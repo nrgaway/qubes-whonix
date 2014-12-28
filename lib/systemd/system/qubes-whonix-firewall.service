@@ -1,0 +1,12 @@
+[Unit]
+Description=Qubes Whonix firewall updater
+After=qubes-whonix-network.service
+Before=network.target
+
+[Service]
+ExecStart=/usr/lib/whonix/init/qubes-whonix-firewall.sh
+StandardOutput=syslog
+
+[Install]
+WantedBy=multi-user.target
+Alias=qubes-firewall.service

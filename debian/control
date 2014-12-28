@@ -1,0 +1,31 @@
+## This file is part of Whonix
+## -- and --
+## The Qubes OS Project, http://www.qubes-os.org
+##
+## Copyright (C) 2014  Jason Mehring <nrgaway@gmail.com>
+## Copyright (C) 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
+## See the file COPYING for copying conditions.
+
+Source: whonix-qubes
+Section: admin
+Priority: extra
+Maintainer: Jason Mehring <nrgaway@gmail.com>
+Build-Depends: debhelper (>= 8), faketime, config-package-dev (>= 5.1)
+Homepage: https://github.com/Whonix/whonix-qubes
+Vcs-Browser: https://github.com/Whonix/whonix-qubes
+Vcs-Git: https://github.com/Whonix/whonix-qubes.git
+Standards-Version: 3.9.4
+
+Package: whonix-qubes
+Architecture: any
+Depends: ethtool, grub-pc, initscripts, iptables, lintian, locales, menu-xdg, net-tools, notify-osd, sudo, systemd, x11-xserver-utils, xen-utils-common, xinit, xserver-xorg-core, xsettingsd, xdg-user-dirs, ${shlibs:Depends}, ${misc:Depends}
+Recommends: gnome-packagekit, gnome-terminal, haveged, network-manager (>= 0.8.1-1), network-manager-gnome
+Description: Qubes Configuration for Whonix Gateway and Workstation
+ This package contains all the scripts and configuration options to be able
+ to run Whonix Gateway and Workstation within a Qubes environment.
+ .
+ Whonix Gateway should run as a ProxyVM
+ .
+ Whonix Workstation should run as an AppVM
+ .
+ Template updates over Tor

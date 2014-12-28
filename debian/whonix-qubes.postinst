@@ -1,0 +1,227 @@
+#!/bin/bash
+# vim: set ts=4 sw=4 sts=4 et :
+
+## This file is part of Whonix
+## -- and --
+## The Qubes OS Project, http://www.qubes-os.org
+##
+## Copyright (C) 2014  Jason Mehring <nrgaway@gmail.com>
+## Copyright (C) 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
+## See the file COPYING for copying conditions.
+##
+## postinst script for whonix-qubes
+
+# see: dh_installdeb(1)
+
+set -e
+
+# The postint script may be called in the following ways:
+#   * <postinst> 'configure' <most-recently-configured-version>
+#   * <old-postinst> 'abort-upgrade' <new version>
+#   * <conflictor's-postinst> 'abort-remove' 'in-favour' <package>
+#     <new-version>
+#   * <postinst> 'abort-remove'
+#   * <deconfigured's-postinst> 'abort-deconfigure' 'in-favour'
+#     <failed-install-package> <version> 'removing'
+#     <conflicting-package> <version>
+#
+#    For details, see http://www.debian.org/doc/debian-policy/ or
+# https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html or
+# the debian-policy package
+
+setArrayAsGlobal() {
+    local array="$1"
+    local export_as="$2"
+    local code=$(declare -p "$array")
+    local replaced="${code/$array/$export_as}"
+    eval ${replaced/declare -/declare -g}
+}
+
+systemdInfo() {
+    unit=${1}
+    return_global_var=${2}
+
+    declare -A INFO=()
+    while read line; do
+        INFO[${line%%=*}]="${line##*=}"
+    done < <(systemctl show ${unit} 2> /dev/null)
+
+    setArrayAsGlobal INFO $return_global_var
+    return ${#INFO[@]}
+}
+
+displayFailedStatus() {
+    action=${1}
+    unit=${2}
+
+    # Only display if there are results.  In chroot environmnet there will be 
+    # no results to 'systemctl show' command
+    systemdInfo ${unit} info || {
+        echo
+        echo "==================================================="
+        echo "FAILED: systemd ${action} ${unit}"
+        echo "==================================================="
+        echo "    LoadState = ${info[LoadState]}"
+        echo "    LoadError = ${info[LoadError]}"
+        echo "  ActiveState = ${info[ActiveState]}"
+        echo "     SubState = ${info[SubState]}"
+        echo "UnitFileState = ${info[UnitFileState]}"
+        echo
+    }
+}
+
+# Disable systemd units
+disableSystemdUnits() {
+    for unit in $*; do
+        systemctl is-enabled ${unit} > /dev/null 2>&1 && {
+            echo "Disabling ${unit}..."
+            systemctl is-active ${unit} > /dev/null 2>&1 && {
+                systemctl stop ${unit} > /dev/null 2>&1 || displayFailedStatus stop ${unit}
+            }
+            if [ -f /lib/systemd/system/${unit} ]; then
+                if fgrep -q '[Install]' /lib/systemd/system/${unit}; then
+                    systemctl disable ${unit} > /dev/null 2>&1 || displayFailedStatus disable ${unit}
+                else
+                    # Forcibly disable
+                    echo "Forcibly disabling: ${unit}"
+                    ln -sf /dev/null /etc/systemd/system/${unit}
+                fi
+            else
+                    systemctl disable ${unit} > /dev/null 2>&1 || displayFailedStatus disable ${unit}
+            fi
+        } || {
+            echo "It appears ${unit} is already disabled!"
+        }
+    done
+}
+
+# Enable systemd units
+enableSystemdUnits() {
+    for unit in $*; do
+        systemctl is-enabled ${unit} > /dev/null 2>&1 && {
+            echo "It appears ${unit} is already enabled!"
+        } || {
+            echo "Enabling: ${unit}..."
+            systemctl enable ${unit} > /dev/null 2>&1 && {
+                systemctl start ${unit} > /dev/null 2>&1 || displayFailedStatus start ${unit}
+            } || {
+                echo "Could not enable: ${unit}"
+                displayFailedStatus enable ${unit}
+            }
+        }
+    done
+}
+
+setPermissions() {
+    local owner="${1}"
+    local group="${2}"
+    local mode="${3}"
+    local file="${4}"
+
+    /usr/bin/chmod ${mode} "${file}"
+    /usr/bin/chown ${owner}.${group} "${file}"
+}
+
+case "${1}" in
+    configure)
+
+        setPermissions root root 0644 /lib/systemd/system/qubes-whonix-firewall.service
+        setPermissions root root 0644 /lib/systemd/system/qubes-whonix-network.service
+        setPermissions root root 0644 /lib/systemd/system/qubes-whonix-init.service
+        setPermissions root root 0644 /etc/uwt.d/50_uwt_default
+        setPermissions root root 0644 /etc/xdg/autostart/qubes-whonixsetup.desktop
+        setPermissions root root 0440 /etc/sudoers.d/whonix-build
+
+        setPermissions root root 0755 /usr/lib/whonix/utility_functions
+        setPermissions root root 0755 /usr/lib/whonix/bind-dirs.sh
+        setPermissions root root 0755 /usr/lib/whonix/init/qubes-whonix-firewall.sh
+        setPermissions root root 0755 /usr/lib/whonix/init/replace-ips
+        setPermissions root root 0755 /usr/lib/whonix/init/init.sh
+        setPermissions root root 0755 /usr/lib/whonix/init/network-proxy-setup.sh
+        setPermissions root root 0755 /usr/lib/whonix/alert
+        setPermissions root root 0755 /usr/lib/whonix/qubes-whonixsetup
+        setPermissions root root 0755 /usr/lib/whonix/enable-iptables-logging.sh
+
+        # Prevent scripts from running during whonix installation by faking
+        # that this environment is running in a Qubes template
+        if [ ! -d "/var/run/qubes" ]; then
+            mkdir -p "/var/run/qubes-service"
+            touch "/var/run/qubes-service/updates-proxy-setup"
+        fi
+
+        # Enable systemd units
+        enableSystemdUnits \
+            rsyslog.service
+            qubes-whonix-firewall.service
+            qubes-whonix-network.service
+            qubes-whonix-init.service
+
+        # These scripts will not run in a template or fake template environment
+        /usr/lib/whonix/init/init
+        /usr/lib/whonix/init/qubes-whonix-firewall.sh
+
+        ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+        exit 0
+        ;;
+
+    triggered)
+        for trigger in ${2}; do
+            case "${trigger}" in
+
+                # Restart firewall
+                /usr/bin/whonix_firewall | \
+                /usr/share/tor/tor-service-defaults-torrc.anondist) 
+                    /usr/lib/whonix/init/init
+                    /usr/lib/whonix/init/qubes-whonix-firewall.sh
+                    ;;
+
+                # Reset back to Whonix defaults
+                /etc/resolv.conf | \
+                /etc/hosts | \
+                /etc/hostname)
+                    /usr/lib/whonix/init/init
+                    ;;
+
+                # Replace IP adresses
+                /usr/lib/leaktest-workstation/simple_ping.py | \
+                /usr/lib/whonixcheck/preparation | \
+                /usr/share/anon-kde-streamiso/share/config/kioslaverc | \
+                /usr/bin/whonix_firewall | \
+                /etc/whonix_firewall.d/30_default | \
+                /usr/lib/anon-shared-helper-scripts/tor_bootstrap_check.bsh | \
+                /usr/bin/uwt | \
+                /etc/uwt.d/30_uwt_default | \
+                /usr/bin/update-torbrowser | \
+                /etc/network/interfaces.whonix | \
+                /etc/resolv.conf.anondist | \
+                /etc/sdwdate.d/31_anon_dist_stream_isolation_plugin | \
+                /etc/rinetd.conf.anondist | \
+                /etc/network/interfaces.whonix | \
+                /usr/share/anon-torchat/.torchat/torchat.ini)
+                    /usr/lib/whonix/init/replace-ips
+                    ;;
+
+                *)
+                    echo "postinst called with unknown trigger \`${2}'" >&2
+                    exit 1
+                    ;;
+            esac
+        done
+        exit 0
+        ;;
+
+    *)
+        echo "postinst called with unknown argument \`${1}'" >&2
+        exit 1
+        ;;
+esac
+
+# dh_installdeb will replace this with shell code automatically
+# generated by other debhelper scripts.
+
+#DEBHELPER#
+
+exit 0
+

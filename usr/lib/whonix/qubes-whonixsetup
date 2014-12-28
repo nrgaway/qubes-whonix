@@ -1,0 +1,41 @@
+#!/bin/bash
+
+. /usr/lib/whonix/utility_functions
+
+if ! [ "${WHONIX}" == "template" ]; then
+    sudo /usr/lib/whonix/bind-dirs.sh
+fi
+
+if [ "${WHONIX}" == "gateway" ]; then
+    if grep "^DisableNetwork 0$" /etc/tor/torrc ;then
+        sudo service sdwdate restart
+        sudo service tor restart 
+    else
+        sudo service sdwdate restart
+        sudo service tor stop
+        sudo /usr/bin/whonixsetup
+    fi
+
+elif [ "${WHONIX}" == "workstation" ]; then
+    sudo service sdwdate restart
+    if ! [ -f "/var/lib/whonix/do_once/whonixsetup.done" ]; then
+        sudo /usr/bin/whonixsetup
+    fi
+
+elif [ "${WHONIX}" == "template" -a "${PROXY_SECURE}" == "0" ]; then
+    # Set secure defaults.
+    sudo iptables -P INPUT DROP
+    sudo iptables -P FORWARD DROP
+    sudo iptables -P OUTPUT DROP
+
+    # Flush old rules.
+    sudo iptables -F
+    sudo iptables -X
+    sudo iptables -t nat -F
+    sudo iptables -t nat -X
+    sudo iptables -t mangle -F
+    sudo iptables -t mangle -X
+
+    # Display warning that netvm is not connected to a torvm
+    /usr/lib/whonix/alert update /usr/lib/whonix/messages.yaml
+fi

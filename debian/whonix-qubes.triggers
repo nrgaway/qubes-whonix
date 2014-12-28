@@ -1,0 +1,36 @@
+## This file is part of Whonix
+## -- and --
+## The Qubes OS Project, http://www.qubes-os.org
+##
+## Copyright (C) 2014  Jason Mehring <nrgaway@gmail.com>
+## Copyright (C) 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
+## See the file COPYING for copying conditions.
+##
+## triggers for whonix-qubes
+
+# Replace IP address and restart firewall
+interest-noawait /usr/bin/whonix_firewall
+interest-noawait /usr/share/tor/tor-service-defaults-torrc.anondist
+
+# Reset back to Whonix defaults
+interest-noawait /etc/resolv.conf
+interest-noawait /etc/hosts
+interest-noawait /etc/hostname
+
+# Replace IP adresses
+interest-noawait /usr/lib/leaktest-workstation/simple_ping.py
+interest-noawait /usr/lib/whonixcheck/preparation
+interest-noawait /usr/share/anon-kde-streamiso/share/config/kioslaverc
+interest-noawait /usr/bin/whonix_firewall
+interest-noawait /etc/whonix_firewall.d/30_default
+interest-noawait /usr/lib/anon-shared-helper-scripts/tor_bootstrap_check.bsh
+interest-noawait /usr/bin/uwt
+interest-noawait /etc/uwt.d/30_uwt_default
+interest-noawait /usr/bin/update-torbrowser
+interest-noawait /etc/network/interfaces.whonix
+interest-noawait /etc/resolv.conf.anondist
+interest-noawait /etc/sdwdate.d/31_anon_dist_stream_isolation_plugin
+interest-noawait /etc/rinetd.conf.anondist
+interest-noawait /etc/network/interfaces.whonix
+interest-noawait /usr/share/anon-torchat/.torchat/torchat.ini
+

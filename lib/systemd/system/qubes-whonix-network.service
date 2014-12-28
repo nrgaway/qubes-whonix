@@ -1,0 +1,15 @@
+[Unit]
+Description=Qubes Whonix network proxy setup
+ConditionPathExists=/var/run/qubes-service/qubes-network
+Before=network.target
+After=iptables.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/lib/whonix/init/network-proxy-setup.sh
+StandardOutput=syslog
+
+[Install]
+WantedBy=multi-user.target
+Alias=qubes-network.service

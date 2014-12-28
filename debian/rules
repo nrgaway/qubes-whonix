@@ -1,0 +1,32 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+## This file is part of Whonix
+## -- and --
+## The Qubes OS Project, http://www.qubes-os.org
+##
+## Copyright (C) 2014  Jason Mehring <nrgaway@gmail.com>
+## Copyright (C) 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
+## See the file COPYING for copying conditions.
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+export DESTDIR=$(shell pwd)/debian/whonix-qubes
+
+%:
+	#dh $@ --with=config-package
+	dh $@ --with systemd
+
+override_dh_auto_build:
+	make all
+
+override_dh_auto_install:
+	make install-common install-deb install-systemd
+	make -C qrexec install
+
+override_dh_fixperms:
+	dh_fixperms -a -Xqfile-unpacker
+
+override_dh_systemd_start:
+	dh_systemd_start --no-restart-on-upgrade

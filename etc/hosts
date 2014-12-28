@@ -1,0 +1,7 @@
+## Anonymity Distribution /etc/hosts
+
+## Anonymity Distribution specific
+127.0.0.1 host.localdomain host
+## End of Anonymity Distribution specific
+
+## End of Anonymity Distribution /etc/hosts

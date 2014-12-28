@@ -1,0 +1,13 @@
+[Unit]
+Description=Qubes Whonix initialization script
+After=qubes-whonix-network.service
+Before=qubes-whonix-firewall.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/lib/whonix/init/init.sh
+StandardOutput=syslog
+
+[Install]
+WantedBy=multi-user.target

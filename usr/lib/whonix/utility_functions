@@ -1,0 +1,94 @@
+#!/bin/bash
+
+# /etc/uwt.d/50_uwt_default relies on this in order to allow connection 
+# to proxy for template
+PROXY_SERVER="http://10.137.255.254:8082/"
+PROXY_META='<meta name=\"application-name\" content=\"tor proxy\"\/>'
+
+if [ -f "/var/run/qubes-service/updates-proxy-setup" ]; then
+    WHONIX="template"
+elif [ -f "/usr/share/anon-gw-base-files/gateway" ]; then
+    WHONIX="gateway"
+elif [ -f "/usr/share/anon-ws-base-files/workstation" ]; then
+    WHONIX="workstation"
+else
+    WHONIX="unknown"
+fi
+
+if [ "${WHONIX}" == "template" ]; then
+    curl.anondist-orig "${PROXY_SERVER}" | grep -q "${PROXY_META}" && {
+        PROXY_SECURE=1
+    } || {
+        PROXY_SECURE=0
+    }
+fi
+
+immutableFilesEnable() {
+    files="${1}"
+    suffix="${2}"
+
+    for file in "${files[@]}"; do
+        if [ -f "${file}" ] && ! [ -L "${file}" ]; then 
+            sudo chattr +i "${file}${suffix}"
+        fi
+    done
+}
+
+immutableFilesDisable() {
+    files="${1}"
+    suffix="${2}"
+
+    for file in "${files[@]}"; do
+        if [ -f "${file}" ] && ! [ -L "${file}" ]; then 
+            sudo chattr -i "${file}${suffix}"
+        fi
+    done
+}
+
+copyAnondist() {
+    file="${1}"
+    suffix="${2-.anondist}"
+
+    # Remove any softlinks first
+    if [ -L "${file}" ]; then 
+        sudo rm -f "${file}"
+    fi
+
+    if [ -f "${file}" ] && [ -n "$(diff ${file} ${file}${suffix})" ]; then 
+        sudo chattr -i "${file}"
+        sudo rm -f "${file}"
+        sudo cp -p "${file}${suffix}" "${file}"
+        sudo chattr +i "${file}"
+    elif ! [ -f "${file}" ]; then 
+        sudo cp -p "${file}${suffix}" "${file}"
+        sudo chattr +i "${file}"
+    fi
+}
+
+# Will only enable / disable if service is not already in that state
+enable_sysv() {
+    servicename=${1}
+    disable=${2-0}
+
+    # Check to see if the service is already enabled and if not, enable it
+    string="/etc/rc$(runlevel | awk '{ print $2 }').d/S[0-9][0-9]${servicename}"
+
+    if [ $(find $string 2>/dev/null | wc -l) -eq ${disable} ] ; then
+        case ${disable} in
+            0)
+                echo "${1} is currently disabled; enabling it"
+                sudo systemctl --quiet enable ${servicename}
+                ;;
+            1)
+                echo "${1} is currently enabled; disabling it"
+                sudo service ${servicename} stop
+                sudo systemctl --quiet disable ${servicename}
+                ;;
+        esac
+    fi
+}
+
+disable_sysv() {
+    enable_sysv ${1} 1
+}
+

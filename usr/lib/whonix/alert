@@ -1,0 +1,90 @@
+#!/usr/bin/python
+
+#
+# Copyright 2014 Jason Mehring (nrgaway@gmail.com)
+#
+
+from PyQt4 import QtGui
+import locale
+import yaml
+
+DEFAULT_LANG = 'en'
+
+class Messages():
+    filename = None
+    data = None
+    language = DEFAULT_LANG
+    title = None
+    icon = None
+    message = None
+
+    def __init__(self, section, filename):
+        self.filename = filename
+
+        language = locale.getdefaultlocale()[0].split('_')[0]
+        if language:
+            self.language = language
+
+        try:
+            stream = file(filename, 'r')
+            data = yaml.load(stream)
+
+            if section in data.keys():
+                section = data[section]
+
+                self.icon = section.get('icon', None)
+
+                language = section.get(self.language, DEFAULT_LANG)
+
+                self.title = language.get('title', None)
+                self.message = language.get('message', None)
+
+        except (IOError):
+            pass
+        except (yaml.scanner.ScannerError, yaml.parser.ParserError):
+            pass
+
+class WhonixMessageBox(QtGui.QMessageBox):
+    def __init__(self, message):
+        super(WhonixMessageBox, self).__init__()
+        self.message = message
+        self.initUI()
+
+    def initUI(self):
+        message = self.message
+
+        if message.title:
+            self.setWindowTitle(message.title)
+
+        if message.icon:
+            self.setIcon(getattr(QtGui.QMessageBox, message.icon))
+
+        if message.message:
+            self.setText(message.message)
+            self.exec_()
+
+import argparse
+import sys
+
+
+
+def main():
+    parser = argparse.ArgumentParser(description='Display a QT Message Box')
+
+    parser.add_argument('section', help="Message section")
+    parser.add_argument('filename', help="File including full path")
+
+    args = parser.parse_args()
+
+    if not args.filename and args.section:
+        print parser.usage()
+        sys.exit(1)
+
+    app = QtGui.QApplication(sys.argv)
+
+    message = Messages(args.section, args.filename)
+    dialog = WhonixMessageBox(message)
+    sys.exit()
+
+if __name__ == "__main__":
+    main()
