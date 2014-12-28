@@ -21,10 +21,6 @@ export DESTDIR=$(shell pwd)/debian/whonix-qubes
 override_dh_auto_build:
 	make all
 
-override_dh_auto_install:
-	make install-common install-deb install-systemd
-	make -C qrexec install
-
 override_dh_fixperms:
 	dh_fixperms -a -Xqfile-unpacker
 

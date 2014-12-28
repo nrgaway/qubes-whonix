@@ -48,7 +48,7 @@ if [ "$1" = "install" ] ; then
     # Create required directories
     # --------------------------------------------------------------------------
     mkdir -p /var/lib/whonix/init
-    chown -R root.root /usr/lib/whonix
+    chown -R root:root /usr/lib/whonix
     chmod -R u+rwX,go+rX /usr/lib/whonix
 
 fi

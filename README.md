@@ -1,10 +1,12 @@
-# Network Configuration for Whonix-Gateway #
+# Qubes Configuration for Whonix Gateway and Workstation #
 
-Includes /etc/network/interfaces for Whonix-Gateway.
+This package contains all the scripts and configuration options to be able to run Whonix Gateway and Workstation within a Qubes environment.
 
-Sets up two network interfaces, an external one eth0 and an internal one eth1.
+Whonix Gateway should run as a ProxyVM
 
-Loads Whonix's firewall using pre-up hook. Fails closed.
+honix Workstation should run as an AppVM
+
+Template updates over Tor
 
 (This package description has been [automatically](https://github.com/Whonix/whonix-developer-meta-files/blob/master/debug-steps/packaging-helper-script) extracted and mirrored from `debian/control`.)
 

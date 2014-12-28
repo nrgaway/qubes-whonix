@@ -1,0 +1,2 @@
+# These are triggers and need full path to be triggered
+whonix-qubes: command-with-path-in-maintainer-script postinst:* /usr/bin/whonix_firewall

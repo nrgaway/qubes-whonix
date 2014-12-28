@@ -118,8 +118,8 @@ setPermissions() {
     local mode="${3}"
     local file="${4}"
 
-    /usr/bin/chmod ${mode} "${file}"
-    /usr/bin/chown ${owner}.${group} "${file}"
+    chmod ${mode} "${file}"
+    chown ${owner}:${group} "${file}"
 }
 
 case "${1}" in
@@ -151,13 +151,12 @@ case "${1}" in
 
         # Enable systemd units
         enableSystemdUnits \
-            rsyslog.service
-            qubes-whonix-firewall.service
-            qubes-whonix-network.service
+            qubes-whonix-firewall.service \
+            qubes-whonix-network.service \
             qubes-whonix-init.service
 
         # These scripts will not run in a template or fake template environment
-        /usr/lib/whonix/init/init
+        /usr/lib/whonix/init/init.sh
         /usr/lib/whonix/init/qubes-whonix-firewall.sh
 
         ;;
@@ -173,7 +172,7 @@ case "${1}" in
                 # Restart firewall
                 /usr/bin/whonix_firewall | \
                 /usr/share/tor/tor-service-defaults-torrc.anondist) 
-                    /usr/lib/whonix/init/init
+                    /usr/lib/whonix/init/init.sh
                     /usr/lib/whonix/init/qubes-whonix-firewall.sh
                     ;;
 
@@ -181,7 +180,7 @@ case "${1}" in
                 /etc/resolv.conf | \
                 /etc/hosts | \
                 /etc/hostname)
-                    /usr/lib/whonix/init/init
+                    /usr/lib/whonix/init/init.sh
                     ;;
 
                 # Replace IP adresses
