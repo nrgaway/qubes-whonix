@@ -10,6 +10,12 @@ all:
 dist:
 	./make-helper.bsh dist
 
+dist-build-dep::
+	@sudo apt-get update
+	@grep Build-Depends: debian/control | cut -d: -f 2- |\
+	    sed -e 's/ *, */\n/g'| cut -d'(' -f 1 |tr -d " " |\
+	    xargs sudo apt-get install -y
+
 manpages:
 	./make-helper.bsh manpages
 
@@ -19,10 +25,10 @@ uch:
 install:
 	./make-helper.bsh install
 
-deb-pkg:
+deb-pkg: dist-build-dep
 	./make-helper.bsh deb-pkg ${ARGS}
 
-deb-pkg-signed:
+deb-pkg-signed: dist-build-dep
 	./make-helper.bsh deb-pkg-signed ${ARGS}
 
 deb-pkg-install:
@@ -81,3 +87,4 @@ deb-chl-bumpup:
 
 help:
 	./make-helper.bsh help
+

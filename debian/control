@@ -10,7 +10,7 @@ Source: whonix-qubes
 Section: admin
 Priority: extra
 Maintainer: Jason Mehring <nrgaway@gmail.com>
-Build-Depends: config-package-dev (>= 5.1), debhelper (>= 8), faketime, python, dh-systemd (>= 1.5) 
+Build-Depends: debhelper (>= 9), faketime, python, dh-systemd (>= 1.5) 
 Homepage: https://github.com/Whonix/whonix-qubes
 Vcs-Browser: https://github.com/Whonix/whonix-qubes
 Vcs-Git: https://github.com/Whonix/whonix-qubes.git
@@ -18,7 +18,7 @@ Standards-Version: 3.9.4
 
 Package: whonix-qubes
 Architecture: any
-Depends: ethtool, grub-pc, initscripts, iptables, lintian, locales, net-tools, notify-osd, python, sudo, systemd, x11-xserver-utils, xen-utils-common, xinit, xserver-xorg-core, xsettingsd, xdg-user-dirs, ${shlibs:Depends}, ${misc:Depends}
+Depends: ethtool, grub-pc, initscripts, iptables, lintian, locales, net-tools, notify-osd, python, sudo, systemd, x11-xserver-utils, xen-utils-common, xinit, xserver-xorg-core, xsettingsd, xdg-user-dirs, ${misc:Depends}
 Recommends: gnome-packagekit, gnome-terminal, haveged, network-manager (>= 0.8.1-1), network-manager-gnome
 Description: Qubes Configuration for Whonix Gateway and Workstation
  This package contains all the scripts and configuration options to be able
