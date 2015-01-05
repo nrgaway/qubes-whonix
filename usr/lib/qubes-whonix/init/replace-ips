@@ -8,7 +8,7 @@ source /usr/lib/qubes-whonix/utility_functions
 
 FILES=(
     '/usr/lib/leaktest-workstation/simple_ping.py'
-    '/usr/lib/qubes-whonixcheck/preparation'
+    '/usr/lib/whonixcheck/preparation'
     '/usr/share/anon-kde-streamiso/share/config/kioslaverc'
     '/usr/bin/whonix_firewall'
     '/etc/whonix_firewall.d/30_default'

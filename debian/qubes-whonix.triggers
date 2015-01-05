@@ -19,7 +19,7 @@ interest-noawait /etc/hostname
 
 # Replace IP adresses
 interest-noawait /usr/lib/leaktest-workstation/simple_ping.py
-interest-noawait /usr/lib/qubes-whonixcheck/preparation
+interest-noawait /usr/lib/whonixcheck/preparation
 interest-noawait /usr/share/anon-kde-streamiso/share/config/kioslaverc
 interest-noawait /usr/bin/whonix_firewall
 interest-noawait /etc/whonix_firewall.d/30_default
