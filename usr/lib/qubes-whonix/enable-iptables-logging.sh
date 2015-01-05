@@ -30,4 +30,3 @@ fi
 # Works
 # localhost/loopback maps localhost port 8082 to localhost port 8888
 # iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 8082 -j REDIRECT --to-ports 8888
-

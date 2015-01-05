@@ -1,9 +1,0 @@
-#!/bin/bash -e
-# vim: set ts=4 sw=4 sts=4 et :
-
-source /usr/lib/qubes-whonix/utility_functions
-
-if [ "${WHONIX}" == "template" -a "${PROXY_SECURE}" == "1" ]; then
-    uwtwrapper["/usr/bin/apt-get"]="0"
-fi
-

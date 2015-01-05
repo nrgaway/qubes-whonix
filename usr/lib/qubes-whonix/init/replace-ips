@@ -117,4 +117,3 @@ elif [ "${WHONIX_QUBES}" == "workstation" ]; then
         replace_ips "10.152.152.10" "${gateway}" FILES[@] && echo "${gateway}" > /etc/whonix-netvm-gateway
     fi
 fi
-

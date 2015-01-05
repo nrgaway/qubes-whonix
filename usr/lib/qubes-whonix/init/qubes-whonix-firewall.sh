@@ -48,4 +48,3 @@ EOF
 
     systemctl restart qubes-updates-proxy.service
 fi
-

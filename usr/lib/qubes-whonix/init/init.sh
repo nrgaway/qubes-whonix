@@ -43,4 +43,3 @@ if [ "${WHONIX_QUBES}" != "template" -o "${WHONIX_QUBES}" == "unknown" ]; then
     # Make sure hostname is correct
     /bin/hostname host
 fi
-

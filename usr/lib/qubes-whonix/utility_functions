@@ -94,4 +94,3 @@ enable_sysv() {
 disable_sysv() {
     enable_sysv ${1} 1
 }
-

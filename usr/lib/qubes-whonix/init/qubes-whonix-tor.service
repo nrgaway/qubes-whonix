@@ -14,4 +14,3 @@ LimitNOFILE = 32768
 [Install]
 WantedBy = multi-user.target
 Alias=tor.service
-

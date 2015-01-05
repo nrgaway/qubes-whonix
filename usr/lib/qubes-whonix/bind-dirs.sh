@@ -57,4 +57,3 @@ if [ "${WHONIX_QUBES}" == "gateway" ]; then
 fi
 
 exit 0
-

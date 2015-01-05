@@ -56,4 +56,3 @@ if [ "${WHONIX_QUBES}" == "gateway" ]; then
         sed -i "s/<\/head>/${PROXY_META}\n<\/head>/" "${error_file}"
     }
 fi
-

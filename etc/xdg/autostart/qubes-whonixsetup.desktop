@@ -5,4 +5,3 @@
 Type=Application
 Terminal=false
 Exec=/usr/lib/qubes-whonix/qubes-whonixsetup
-

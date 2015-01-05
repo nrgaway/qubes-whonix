@@ -40,4 +40,3 @@ elif [ "${WHONIX_QUBES}" == "template" -a "${PROXY_SECURE}" == "0" ]; then
     # Display warning that netvm is not connected to a torvm
     /usr/lib/qubes-whonix/alert update /usr/lib/qubes-whonix/messages.yaml
 fi
-
