@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 # vim: set ts=4 sw=4 sts=4 et :
 
 ## This file is part of Whonix
@@ -9,12 +9,10 @@
 ## Copyright (C) 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
 ## See the file COPYING for copying conditions.
 ##
-## postinst script for whonix-qubes
+## postinst script for qubes-whonix
 
 # see: dh_installdeb(1)
-
-set -e
-
+#
 # The postint script may be called in the following ways:
 #   * <postinst> 'configure' <most-recently-configured-version>
 #   * <old-postinst> 'abort-upgrade' <new version>
@@ -54,7 +52,7 @@ displayFailedStatus() {
     action=${1}
     unit=${2}
 
-    # Only display if there are results.  In chroot environmnet there will be 
+    # Only display if there are results.  In chroot environment there will be
     # no results to 'systemctl show' command
     systemdInfo ${unit} info || {
         echo
@@ -122,32 +120,39 @@ setPermissions() {
     chown ${owner}:${group} "${file}"
 }
 
+# Check to see if script is running within a Qubes environment
+if [ ! -d "/var/run/qubes" ]; then
+    WHONIX_QUBES="unknown"
+fi
+
 case "${1}" in
     configure)
-
-        setPermissions root root 0644 /lib/systemd/system/qubes-whonix-firewall.service
-        setPermissions root root 0644 /lib/systemd/system/qubes-whonix-network.service
-        setPermissions root root 0644 /lib/systemd/system/qubes-whonix-init.service
-        setPermissions root root 0644 /etc/uwt.d/50_uwt_default
-        setPermissions root root 0644 /etc/xdg/autostart/qubes-whonixsetup.desktop
-        setPermissions root root 0440 /etc/sudoers.d/whonix-build
-
-        setPermissions root root 0755 /usr/lib/whonix/utility_functions
-        setPermissions root root 0755 /usr/lib/whonix/bind-dirs.sh
-        setPermissions root root 0755 /usr/lib/whonix/init/qubes-whonix-firewall.sh
-        setPermissions root root 0755 /usr/lib/whonix/init/replace-ips
-        setPermissions root root 0755 /usr/lib/whonix/init/init.sh
-        setPermissions root root 0755 /usr/lib/whonix/init/network-proxy-setup.sh
-        setPermissions root root 0755 /usr/lib/whonix/alert
-        setPermissions root root 0755 /usr/lib/whonix/qubes-whonixsetup
-        setPermissions root root 0755 /usr/lib/whonix/enable-iptables-logging.sh
-
-        # Prevent scripts from running during whonix installation by faking
-        # that this environment is running in a Qubes template
-        if [ ! -d "/var/run/qubes" ]; then
-            mkdir -p "/var/run/qubes-service"
-            touch "/var/run/qubes-service/updates-proxy-setup"
+        # Use gdialog as an alternative for dialog
+        if [ ! -L "/usr/bin/dialog" ]; then
+            mv -f /usr/bin/dialog /usr/bin/dialog.dist
+            update-alternatives --force --install /usr/bin/dialog dialog /usr/bin/gdialog 999
         fi
+
+        # Fake that initializer was already run
+        mkdir -p /root/.whonix
+        touch /root/.whonix/first_run_initializer.done
+
+        # Prevent whonixcheck error
+        echo 'WHONIXCHECK_NO_EXIT_ON_UNSUPPORTED_VIRTUALIZER="1"' >> /etc/whonix.d/30_whonixcheck_default
+
+        # Tor will be re-enabled upon initial configuration
+        if [ "${WHONIX_QUBES}" == "unknown" ]; then
+            disableSystemdUnits \
+                tor.service \
+                sdwdate.service
+        fi
+
+        # Disable unwanted applications
+        disableSystemdUnits \
+            network-manager.service \
+            spice-vdagent.service \
+            swap-file-creator.service \
+            whonix-initializer.service
 
         # Enable systemd units
         enableSystemdUnits \
@@ -155,10 +160,11 @@ case "${1}" in
             qubes-whonix-network.service \
             qubes-whonix-init.service
 
-        # These scripts will not run in a template or fake template environment
-        /usr/lib/whonix/init/init.sh
-        /usr/lib/whonix/init/qubes-whonix-firewall.sh
-
+        # Only run in a Qubes environment
+        if [ "${WHONIX_QUBES}" != "unknown" ]; then
+            /usr/lib/qubes-whonix/init/init.sh
+            /usr/lib/qubes-whonix/init/qubes-whonix-firewall.sh
+        fi
         ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
@@ -171,21 +177,25 @@ case "${1}" in
 
                 # Restart firewall
                 /usr/bin/whonix_firewall | \
-                /usr/share/tor/tor-service-defaults-torrc.anondist) 
-                    /usr/lib/whonix/init/init.sh
-                    /usr/lib/whonix/init/qubes-whonix-firewall.sh
+                /usr/share/tor/tor-service-defaults-torrc.anondist)
+                    /usr/lib/qubes-whonix/init/init.sh
+                    if [ "${WHONIX_QUBES}" != "unknown" ]; then
+                        /usr/lib/qubes-whonix/init/qubes-whonix-firewall.sh
+                    fi
                     ;;
 
                 # Reset back to Whonix defaults
                 /etc/resolv.conf | \
                 /etc/hosts | \
                 /etc/hostname)
-                    /usr/lib/whonix/init/init.sh
+                    if [ "${WHONIX_QUBES}" != "unknown" ]; then
+                        /usr/lib/qubes-whonix/init/init.sh
+                    fi
                     ;;
 
-                # Replace IP adresses
+                # Replace IP addresses
                 /usr/lib/leaktest-workstation/simple_ping.py | \
-                /usr/lib/whonixcheck/preparation | \
+                /usr/lib/qubes-whonixcheck/preparation | \
                 /usr/share/anon-kde-streamiso/share/config/kioslaverc | \
                 /usr/bin/whonix_firewall | \
                 /etc/whonix_firewall.d/30_default | \
@@ -199,7 +209,9 @@ case "${1}" in
                 /etc/rinetd.conf.anondist | \
                 /etc/network/interfaces.whonix | \
                 /usr/share/anon-torchat/.torchat/torchat.ini)
-                    /usr/lib/whonix/init/replace-ips
+                    if [ "${WHONIX_QUBES}" != "unknown" ]; then
+                        /usr/lib/qubes-whonix/init/replace-ips
+                    fi
                     ;;
 
                 *)

@@ -1,28 +1,29 @@
-#!/bin/bash
+#!/bin/bash -e
+# vim: set ts=4 sw=4 sts=4 et :
 
-. /usr/lib/whonix/utility_functions
+source /usr/lib/qubes-whonix/utility_functions
 
-if ! [ "${WHONIX}" == "template" ]; then
-    sudo /usr/lib/whonix/bind-dirs.sh
+if ! [ "${WHONIX_QUBES}" == "template" -o "${WHONIX_QUBES}" == "unknown"]; then
+    sudo /usr/lib/qubes-whonix/bind-dirs.sh
 fi
 
-if [ "${WHONIX}" == "gateway" ]; then
+if [ "${WHONIX_QUBES}" == "gateway" ]; then
     if grep "^DisableNetwork 0$" /etc/tor/torrc ;then
         sudo service sdwdate restart
-        sudo service tor restart 
+        sudo service tor restart
     else
         sudo service sdwdate restart
         sudo service tor stop
         sudo /usr/bin/whonixsetup
     fi
 
-elif [ "${WHONIX}" == "workstation" ]; then
+elif [ "${WHONIX_QUBES}" == "workstation" ]; then
     sudo service sdwdate restart
     if ! [ -f "/var/lib/whonix/do_once/whonixsetup.done" ]; then
         sudo /usr/bin/whonixsetup
     fi
 
-elif [ "${WHONIX}" == "template" -a "${PROXY_SECURE}" == "0" ]; then
+elif [ "${WHONIX_QUBES}" == "template" -a "${PROXY_SECURE}" == "0" ]; then
     # Set secure defaults.
     sudo iptables -P INPUT DROP
     sudo iptables -P FORWARD DROP
@@ -37,5 +38,6 @@ elif [ "${WHONIX}" == "template" -a "${PROXY_SECURE}" == "0" ]; then
     sudo iptables -t mangle -X
 
     # Display warning that netvm is not connected to a torvm
-    /usr/lib/whonix/alert update /usr/lib/whonix/messages.yaml
+    /usr/lib/qubes-whonix/alert update /usr/lib/qubes-whonix/messages.yaml
 fi
+

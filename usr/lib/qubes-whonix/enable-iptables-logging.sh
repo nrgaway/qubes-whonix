@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/bin/bash -e
+# vim: set ts=4 sw=4 sts=4 et :
 
 # Check /var/log/kern.log for logging results
 
@@ -22,9 +23,11 @@ if [ "$LOG_IP6" == "1" ]; then
 fi
 
 # Redirect local port to remote via socat
-#apt-get install socat
-#socat TCP4-LISTEN:8082,fork,mode=0666,user=root,group=root TCP4:10.137.255.254:8082
+# ---------------------------------------
+# apt-get install socat
+# socat TCP4-LISTEN:8082,fork,mode=0666,user=root,group=root TCP4:10.137.255.254:8082
 #
 # Works
 # localhost/loopback maps localhost port 8082 to localhost port 8888
-#iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 8082 -j REDIRECT --to-ports 8888
+# iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 8082 -j REDIRECT --to-ports 8888
+

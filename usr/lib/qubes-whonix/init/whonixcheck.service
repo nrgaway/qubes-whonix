@@ -7,7 +7,7 @@ Type=forking
 ExecStartPre=/usr/bin/install -m 0775 -d --owner user --group user /var/run/whonixcheck
 ExecStartPre=/usr/bin/install -m 0775 -d --owner user --group user /var/lib/whonixcheck
 ExecStartPre=/usr/bin/install -m 0775 -d --owner user --group user /var/lib/whonix/whonixblog
-ExecStart=/usr/lib/whonixcheckdaemon
+ExecStart=/usr/lib/qubes-whonixcheckdaemon
 PIDFile=/var/run/whonixcheck.pid
 User=user
 Group=user
@@ -16,3 +16,4 @@ StandardOutput=syslog
 
 [Install]
 WantedBy=multi-user.target
+

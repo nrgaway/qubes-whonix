@@ -1,4 +1,3 @@
-
 update:
   icon: Critical
   en:
@@ -7,3 +6,4 @@ update:
       <p><B>Tor netvm required for updates!</B></p>
       <p>Please ensure your template vm has a Whonix gateway as it's VM.</p>
       <p>No updates are possible without an active (running) Whonix gateway VM.</p>
+

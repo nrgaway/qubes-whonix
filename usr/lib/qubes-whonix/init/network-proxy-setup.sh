@@ -1,10 +1,11 @@
-#!/bin/bash
+#!/bin/bash -e
+# vim: set ts=4 sw=4 sts=4 et :
 
-. /usr/lib/whonix/utility_functions
+source /usr/lib/qubes-whonix/utility_functions
 
 INTERFACE="eth1"
 
-if [ "${WHONIX}" == "gateway" ]; then
+if [ "${WHONIX_QUBES}" == "gateway" ]; then
 
     if [ -x /usr/sbin/xenstore-read ]; then
         XENSTORE_READ="/usr/sbin/xenstore-read"
@@ -55,3 +56,4 @@ if [ "${WHONIX}" == "gateway" ]; then
         sed -i "s/<\/head>/${PROXY_META}\n<\/head>/" "${error_file}"
     }
 fi
+

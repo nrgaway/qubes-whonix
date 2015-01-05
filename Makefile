@@ -1,20 +1,37 @@
 #!/usr/bin/make -f
 
-## generic deb build script version 0.6
+## generic deb build script version 1.0
+
+## This is a copy.
+## master location:
+## https://github.com/Whonix/Whonix/blob/master/Makefile
 
 DESTDIR ?= /
 
 all:
 	@echo "make all is not required."
 
+version:
+	./parse_debian changelog --package-release-name debian/changelog
+
 dist:
 	./make-helper.bsh dist
 
-dist-build-dep::
-	@sudo apt-get update
-	@grep Build-Depends: debian/control | cut -d: -f 2- |\
-	    sed -e 's/ *, */\n/g'| cut -d'(' -f 1 |tr -d " " |\
+deb-pkg-build-dep::
+	@./parse_debian control --build-depends debian/control |\
 	    xargs sudo apt-get install -y
+
+deb-pkg-update-build-dep:
+	@sudo apt-get update
+
+undist:
+	./make-helper.bsh undist
+
+debdist:
+	./make-helper.bsh debdist
+
+undebdist:
+	./make-helper.bsh undebdist
 
 manpages:
 	./make-helper.bsh manpages
@@ -25,10 +42,10 @@ uch:
 install:
 	./make-helper.bsh install
 
-deb-pkg: dist-build-dep
+deb-pkg: deb-pkg-build-dep
 	./make-helper.bsh deb-pkg ${ARGS}
 
-deb-pkg-signed: dist-build-dep
+deb-pkg-signed: deb-pkg-build-dep
 	./make-helper.bsh deb-pkg-signed ${ARGS}
 
 deb-pkg-install:
@@ -85,6 +102,20 @@ uninstallsim:
 deb-chl-bumpup:
 	./make-helper.bsh deb-chl-bumpup
 
+git-tag-sign:
+	./make-helper.bsh git-tag-sign
+
+git-tag-verify:
+	./make-helper.bsh git-tag-verify
+
+git-tag-check:
+	./make-helper.bsh git-tag-check
+
+git-commit-verify:
+	./make-helper.bsh git-commit-verify
+
+git-verify:
+	./make-helper.bsh git-verify
+
 help:
 	./make-helper.bsh help
-

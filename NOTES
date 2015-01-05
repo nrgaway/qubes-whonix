@@ -74,7 +74,7 @@ After boot; check in terminal:
   ✓ /etc/resolv.conf is being updated by quebes setup-ip; so to make sure whonix
     udev rule gets applied after qubes also run setup-ip when eth* goes online
     - append to /etc/udev/rules.d/99-qubes-whonix.rules
-      SUBSYSTEMS=="xen", KERNEL=="eth*", ACTION=="online", RUN+="/usr/lib/whonix/setup-ip"
+      SUBSYSTEMS=="xen", KERNEL=="eth*", ACTION=="online", RUN+="/usr/lib/qubes-whonix/setup-ip"
     * important files now have immutable +i bit set.
 
   ✓ /usr/lib/anon-shared-helper-scripts/tor_bootstrap_check.bsh: line 86: error: command not found
@@ -92,7 +92,7 @@ After boot; check in terminal:
     https://www.whonix.org/forum/index.php/topic,537.msg4770.html#msg4770
     - swdate fails on start and after start.
     - initial whonixcheck fails on start, but works.  Might not be waiting for
-      tor to bootstrap 
+      tor to bootstrap
     * Added a iptables rule to force traffic from netvm to netvm to go to localhost
 
   ✓ Whonix-gateway first run will most likely produce an error message that
@@ -118,7 +118,7 @@ After boot; check in terminal:
   ✓ Another issue which is more important would be to make sure whonix has the
     for the template to update... it updates VIA tor not clearnet
 
-  ✓ Currently the Whonix Proxy must be created as a standalone VM until it is 
+  ✓ Currently the Whonix Proxy must be created as a standalone VM until it is
     modified to store configurations on /rw
 
   ✓ Tor browser installs but does not launch from menu.  Need to manually start
@@ -132,7 +132,7 @@ After boot; check in terminal:
   ✓ Wheezy terminal starts black in black; ugly theme
     being used, even when kde is installed
       - add to packages_qubes.list:
-	  - xdg-user-dirs gnome-themes-standard xsettingsd 
+	  - xdg-user-dirs gnome-themes-standard xsettingsd
         +configfiles:
           - /etc/X11/Xsession.d/25qubes-settings
           - /etc/xdg/fonts.conf
@@ -142,7 +142,7 @@ After boot; check in terminal:
   ✓umask also needs to be set for wheezy and jessie
     - echo "session optional pam_umask.so" >> "${INSTALLDIR}/etc/pam.d/common-session"
 
-  ✓ unable to resolve host name 
+  ✓ unable to resolve host name
     - /usr/lib/qubes/init/qubes-sysinit.sh can't parse hosts file with tabs in it
       - expand "${INSTALLDIR}/etc/hosts" > "${INSTALLDIR}/etc/hosts.dist"
       - mv "${INSTALLDIR}/etc/hosts.dist" "${INSTALLDIR}/etc/hosts"

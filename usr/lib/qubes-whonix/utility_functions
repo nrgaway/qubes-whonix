@@ -1,21 +1,24 @@
-#!/bin/bash
+#!/bin/bash -e
+# vim: set ts=4 sw=4 sts=4 et :
 
 # /etc/uwt.d/50_uwt_default relies on this in order to allow connection 
 # to proxy for template
 PROXY_SERVER="http://10.137.255.254:8082/"
 PROXY_META='<meta name=\"application-name\" content=\"tor proxy\"\/>'
 
-if [ -f "/var/run/qubes-service/updates-proxy-setup" ]; then
-    WHONIX="template"
+if [ ! -d "/var/run/qubes" ]; then
+    WHONIX_QUBES="unknown"
+elif [ -f "/var/run/qubes-service/updates-proxy-setup" ]; then
+    WHONIX_QUBES="template"
 elif [ -f "/usr/share/anon-gw-base-files/gateway" ]; then
-    WHONIX="gateway"
+    WHONIX_QUBES="gateway"
 elif [ -f "/usr/share/anon-ws-base-files/workstation" ]; then
-    WHONIX="workstation"
+    WHONIX_QUBES="workstation"
 else
-    WHONIX="unknown"
+    WHONIX_QUBES="unknown"
 fi
 
-if [ "${WHONIX}" == "template" ]; then
+if [ "${WHONIX_QUBES}" == "template" ]; then
     curl.anondist-orig "${PROXY_SERVER}" | grep -q "${PROXY_META}" && {
         PROXY_SECURE=1
     } || {

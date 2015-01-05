@@ -1,13 +1,14 @@
-#!/bin/bash
+#!/bin/bash -e
+# vim: set ts=4 sw=4 sts=4 et :
 
-. /usr/lib/whonix/utility_functions
+source /usr/lib/qubes-whonix/utility_functions
 
-# Search though files and updates IP address to the current 
+# Search though files and updates IP address to the current
 # IP address(es)
 
 FILES=(
     '/usr/lib/leaktest-workstation/simple_ping.py'
-    '/usr/lib/whonixcheck/preparation'
+    '/usr/lib/qubes-whonixcheck/preparation'
     '/usr/share/anon-kde-streamiso/share/config/kioslaverc'
     '/usr/bin/whonix_firewall'
     '/etc/whonix_firewall.d/30_default'
@@ -31,14 +32,14 @@ search_replace() {
     local file="${3}"
     local retval=1
 
-    if ! [ -L "${file}" ]; then 
+    if ! [ -L "${file}" ]; then
         ls_attrs="$(lsattr "${file}")"
         ls_attrs=${ls_attrs:4:1}
         if [ "${ls_attrs}" == "i" ]; then
             chattr -i "${file}"
         fi
     fi
-    
+
     sed -i.bak '/'"${search}"'/,${s//'"${replace}"'/;b};$q1' "${file}"
     retval=$?
 
@@ -83,7 +84,7 @@ update_ip() {
     }
 }
 
-if [ "${WHONIX}" == "gateway" ]; then
+if [ "${WHONIX_QUBES}" == "gateway" ]; then
     ip="$(xenstore-read qubes-netvm-gateway)"
     if [ x${ip} != x ]; then
         # Compare to current IP address assiged by Qubes
@@ -96,7 +97,7 @@ if [ "${WHONIX}" == "gateway" ]; then
         replace_ips "10.152.152.11" "${ip}" FILES[@] && update_ip "${ip}"
     fi
 
-elif [ "${WHONIX}" == "workstation" ]; then
+elif [ "${WHONIX_QUBES}" == "workstation" ]; then
     ip="$(xenstore-read qubes-ip)"
     gateway="$(xenstore-read qubes-gateway)"
 
@@ -116,3 +117,4 @@ elif [ "${WHONIX}" == "workstation" ]; then
         replace_ips "10.152.152.10" "${gateway}" FILES[@] && echo "${gateway}" > /etc/whonix-netvm-gateway
     fi
 fi
+

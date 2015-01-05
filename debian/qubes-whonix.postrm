@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 # vim: set ts=4 sw=4 sts=4 et :
 
 ## This file is part of Whonix
@@ -9,12 +9,10 @@
 ## Copyright (C) 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
 ## See the file COPYING for copying conditions.
 ##
-## postrm script for whonix-qubes
+## postrm script for qubes-whonix
 
 # see: dh_installdeb(1)
-
-set -e
-
+#
 # The prerm script may be called in the following ways:
 #   * <postrm> 'remove'
 #   * <postrm> 'purge'
@@ -32,7 +30,7 @@ set -e
 #
 #     Called when the old postrm upgrade action fails. The new package will be
 # unpacked, but only essential packages and pre-dependencies can be relied on.
-# Pre-dependencies will either be configured or will be "Unpacked" or 
+# Pre-dependencies will either be configured or will be "Unpacked" or
 # "Half-Configured" but previously had been configured and was never removed.
 #
 #   * <new-postrm> 'abort-install'

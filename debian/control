@@ -6,26 +6,26 @@
 ## Copyright (C) 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
 ## See the file COPYING for copying conditions.
 
-Source: whonix-qubes
+Source: qubes-whonix
 Section: admin
 Priority: extra
 Maintainer: Jason Mehring <nrgaway@gmail.com>
-Build-Depends: debhelper (>= 9), faketime, python, dh-systemd (>= 1.5) 
-Homepage: https://github.com/Whonix/whonix-qubes
-Vcs-Browser: https://github.com/Whonix/whonix-qubes
-Vcs-Git: https://github.com/Whonix/whonix-qubes.git
+Build-Depends: debhelper (>= 9), faketime, python, dh-systemd (>= 1.5)
+Homepage: https://github.com/Whonix/qubes-whonix
+Vcs-Browser: https://github.com/Whonix/qubes-whonix
+Vcs-Git: https://github.com/Whonix/qubes-whonix.git
 Standards-Version: 3.9.4
 
-Package: whonix-qubes
+Package: qubes-whonix
 Architecture: any
 Depends: ethtool, grub-pc, initscripts, iptables, lintian, locales, net-tools, notify-osd, python, sudo, systemd, x11-xserver-utils, xen-utils-common, xinit, xserver-xorg-core, xsettingsd, xdg-user-dirs, ${misc:Depends}
 Recommends: gnome-packagekit, gnome-terminal, haveged, network-manager (>= 0.8.1-1), network-manager-gnome
-Description: Qubes Configuration for Whonix Gateway and Workstation
+Description: Qubes Configuration for Whonix-Gateway and Whonix-Workstation
  This package contains all the scripts and configuration options to be able
- to run Whonix Gateway and Workstation within a Qubes environment.
+ to run Whonix-Gateway and Whonix-Workstation within a Qubes environment.
  .
- Whonix Gateway should run as a ProxyVM
+ Whonix-Gateway should run as a ProxyVM.
  .
- Whonix Workstation should run as an AppVM
+ Whonix-Workstation should run as an AppVM.
  .
- Template updates over Tor
+ Template updates over Tor.

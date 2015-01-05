@@ -1,6 +1,7 @@
-#!/bin/bash
+#!/bin/bash -e
+# vim: set ts=4 sw=4 sts=4 et :
 
-. /usr/lib/whonix/utility_functions
+source /usr/lib/qubes-whonix/utility_functions
 
 if [ -x /usr/sbin/xenstore-read ]; then
     XENSTORE_READ="/usr/sbin/xenstore-read"
@@ -11,11 +12,11 @@ fi
 # Make sure IP forwarding is disabled
 echo "0" > /proc/sys/net/ipv4/ip_forward
 
-if [ "${WHONIX}" != "template" ]; then
+if [ "${WHONIX_QUBES}" != "template" -o "${WHONIX_QUBES}" == "unknown" ]; then
     ip=$(${XENSTORE_READ} qubes-netvm-gateway 2> /dev/null)
 
     # Start Whonix Firewall
-    if [ "${WHONIX}" == "gateway" ]; then
+    if [ "${WHONIX_QUBES}" == "gateway" ]; then
         export INT_IF="vif+"
         export INT_TIF="vif+"
 
@@ -47,3 +48,4 @@ EOF
 
     systemctl restart qubes-updates-proxy.service
 fi
+

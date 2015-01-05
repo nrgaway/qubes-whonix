@@ -1,8 +1,8 @@
-## This file is part of Whonix.
-## Copyright (C) 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
+## This file is part of qubes-whonix.
 ## See the file COPYING for copying conditions.
 
 [Desktop Entry]
 Type=Application
 Terminal=false
-Exec=/usr/lib/whonix/qubes-whonixsetup
+Exec=/usr/lib/qubes-whonix/qubes-whonixsetup
+
