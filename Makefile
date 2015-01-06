@@ -24,6 +24,9 @@ deb-pkg-build-dep::
 deb-pkg-update-build-dep:
 	@sudo apt-get update
 
+dist:
+	./make-helper.bsh dist
+
 undist:
 	./make-helper.bsh undist
 
