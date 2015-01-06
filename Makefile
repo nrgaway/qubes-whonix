@@ -12,10 +12,7 @@ all:
 	@echo "make all is not required."
 
 version:
-	./parse_debian changelog --package-release-name debian/changelog
-
-dist:
-	./make-helper.bsh dist
+	@./parse_debian changelog --package-release-name debian/changelog
 
 deb-pkg-build-dep::
 	@./parse_debian control --build-depends debian/control |\
