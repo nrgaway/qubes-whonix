@@ -12,11 +12,11 @@ fi
 # Make sure IP forwarding is disabled
 echo "0" > /proc/sys/net/ipv4/ip_forward
 
-if [ "${WHONIX_QUBES}" != "template" -o "${WHONIX_QUBES}" == "unknown" ]; then
+if [ "${QUBES_WHONIX}" != "template" ]; then
     ip=$(${XENSTORE_READ} qubes-netvm-gateway 2> /dev/null)
 
     # Start Whonix Firewall
-    if [ "${WHONIX_QUBES}" == "gateway" ]; then
+    if [ "${QUBES_WHONIX}" == "gateway" ]; then
         export INT_IF="vif+"
         export INT_TIF="vif+"
 

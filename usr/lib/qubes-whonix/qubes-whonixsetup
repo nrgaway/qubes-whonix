@@ -3,11 +3,11 @@
 
 source /usr/lib/qubes-whonix/utility_functions
 
-if ! [ "${WHONIX_QUBES}" == "template" -o "${WHONIX_QUBES}" == "unknown"]; then
+if ! [ "${QUBES_WHONIX}" == "template" ]; then
     sudo /usr/lib/qubes-whonix/bind-dirs.sh
 fi
 
-if [ "${WHONIX_QUBES}" == "gateway" ]; then
+if [ "${QUBES_WHONIX}" == "gateway" ]; then
     if grep "^DisableNetwork 0$" /etc/tor/torrc ;then
         sudo service sdwdate restart
         sudo service tor restart
@@ -17,13 +17,13 @@ if [ "${WHONIX_QUBES}" == "gateway" ]; then
         sudo /usr/bin/whonixsetup
     fi
 
-elif [ "${WHONIX_QUBES}" == "workstation" ]; then
+elif [ "${QUBES_WHONIX}" == "workstation" ]; then
     sudo service sdwdate restart
     if ! [ -f "/var/lib/whonix/do_once/whonixsetup.done" ]; then
         sudo /usr/bin/whonixsetup
     fi
 
-elif [ "${WHONIX_QUBES}" == "template" -a "${PROXY_SECURE}" == "0" ]; then
+elif [ "${QUBES_WHONIX}" == "template" -a "${PROXY_SECURE}" == "0" ]; then
     # Set secure defaults.
     sudo iptables -P INPUT DROP
     sudo iptables -P FORWARD DROP

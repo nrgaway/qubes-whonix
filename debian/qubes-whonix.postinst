@@ -120,10 +120,6 @@ setPermissions() {
     chown ${owner}:${group} "${file}"
 }
 
-# Check to see if script is running within a Qubes environment
-if [ ! -d "/var/run/qubes" ]; then
-    WHONIX_QUBES="unknown"
-fi
 
 case "${1}" in
     configure)
@@ -141,7 +137,7 @@ case "${1}" in
         echo 'WHONIXCHECK_NO_EXIT_ON_UNSUPPORTED_VIRTUALIZER="1"' >> /etc/whonix.d/30_whonixcheck_default
 
         # Tor will be re-enabled upon initial configuration
-        if [ "${WHONIX_QUBES}" == "unknown" ]; then
+        if [ ! -d "/var/run/qubes" ]; then
             disableSystemdUnits \
                 tor.service \
                 sdwdate.service
@@ -160,11 +156,8 @@ case "${1}" in
             qubes-whonix-network.service \
             qubes-whonix-init.service
 
-        # Only run in a Qubes environment
-        if [ "${WHONIX_QUBES}" != "unknown" ]; then
-            /usr/lib/qubes-whonix/init/init.sh
-            /usr/lib/qubes-whonix/init/qubes-whonix-firewall.sh
-        fi
+        /usr/lib/qubes-whonix/init/init.sh
+        /usr/lib/qubes-whonix/init/qubes-whonix-firewall.sh
         ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
@@ -178,19 +171,15 @@ case "${1}" in
                 # Restart firewall
                 /usr/bin/whonix_firewall | \
                 /usr/share/tor/tor-service-defaults-torrc.anondist)
-                    /usr/lib/qubes-whonix/init/init.sh
-                    if [ "${WHONIX_QUBES}" != "unknown" ]; then
-                        /usr/lib/qubes-whonix/init/qubes-whonix-firewall.sh
-                    fi
+                /usr/lib/qubes-whonix/init/init.sh
+                    /usr/lib/qubes-whonix/init/qubes-whonix-firewall.sh
                     ;;
 
                 # Reset back to Whonix defaults
                 /etc/resolv.conf | \
                 /etc/hosts | \
                 /etc/hostname)
-                    if [ "${WHONIX_QUBES}" != "unknown" ]; then
-                        /usr/lib/qubes-whonix/init/init.sh
-                    fi
+                    /usr/lib/qubes-whonix/init/init.sh
                     ;;
 
                 # Replace IP addresses
@@ -209,9 +198,7 @@ case "${1}" in
                 /etc/rinetd.conf.anondist | \
                 /etc/network/interfaces.whonix | \
                 /usr/share/anon-torchat/.torchat/torchat.ini)
-                    if [ "${WHONIX_QUBES}" != "unknown" ]; then
-                        /usr/lib/qubes-whonix/init/replace-ips
-                    fi
+                    /usr/lib/qubes-whonix/init/replace-ips
                     ;;
 
                 *)

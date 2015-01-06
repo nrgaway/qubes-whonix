@@ -4,9 +4,9 @@
 source /usr/lib/qubes-whonix/utility_functions
 
 resetGatewayIP() {
-    if [ "${WHONIX_QUBES}" == "gateway" ]; then
+    if [ "${QUBES_WHONIX}" == "gateway" ]; then
         echo "10.152.152.10" > /etc/whonix-netvm-gateway
-    elif [ "${WHONIX_QUBES}" == "workstation" ]; then
+    elif [ "${QUBES_WHONIX}" == "workstation" ]; then
         echo "10.152.152.11" > /etc/whonix-netvm-gateway
     fi
 }
@@ -17,7 +17,7 @@ if [ ! -e "/etc/whonix-netvm-gateway" ]; then
     resetGatewayIP
 fi
 
-if [ "${WHONIX_QUBES}" != "template" -o "${WHONIX_QUBES}" == "unknown" ]; then
+if [ "${QUBES_WHONIX}" != "template" ]; then
     # Files that will have the immutable bit set
     # since we don't want them modified by other programs
     IMMUTABLE_FILES=(

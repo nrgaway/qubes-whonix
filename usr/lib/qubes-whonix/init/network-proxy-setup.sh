@@ -5,7 +5,7 @@ source /usr/lib/qubes-whonix/utility_functions
 
 INTERFACE="eth1"
 
-if [ "${WHONIX_QUBES}" == "gateway" ]; then
+if [ "${QUBES_WHONIX}" == "gateway" ]; then
 
     if [ -x /usr/sbin/xenstore-read ]; then
         XENSTORE_READ="/usr/sbin/xenstore-read"

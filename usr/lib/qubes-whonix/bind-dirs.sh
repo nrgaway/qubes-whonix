@@ -8,7 +8,7 @@
 source /usr/lib/qubes-whonix/utility_functions
 
 # Don't run if started as a template
-if ! [ "${WHONIX_QUBES}" == "template" -o "${WHONIX_QUBES}" == "unknown" ]; then
+if ! [ "${QUBES_WHONIX}" == "template" ]; then
     # Array of directories to bind
     BINDS=(
         '/rw/srv/whonix/root/.whonix:/root/.whonix'
@@ -48,7 +48,7 @@ if ! [ "${WHONIX_QUBES}" == "template" -o "${WHONIX_QUBES}" == "unknown" ]; then
     sync
 fi
 
-if [ "${WHONIX_QUBES}" == "gateway" ]; then
+if [ "${QUBES_WHONIX}" == "gateway" ]; then
     # Make sure we remove whonixsetup.done if Tor is not enabled
     # to allow choice of repo and prevent whonixcheck errors
     grep "^DisableNetwork 0$" /etc/tor/torrc || {

@@ -7,18 +7,18 @@ PROXY_SERVER="http://10.137.255.254:8082/"
 PROXY_META='<meta name=\"application-name\" content=\"tor proxy\"\/>'
 
 if [ ! -d "/var/run/qubes" ]; then
-    WHONIX_QUBES="unknown"
+    exit 0
 elif [ -f "/var/run/qubes-service/updates-proxy-setup" ]; then
-    WHONIX_QUBES="template"
+    QUBES_WHONIX="template"
 elif [ -f "/usr/share/anon-gw-base-files/gateway" ]; then
-    WHONIX_QUBES="gateway"
+    QUBES_WHONIX="gateway"
 elif [ -f "/usr/share/anon-ws-base-files/workstation" ]; then
-    WHONIX_QUBES="workstation"
+    QUBES_WHONIX="workstation"
 else
-    WHONIX_QUBES="unknown"
+    QUBES_WHONIX="unknown"
 fi
 
-if [ "${WHONIX_QUBES}" == "template" ]; then
+if [ "${QUBES_WHONIX}" == "template" ]; then
     curl.anondist-orig "${PROXY_SERVER}" | grep -q "${PROXY_META}" && {
         PROXY_SECURE=1
     } || {

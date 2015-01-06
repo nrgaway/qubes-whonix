@@ -84,7 +84,7 @@ update_ip() {
     }
 }
 
-if [ "${WHONIX_QUBES}" == "gateway" ]; then
+if [ "${QUBES_WHONIX}" == "gateway" ]; then
     ip="$(xenstore-read qubes-netvm-gateway)"
     if [ x${ip} != x ]; then
         # Compare to current IP address assiged by Qubes
@@ -97,7 +97,7 @@ if [ "${WHONIX_QUBES}" == "gateway" ]; then
         replace_ips "10.152.152.11" "${ip}" FILES[@] && update_ip "${ip}"
     fi
 
-elif [ "${WHONIX_QUBES}" == "workstation" ]; then
+elif [ "${QUBES_WHONIX}" == "workstation" ]; then
     ip="$(xenstore-read qubes-ip)"
     gateway="$(xenstore-read qubes-gateway)"
 
