@@ -254,7 +254,6 @@ make_parse_cmd() {
 }
 
 make_get_variables() {
-set -x
    local temp dpkg_line
    command -v dpkg-parsechangelog >/dev/null
 
