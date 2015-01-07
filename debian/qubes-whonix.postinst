@@ -150,12 +150,6 @@ case "${1}" in
             swap-file-creator.service \
             whonix-initializer.service
 
-        # Enable systemd units
-        enableSystemdUnits \
-            qubes-whonix-firewall.service \
-            qubes-whonix-network.service \
-            qubes-whonix-init.service
-
         /usr/lib/qubes-whonix/init/init.sh
         /usr/lib/qubes-whonix/init/qubes-whonix-firewall.sh
         ;;
