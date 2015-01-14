@@ -5,8 +5,10 @@
 # to proxy for template
 PROXY_SERVER="http://10.137.255.254:8082/"
 PROXY_META='<meta name=\"application-name\" content=\"tor proxy\"\/>'
+PROXY_SECURE=0
 
 if [ ! -d "/var/run/qubes" ]; then
+    QUBES_WHONIX="unknown"
     exit 0
 elif [ -f "/var/run/qubes-service/updates-proxy-setup" ]; then
     QUBES_WHONIX="template"
@@ -21,8 +23,6 @@ fi
 if [ "${QUBES_WHONIX}" == "template" ]; then
     curl.anondist-orig "${PROXY_SERVER}" | grep -q "${PROXY_META}" && {
         PROXY_SECURE=1
-    } || {
-        PROXY_SECURE=0
     }
 fi
 
