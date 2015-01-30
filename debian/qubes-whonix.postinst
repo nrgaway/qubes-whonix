@@ -192,8 +192,8 @@ case "${1}" in
             swap-file-creator.service \
             whonix-initializer.service
 
-        /usr/lib/qubes-whonix/init/init.sh
-        /usr/lib/qubes-whonix/init/qubes-whonix-firewall.sh
+        /usr/lib/qubes-whonix/init/init
+        /usr/lib/qubes-whonix/init/qubes-whonix-firewall
         ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
@@ -207,15 +207,15 @@ case "${1}" in
                 # Restart firewall
                 /usr/bin/whonix_firewall | \
                 /usr/share/tor/tor-service-defaults-torrc.anondist)
-                    /usr/lib/qubes-whonix/init/init.sh
-                    /usr/lib/qubes-whonix/init/qubes-whonix-firewall.sh
+                    /usr/lib/qubes-whonix/init/init
+                    /usr/lib/qubes-whonix/init/qubes-whonix-firewall
                     ;;
 
                 # Reset back to Whonix defaults
                 /etc/resolv.conf | \
                 /etc/hosts | \
                 /etc/hostname)
-                    /usr/lib/qubes-whonix/init/init.sh
+                    /usr/lib/qubes-whonix/init/init
                     ;;
 
                 # Replace IP addresses
