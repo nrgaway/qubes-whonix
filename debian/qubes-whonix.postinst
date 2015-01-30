@@ -206,7 +206,7 @@ case "${1}" in
                 # Restart firewall
                 /usr/bin/whonix_firewall | \
                 /usr/share/tor/tor-service-defaults-torrc.anondist)
-                /usr/lib/qubes-whonix/init/init.sh
+                    /usr/lib/qubes-whonix/init/init.sh
                     /usr/lib/qubes-whonix/init/qubes-whonix-firewall.sh
                     ;;
 
@@ -237,9 +237,9 @@ case "${1}" in
                     ;;
 
                 # Desktop Entry Modification - Not shown in Qubes
-                /etc/xdg/autostart/pulseaudio-kde.desktop |
-                /etc/xdg/autostart/gateway_first_run_notice.desktop |
-                /etc/xdg/autostart/spice-vdagent.desktop |
+                /etc/xdg/autostart/pulseaudio-kde.desktop | \
+                /etc/xdg/autostart/gateway_first_run_notice.desktop | \
+                /etc/xdg/autostart/spice-vdagent.desktop | \
                 /etc/xdg/autostart/whonixsetup.desktop | \
                 /etc/xdg/autostart/whonix-setup-wizard.desktop)
                     showIn "${trigger}" 'NotShowIn=QUBES;'
