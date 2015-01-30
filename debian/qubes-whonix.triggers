@@ -35,8 +35,8 @@ interest-noawait /etc/network/interfaces.whonix
 interest-noawait /usr/share/anon-torchat/.torchat/torchat.ini
 
 # Don't show in Qubes
-interest-nowait /etc/xdg/autostart/whonixsetup.desktop
-interest-nowait /etc/xdg/autostart/whonix-setup-wizard.desktop
-interest-nowait /etc/xdg/autostart/gateway_first_run_notice.desktop
-interest-nowait /etc/xdg/autostart/spice-vdagent.desktop
-interest-nowait /etc/xdg/autostart/pulseaudio-kde.desktop
+interest-noawait /etc/xdg/autostart/whonixsetup.desktop
+interest-noawait /etc/xdg/autostart/whonix-setup-wizard.desktop
+interest-noawait /etc/xdg/autostart/gateway_first_run_notice.desktop
+interest-noawait /etc/xdg/autostart/spice-vdagent.desktop
+interest-noawait /etc/xdg/autostart/pulseaudio-kde.desktop
