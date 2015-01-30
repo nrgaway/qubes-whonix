@@ -33,3 +33,10 @@ interest-noawait /etc/sdwdate.d/31_anon_dist_stream_isolation_plugin
 interest-noawait /etc/rinetd.conf.anondist
 interest-noawait /etc/network/interfaces.whonix
 interest-noawait /usr/share/anon-torchat/.torchat/torchat.ini
+
+# Don't show in Qubes
+interest-nowait /etc/xdg/autostart/whonixsetup.desktop
+interest-nowait /etc/xdg/autostart/whonix-setup-wizard.desktop
+interest-nowait /etc/xdg/autostart/gateway_first_run_notice.desktop
+interest-nowait /etc/xdg/autostart/spice-vdagent.desktop
+interest-nowait /etc/xdg/autostart/pulseaudio-kde.desktop
