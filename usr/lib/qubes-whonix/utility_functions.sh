@@ -1,6 +1,9 @@
 #!/bin/bash -e
 # vim: set ts=4 sw=4 sts=4 et :
 
+export QT_X11_NO_MITSHM=1
+export XDG_CURRENT_DESKTOP=gnome
+
 # /etc/uwt.d/50_uwt_default relies on this in order to allow connection 
 # to proxy for template
 PROXY_SERVER="http://10.137.255.254:8082/"
@@ -10,20 +13,21 @@ PROXY_SECURE=0
 if [ ! -d "/var/run/qubes" ]; then
     QUBES_WHONIX="unknown"
     exit 0
+
 elif [ -f "/var/run/qubes-service/updates-proxy-setup" ]; then
     QUBES_WHONIX="template"
-elif [ -f "/usr/share/anon-gw-base-files/gateway" ]; then
-    QUBES_WHONIX="gateway"
-elif [ -f "/usr/share/anon-ws-base-files/workstation" ]; then
-    QUBES_WHONIX="workstation"
-else
-    QUBES_WHONIX="unknown"
-fi
-
-if [ "${QUBES_WHONIX}" == "template" ]; then
     curl.anondist-orig "${PROXY_SERVER}" | grep -q "${PROXY_META}" && {
         PROXY_SECURE=1
     }
+
+elif [ -f "/usr/share/anon-gw-base-files/gateway" ]; then
+    QUBES_WHONIX="gateway"
+
+elif [ -f "/usr/share/anon-ws-base-files/workstation" ]; then
+    QUBES_WHONIX="workstation"
+
+else
+    QUBES_WHONIX="unknown"
 fi
 
 immutableFilesEnable() {

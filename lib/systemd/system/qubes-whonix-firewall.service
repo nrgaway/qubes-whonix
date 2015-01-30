@@ -4,7 +4,7 @@ After=qubes-whonix-network.service
 Before=network.target
 
 [Service]
-ExecStart=/usr/lib/qubes-whonix/init/qubes-whonix-firewall.sh
+ExecStart=/usr/lib/qubes-whonix/init/qubes-whonix-firewall
 StandardOutput=syslog
 
 [Install]

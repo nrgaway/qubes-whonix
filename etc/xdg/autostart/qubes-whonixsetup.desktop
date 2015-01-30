@@ -2,6 +2,7 @@
 ## See the file COPYING for copying conditions.
 
 [Desktop Entry]
+Encoding=UTF-8
 Type=Application
 Terminal=false
 Exec=/usr/lib/qubes-whonix/qubes-whonixsetup

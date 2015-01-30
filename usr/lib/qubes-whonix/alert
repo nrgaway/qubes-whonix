@@ -1,14 +1,22 @@
-#!/usr/bin/python
+#!/usr/bin/python2 -O
+# -*- coding: utf-8 -*-`
+#
+# vim: set ts=4 sw=4 sts=4 et :
 
 #
 # Copyright 2014 Jason Mehring (nrgaway@gmail.com)
 #
 
-from PyQt4 import QtGui
+import sys
+import argparse
 import locale
 import yaml
 
+from PyQt4 import QtGui
+
+
 DEFAULT_LANG = 'en'
+
 
 class Messages():
     filename = None
@@ -44,7 +52,10 @@ class Messages():
         except (yaml.scanner.ScannerError, yaml.parser.ParserError):
             pass
 
+
 class WhonixMessageBox(QtGui.QMessageBox):
+    '''
+    '''
     def __init__(self, message):
         super(WhonixMessageBox, self).__init__()
         self.message = message
@@ -62,10 +73,6 @@ class WhonixMessageBox(QtGui.QMessageBox):
         if message.message:
             self.setText(message.message)
             self.exec_()
-
-import argparse
-import sys
-
 
 
 def main():

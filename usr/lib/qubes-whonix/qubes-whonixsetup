@@ -1,10 +1,10 @@
 #!/bin/bash -e
 # vim: set ts=4 sw=4 sts=4 et :
 
-source /usr/lib/qubes-whonix/utility_functions
+source /usr/lib/qubes-whonix/utility_functions.sh
 
 if ! [ "${QUBES_WHONIX}" == "template" ]; then
-    sudo /usr/lib/qubes-whonix/bind-dirs.sh
+    sudo /usr/lib/qubes-whonix/bind-dirs
 fi
 
 if [ "${QUBES_WHONIX}" == "gateway" ]; then
@@ -14,13 +14,15 @@ if [ "${QUBES_WHONIX}" == "gateway" ]; then
     else
         sudo service sdwdate restart
         sudo service tor stop
-        sudo /usr/bin/whonixsetup
+        #sudo /usr/bin/whonixsetup
+        XDG_CURRENT_DESKTOP=gnome sudo /usr/bin/whonix-setup-wizard setup -style gtk+
     fi
 
 elif [ "${QUBES_WHONIX}" == "workstation" ]; then
     sudo service sdwdate restart
     if ! [ -f "/var/lib/whonix/do_once/whonixsetup.done" ]; then
-        sudo /usr/bin/whonixsetup
+        #sudo /usr/bin/whonixsetup
+        XDG_CURRENT_DESKTOP=gnome sudo /usr/bin/whonix-setup-wizard setup -style gtk+
     fi
 
 elif [ "${QUBES_WHONIX}" == "template" -a "${PROXY_SECURE}" == "0" ]; then

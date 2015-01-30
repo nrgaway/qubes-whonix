@@ -7,8 +7,8 @@ After=iptables.service
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/lib/qubes-whonix/init/network-proxy-setup.sh
-ExecStartPost=/usr/lib/qubes-whonix/init/init.sh
+ExecStart=/usr/lib/qubes-whonix/init/network-proxy-setup
+ExecStartPost=/usr/lib/qubes-whonix/init/init
 StandardOutput=syslog
 
 [Install]

@@ -1,119 +1,172 @@
-#!/bin/bash -e
+#!/usr/bin/python2 -O
+# -*- coding: utf-8 -*-`
+#
 # vim: set ts=4 sw=4 sts=4 et :
 
-source /usr/lib/qubes-whonix/utility_functions
+import os
+import sys
+import re
+import subprocess
 
-# Search though files and updates IP address to the current
-# IP address(es)
+WHONIX_IP_GATEWAY = '/etc/whonix-ip-gateway'
+WHONIX_IP_LOCAL = '/etc/whonix-ip-local'
+IP_ADDRESS = re.compile(r'(?:[0-9]{1,3}\.){3}[0-9]{1,3}')
 
-FILES=(
-    '/usr/lib/leaktest-workstation/simple_ping.py'
-    '/usr/lib/whonixcheck/preparation'
-    '/usr/share/anon-kde-streamiso/share/config/kioslaverc'
-    '/usr/bin/whonix_firewall'
-    '/etc/whonix_firewall.d/30_default'
-    '/usr/lib/anon-shared-helper-scripts/tor_bootstrap_check.bsh'
-    '/usr/bin/uwt'
-    '/etc/uwt.d/30_uwt_default'
-    '/usr/share/tor/tor-service-defaults-torrc.anondist'
-    '/usr/bin/update-torbrowser'
-    '/etc/network/interfaces.whonix'
-    '/etc/resolv.conf.anondist'
-    '/etc/sdwdate.d/31_anon_dist_stream_isolation_plugin'
-    '/etc/rinetd.conf.anondist'
-    '/etc/network/interfaces.whonix'
-    '/usr/share/anon-torchat/.torchat/torchat.ini'
-)
+FILES=[
+    '/usr/lib/leaktest-workstation/simple_ping.py',
+    '/usr/lib/whonixcheck/preparation',
+    '/usr/share/anon-kde-streamiso/share/config/kioslaverc',
+    '/usr/bin/whonix_firewall',
+    '/etc/whonix_firewall.d/30_default',
+    '/usr/lib/anon-shared-helper-scripts/tor_bootstrap_check.bsh',
+    '/usr/bin/uwt',
+    '/etc/uwt.d/30_uwt_default',
+    '/usr/share/tor/tor-service-defaults-torrc.anondist',
+    '/usr/bin/update-torbrowser',
+    '/etc/network/interfaces.whonix',
+    '/etc/resolv.conf.anondist',
+    '/etc/sdwdate.d/31_anon_dist_stream_isolation_plugin',
+    '/etc/rinetd.conf.anondist',
+    '/etc/network/interfaces.whonix',
+    '/usr/share/anon-torchat/.torchat/torchat.ini',
+]
 
-# sed search and replace. return 0 if replace happened, otherwise 1
-search_replace() {
-    local search="${1}"
-    local replace="${2}"
-    local file="${3}"
-    local retval=1
 
-    if ! [ -L "${file}" ]; then
-        ls_attrs="$(lsattr "${file}")"
-        ls_attrs=${ls_attrs:4:1}
-        if [ "${ls_attrs}" == "i" ]; then
-            chattr -i "${file}"
-        fi
-    fi
+def whonix_mode():
+    '''Determine Whonix mode.
 
-    sed -i.bak '/'"${search}"'/,${s//'"${replace}"'/;b};$q1' "${file}"
-    retval=$?
+    Can be either gateway, workstation, tempalte or unknown
+    '''
+    mode = 'unknown'
 
-    if [ "${ls_attrs}" = "i" ]; then
-        chattr +i "${file}"
-    fi
+    if os.path.exists('/var/run/qubes'):
+        if os.path.exists('/var/run/qubes-service/updates-proxy-setup'):
+            mode = 'template'
+        if os.path.exists('/usr/share/anon-gw-base-files'):
+            mode = 'gateway'
+        elif os.path.exists('/usr/share/anon-ws-base-files'):
+            mode = 'workstation'
+    return mode
 
-    return $retval
-}
 
-function replace_ips()
-{
-    local search_ip="${1}"
-    local replace_ip="${2}"
-    local files=("${!3}")
-    local retval=1
+def is_immutable(filename):
+    filename =  os.path.abspath(filename)
+    lsattr = subprocess.check_output(['lsattr', filename])
+    return lsattr[4] ==  'i'
 
-    # If IP is 10.152.152.10, network is 10.152.152.0
-    search_network="${search_ip%[.]*}.0"
-    replace_network="${replace_ip%[.]*}.0"
 
-    if ! [ "${search_ip}" = "${replace_ip}" ]; then
-        for file in "${files[@]}"; do
-            if [ -f "$file" ]; then
-                search_replace "${search_ip}" "${replace_ip}" "${file}" && retval=0
-                search_replace "${search_network}" "${replace_network}" "${file}" && retval=0
-            fi
-        done
-    fi
+def replace_ip(ips, current_ip, files, ip_file):
+    replaced = False
+    for filename in files:
+        if os.path.exists(filename):
+            try:
+                with open(filename, 'r') as infile:
+                    text = infile.read()
+            except (IOError):
+                return False
 
-    return $retval
-}
+            match = text 
+            for last_ip in ips:
+                #if last_ip == current_ip:
+                #    continue
 
-update_ip() {
-    ip=${1}
+                match = re.sub(r'(?m){0}'.
+                               format(re.escape(last_ip)),
+                               current_ip,
+                               match)
 
-    echo "${ip}" > /etc/whonix-netvm-gateway
-    grep '^DisableNetwork 0$' /etc/tor/torrc && {
-	service tor status && {
-            service tor reload || true;
-	}
-    }
-}
+                match = re.sub(r'(?m){0}[.]0'.
+                               format(re.escape(last_ip.rsplit('.', 1)[0])),
+                               current_ip.rsplit('.', 1)[0] + '.0',
+                               match)
 
-if [ "${QUBES_WHONIX}" == "gateway" ]; then
-    ip="$(xenstore-read qubes-netvm-gateway)"
-    if [ x${ip} != x ]; then
-        # Compare to current IP address assiged by Qubes
-        replace_ips "$(cat /etc/whonix-netvm-gateway)" "${ip}" FILES[@] && update_ip "${ip}"
+            if text !=  match:
+                try:
+                    immutable = False
+                    if is_immutable(filename):
+                        subprocess.call(['chattr', '-i', os.path.abspath(filename)])
 
-        # Do again; checking for original 10.152.152.10 incase of update
-        replace_ips "10.152.152.10" "${ip}" FILES[@] && update_ip "${ip}"
+                    with open(filename, 'w') as outfile:
+                        outfile.writelines(match)
 
-        # Do again; checking for original 10.152.152.11 incase of update
-        replace_ips "10.152.152.11" "${ip}" FILES[@] && update_ip "${ip}"
-    fi
+                    if immutable:
+                        subprocess.call(['chattr', '+i', os.path.abspath(filename)])
 
-elif [ "${QUBES_WHONIX}" == "workstation" ]; then
-    ip="$(xenstore-read qubes-ip)"
-    gateway="$(xenstore-read qubes-gateway)"
+                    replaced = True
+                except (IOError):
+                    return False
 
-    if [ x${ip} != x ]; then
-        # Compare to current IP address assiged by Qubes
-        replace_ips "$(cat /etc/whonix-ip)" "${ip}" FILES[@] && echo "${ip}" > /etc/whonix-ip
+    if replaced:
+        try:
+            with open(ip_file, 'w') as outfile:
+                outfile.writelines(current_ip)
+            replaced = True
+        except (IOError):
+            return False
 
-        # Do again; checking for original 10.152.152.11 incase of update
-        replace_ips "10.152.152.11" "${ip}" FILES[@] &&  echo "${ip}" > /etc/whonix-ip
-    fi
+    return replaced
 
-    if [ x${gateway} != x ]; then
-        # Compare to current gateway IP address assiged by Qubes
-        replace_ips "$(cat /etc/whonix-netvm-gateway)" "${gateway}" FILES[@] && echo "${gateway}" > /etc/whonix-netvm-gateway
 
-        # Do again; checking for original 10.152.152.10 incase of update
-        replace_ips "10.152.152.10" "${gateway}" FILES[@] && echo "${gateway}" > /etc/whonix-netvm-gateway
-    fi
-fi
+def get_ip_address(filename, default=''):
+    if os.path.exists(filename):
+        try:
+            with open(filename, 'r') as infile:
+                ip_address = infile.read()
+            if IP_ADDRESS.match(ip_address):
+                return ip_address.rstrip()
+        except (IOError):
+            return ''
+    return default
+
+
+def maybe_reload_tor():
+    torrc = '/etc/tor/torrc'
+    if os.path.exists(torrc):
+        try:
+            with open(torrc, 'r') as infile:
+                text = infile.read()
+        except (IOError):
+            return
+
+    if re.search(r'^DisableNetwork 0$', text,  re.MULTILINE):
+        try:
+            if subprocess.check_output(['systemctl', 'is-enabled', 'tor']).strip() == 'enabled':
+                subprocess.call(['systemctl', 'reload', 'tor'])
+                pass
+        except (subprocess.CalledProcessError):
+            pass
+
+
+def main(args):
+    last_ip_gateway = get_ip_address(WHONIX_IP_GATEWAY, '10.152.152.10')
+    last_ip_local = get_ip_address(WHONIX_IP_LOCAL, '10.152.152.11')
+
+    if last_ip_gateway:
+        if whonix_mode() == 'gateway':
+            try:
+                current_ip_gateway = subprocess.check_output(['xenstore-read', 'qubes-netvm-gateway']).rstrip()
+            except (OSError, subprocess.CalledProcessError):
+                return
+
+            if IP_ADDRESS.match(current_ip_gateway):
+                ips_to_replace = [last_ip_gateway, '10.152.152.10',  '10.152.152.11']
+                if replace_ip(ips_to_replace, current_ip_gateway, FILES, WHONIX_IP_GATEWAY):
+                    maybe_reload_tor()
+
+        if whonix_mode() == 'workstation' and last_ip_local:
+            try:
+                current_ip_local = subprocess.check_output(['xenstore-read', 'qubes-ip']).rstrip()
+                current_ip_gateway = subprocess.check_output(['xenstore-read', 'qubes-gateway']).rstrip()
+            except (OSError, subprocess.CalledProcessError):
+                return
+
+            if IP_ADDRESS.match(current_ip_local) and IP_ADDRESS.match(current_ip_gateway):
+                ips_to_replace = [last_ip_local, '10.152.152.11']
+                replace_ip(ips_to_replace, current_ip_local, FILES, WHONIX_IP_LOCAL)
+
+                ips_to_replace = [last_ip_gateway, '10.152.152.10']
+                replace_ip(ips_to_replace, current_ip_gateway, FILES, WHONIX_IP_GATEWAY)
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

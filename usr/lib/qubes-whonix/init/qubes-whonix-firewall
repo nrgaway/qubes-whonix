@@ -1,7 +1,7 @@
 #!/bin/bash -e
 # vim: set ts=4 sw=4 sts=4 et :
 
-source /usr/lib/qubes-whonix/utility_functions
+source /usr/lib/qubes-whonix/utility_functions.sh
 
 if [ "${QUBES_WHONIX}" != "template" ]; then
 

@@ -5,7 +5,7 @@
 # To umount all binds, just pass any arg in $1
 #
 
-source /usr/lib/qubes-whonix/utility_functions
+source /usr/lib/qubes-whonix/utility_functions.sh
 
 # Don't run if started as a template
 if ! [ "${QUBES_WHONIX}" == "template" ]; then
