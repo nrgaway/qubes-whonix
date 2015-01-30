@@ -171,11 +171,12 @@ case "${1}" in
         mkdir -p /root/.whonix
         touch /root/.whonix/first_run_initializer.done
 
+        # prevent first-use notice:
+        mkdir -p /home/user/.gateway
+        touch /home/user/.gateway/first_use_check.done
+
         # Prevent whonixcheck error
         echo 'WHONIXCHECK_NO_EXIT_ON_UNSUPPORTED_VIRTUALIZER="1"' >> /etc/whonix.d/30_whonixcheck_default
-
-        # prevent first-use notice:
-        touch /home/user/.gateway/first_use_check.done
 
         # Tor will be re-enabled upon initial configuration
         if [ ! -d "/var/run/qubes" ]; then
