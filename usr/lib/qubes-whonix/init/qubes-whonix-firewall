@@ -3,16 +3,17 @@
 
 source /usr/lib/qubes-whonix/utility_functions.sh
 
-if [ "${QUBES_WHONIX}" != "template" ]; then
+
+# Make sure IP forwarding is disabled
+echo "0" > /proc/sys/net/ipv4/ip_forward
+
+if [ -e '/var/run/qubes-service/qubes-network' ]; then
 
     if [ -x /usr/sbin/xenstore-read ]; then
         XENSTORE_READ="/usr/sbin/xenstore-read"
     else
         XENSTORE_READ="/usr/bin/xenstore-read"
     fi
-
-    # Make sure IP forwarding is disabled
-    echo "0" > /proc/sys/net/ipv4/ip_forward
 
     ip=$(${XENSTORE_READ} qubes-netvm-gateway 2> /dev/null)
 

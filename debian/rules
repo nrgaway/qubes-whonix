@@ -16,6 +16,3 @@ export DESTDIR=$(shell pwd)/debian/qubes-whonix
 
 %:
 	dh $@ --with systemd
-
-override_dh_systemd_start:
-	dh_systemd_start --no-restart-on-upgrade

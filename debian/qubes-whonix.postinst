@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 # vim: set ts=4 sw=4 sts=4 et :
 
 ## This file is part of Whonix
@@ -164,7 +164,7 @@ case "${1}" in
         # Use gdialog as an alternative for dialog
         if [ ! -L "/usr/bin/dialog" ]; then
             mv -f /usr/bin/dialog /usr/bin/dialog.dist
-            update-alternatives --force --install /usr/bin/dialog dialog /usr/bin/gdialog 999
+            update-alternatives --force --install /usr/bin/dialog dialog /usr/bin/gdialog 100
         fi
 
         # Fake that initializer was already run
@@ -179,21 +179,27 @@ case "${1}" in
         echo 'WHONIXCHECK_NO_EXIT_ON_UNSUPPORTED_VIRTUALIZER="1"' >> /etc/whonix.d/30_whonixcheck_default
 
         # Tor will be re-enabled upon initial configuration
-        if [ ! -d "/var/run/qubes" ]; then
-            disableSystemdUnits \
-                tor.service \
-                sdwdate.service
-        fi
+        update-rc.d tor disable || true
+        update-rc.d sdwdate disable || true
 
         # Disable unwanted applications
-        disableSystemdUnits \
-            network-manager.service \
-            spice-vdagent.service \
-            swap-file-creator.service \
-            whonix-initializer.service
+        update-rc.d network-manager disable || true
+        update-rc.d spice-vdagent disable || true
+        update-rc.d swap-file-creator disable || true
+        update-rc.d whonix-initializer disable || true
 
-        /usr/lib/qubes-whonix/init/init
-        /usr/lib/qubes-whonix/init/qubes-whonix-firewall
+        # Will not be restarted in chroot which is what is expected
+        systemctl restart /usr/lib/qubes-whonix/init/init
+        systemctl restart /usr/lib/qubes-whonix/init/qubes-whonix-firewall
+
+        # Modify desktop files not to show in Qubes
+        for item in = /etc/xdg/autostart/pulseaudio-kde.desktop \
+                      /etc/xdg/autostart/gateway_first_run_notice.desktop \
+                      /etc/xdg/autostart/spice-vdagent.desktop \
+                      /etc/xdg/autostart/whonixsetup.desktop \
+                      /etc/xdg/autostart/whonix-setup-wizard.desktop ; do
+            showIn "${item}" 'NotShowIn=QUBES;'
+        done
         ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

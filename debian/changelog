@@ -1,5 +1,5 @@
-qubes-whonix (9.4-1) UNRELEASED; urgency=low
+qubes-whonix (0:9.6-1) unstable; urgency=low
 
-  * Initial release. (Closes: #100)
+  * Initial release.
 
- -- Jason Mehring <nrgaway@gmail.com>  Sun, 28 Dec 2014 00:00:00 -0000
+ -- Jason Mehring <nrgaway@gmail.com>  Fri, 30 Jan 2015 00:00:00 +0000

@@ -1,6 +1,5 @@
 [Unit]
 Description=Qubes Whonix network proxy setup
-ConditionPathExists=/var/run/qubes-service/qubes-network
 Before=network.target
 After=iptables.service
 

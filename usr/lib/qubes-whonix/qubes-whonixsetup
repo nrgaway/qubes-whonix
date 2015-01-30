@@ -25,7 +25,7 @@ elif [ "${QUBES_WHONIX}" == "workstation" ]; then
         XDG_CURRENT_DESKTOP=gnome sudo /usr/bin/whonix-setup-wizard setup -style gtk+
     fi
 
-elif [ "${QUBES_WHONIX}" == "template" -a "${PROXY_SECURE}" == "0" ]; then
+elif [ "${QUBES_WHONIX}" == "template" ] && [ ! -e '/var/run/qubes-service/qubes-whonix-secure-proxy' ]; then
     # Set secure defaults.
     sudo iptables -P INPUT DROP
     sudo iptables -P FORWARD DROP

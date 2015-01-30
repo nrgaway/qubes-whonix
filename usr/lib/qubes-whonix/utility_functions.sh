@@ -8,7 +8,6 @@ export XDG_CURRENT_DESKTOP=gnome
 # to proxy for template
 PROXY_SERVER="http://10.137.255.254:8082/"
 PROXY_META='<meta name=\"application-name\" content=\"tor proxy\"\/>'
-PROXY_SECURE=0
 
 if [ ! -d "/var/run/qubes" ]; then
     QUBES_WHONIX="unknown"
@@ -16,9 +15,11 @@ if [ ! -d "/var/run/qubes" ]; then
 
 elif [ -f "/var/run/qubes-service/updates-proxy-setup" ]; then
     QUBES_WHONIX="template"
-    curl.anondist-orig "${PROXY_SERVER}" | grep -q "${PROXY_META}" && {
-        PROXY_SECURE=1
-    }
+    if [ ! -e '/var/run/qubes-service/qubes-whonix-secure-proxy' ]; then
+        curl.anondist-orig --connect-timeout 3 "${PROXY_SERVER}" | grep -q "${PROXY_META}" && {
+            sudo touch '/var/run/qubes-service/qubes-whonix-secure-proxy'
+        }
+    fi
 
 elif [ -f "/usr/share/anon-gw-base-files/gateway" ]; then
     QUBES_WHONIX="gateway"

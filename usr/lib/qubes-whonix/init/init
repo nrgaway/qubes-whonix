@@ -23,10 +23,10 @@ copyAnondist "/etc/hosts"
 copyAnondist "/etc/hostname"
 
 if [ "${QUBES_WHONIX}" == "gateway" ] || [ "${QUBES_WHONIX}" == "workstation" ]; then
-    # Replace IP addresses in known configuration files / scripts to
-    # currently discovered one
+    # Replace IP addresses in known configuration files / scripts with
+    # currently discovered IP address
     /usr/lib/qubes-whonix/init/replace-ips
-
-    # Make sure hostname is correct
-    /bin/hostname host
 fi
+
+# Make sure hostname is correct
+/bin/hostname host
