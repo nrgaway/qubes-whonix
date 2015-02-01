@@ -200,6 +200,16 @@ case "${1}" in
                       /etc/xdg/autostart/whonix-setup-wizard.desktop ; do
             showIn "${item}" 'NotShowIn=QUBES;'
         done
+
+        # Set timezone to UTC and make files immutable
+        timezone='UTC'
+        cp -p /usr/share/zoneinfo/${timezone} /etc/localtime
+        cp -p /usr/share/zoneinfo/${timezone} /etc/localtime.anondist
+        echo "${timezone}" > /etc/timezone
+        echo "${timezone}" > /etc/timezone.anondist
+        chattr +i /etc/localtime
+        chattr +i /etc/timezone
+
         ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

@@ -10,6 +10,8 @@ IMMUTABLE_FILES=(
     '/etc/resolv.conf'
     '/etc/hostname'
     '/etc/hosts'
+    '/etc/localtime'
+    '/etc/timezone'
 )
 
 # Make sure all .anondist files in list are immutable
@@ -21,6 +23,8 @@ immutableFilesEnable "${IMMUTABLE_FILES}" ".anondist"
 copyAnondist "/etc/resolv.conf"
 copyAnondist "/etc/hosts"
 copyAnondist "/etc/hostname"
+copyAnondist "/etc/localtime"
+copyAnondist "/etc/timezone"
 
 if [ "${QUBES_WHONIX}" == "gateway" ] || [ "${QUBES_WHONIX}" == "workstation" ]; then
     # Replace IP addresses in known configuration files / scripts with
