@@ -269,36 +269,48 @@ make_get_variables() {
       python setup.py --command-packages=stdeb.command debianize
    fi
 
-   while read -r -d $'\n' dpkg_line; do
-      ## Example dpkg_line:
-      ## Version: 0.1-1
-      read -r first second _ <<< "$dpkg_line"
-      ## Example first:
-      ## Version:
-      ## Example second:
-      ## 3:0.1-1
-      first="${first,,}"
-      ## Example first:
-      ## version
-      if [ "$first" = "version:" ]; then
-         make_changelog_version="$second"
-         ## Example make_changelog_version:
-         ## 3:0.1-1
-         make_pkg_revision="${second#*-}"
-         ## Example make_pkg_revision:
-         ## 1
-         temp="${second%-*}"
-         ## Example temp:
-         ## 3:0.1
-         make_pkg_version="${temp#*:}"
-         ## Example make_pkg_version:
-         ## 0.1
-         make_epoch="${second%:*}"
-         ## Example make_epoch:
-         ## 3
-         break
-      fi
-   done < <( dpkg-parsechangelog )
+   #while read -r -d $'\n' dpkg_line; do
+   #   ## Example dpkg_line:
+   #   ## Version: 0.1-1
+   #   read -r first second _ <<< "$dpkg_line"
+   #   ## Example first:
+   #   ## Version:
+   #   ## Example second:
+   #   ## 3:0.1-1
+   #   first="${first,,}"
+   #   ## Example first:
+   #   ## version
+   #   if [ "$first" = "version:" ]; then
+   #      make_changelog_version="$second"
+   #      ## Example make_changelog_version:
+   #      ## 3:0.1-1
+   #      make_pkg_revision="${second#*-}"
+   #      ## Example make_pkg_revision:
+   #      ## 1
+   #      temp="${second%-*}"
+   #      ## Example temp:
+   #      ## 3:0.1
+   #      make_pkg_version="${temp#*:}"
+   #      ## Example make_pkg_version:
+   #      ## 0.1
+   #      make_epoch="${second%:*}"
+   #      ## Example make_epoch:
+   #      ## 3
+   #      break
+   #   fi
+   #done < <( dpkg-parsechangelog )
+
+   # --------------------------------------------------------------------------
+   # The above code breaks Qubes install
+   # --------------------------------------------------------------------------
+   # ./make-helper.bsh: line 256: /dev/fd/62: No such file or directory
+   # + make_pkg_version_with_revision=-
+   # + '[' '' = '' ']'
+   # + echo 'ERROR: variable make_pkg_version is empty.'
+
+   make_pkg_version="$(./debian-parser changelog --package-version debian/changelog)"
+   make_pkg_revision="$(./debian-parser changelog --package-revision debian/changelog)"
+   make_epoc="$(./debian-parser changelog --package-version-epoc debian/changelog)"
 
    make_pkg_version_with_revision="${make_pkg_version}-${make_pkg_revision}"
    if [ "$make_pkg_version" = "" ]; then

@@ -1,5 +1,7 @@
 #!/usr/bin/python2 -O
 # -*- coding: utf-8 -*-
+#
+# vim: set ts=4 sw=4 sts=4 et :
 
 '''
 Qubes OS
@@ -146,11 +148,15 @@ def main(argv):
                                  action='store_true',
                                  help='Return package name'
                                  )
+    changelog_parser.add_argument( '--package-version',
+                                 action='store_true',
+                                 help='Return package version.  Will not contain EPOC.'
+                                 )
     changelog_parser.add_argument( '--package-version-epoc',
                                  action='store_true',
                                  help='Returns package EPOC version number.  If no EPOC exist it wil be assumed to be 0'
                                  )
-    changelog_parser.add_argument( '--package-version',
+    changelog_parser.add_argument( '--package-revision',
                                  action='store_true',
                                  help='Return package version.  Will not contain EPOC.'
                                  )
@@ -161,6 +167,10 @@ def main(argv):
     changelog_parser.add_argument( '--package-release-name',
                                  action='store_true',
                                  help='Return package release name (<package-name>_<package-version>) with no EPOC included'
+                                 )
+    changelog_parser.add_argument( '--package-release-name-full',
+                                 action='store_true',
+                                 help='Return package release name (<package-name>_<package-version>-<revision>) with no EPOC included'
                                  )
     changelog_parser.add_argument( '--package-distribution',
                                  action='store_true',
@@ -267,17 +277,26 @@ def parseChangelog(filename, **args):
     '''
     content = getContent(filename)
 
-    changelog_re = re.compile(r"^(?P<package_name>.*) \((?P<package_version_full>.*)\) (?P<package_distrib>.*); (?P<package_urgency>.*)$" )
+    changelog_re = re.compile(r'^(?P<package_name>.*) \((?P<package_version_full>.*)\) (?P<package_distrib>.*); (?P<package_urgency>.*)$' )
     match = changelog_re.match(content.split('\n')[0].strip())
     info = match.groupdict()
 
     # Split apart epoch and version so one can reference any part
-    version_re = re.compile(r"(?P<package_version_epoc>^[\d]?):?(?P<package_version>\d.*)$" )
+    version_re = re.compile(r'''
+        (?P<package_version_epoc> ^[\d]+[:] | )
+        (?P<package_version>[\d.]+)
+        (?:[-]?)(?P<package_revision> (?<=[-]).* | )
+        $
+        ''', re.VERBOSE)
     match = version_re.match(info['package_version_full'])
-    version = match.groupdict()
-
-    info.update(version)
-    info['package_release_name'] = '{0[package_name]}_{0[package_version]}'.format(info)
+    if match:
+        version = match.groupdict()
+        info.update(version)
+        info['package_release_name'] = '{0[package_name]}_{0[package_version]}'.format(info)
+        if info['package_revision']:
+            info['package_release_name_full'] = '{package_name}_{package_version}-{package_revision}'.format(**info)
+        else:
+            info['package_release_name_full'] = info['package_release_name']
 
     # Clear out values from info that were not selected so we return only requested
     # info

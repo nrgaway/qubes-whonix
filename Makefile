@@ -12,10 +12,10 @@ all:
 	@echo "make all is not required."
 
 version:
-	@./parse_debian changelog --package-release-name debian/changelog
+	@./debian-parser changelog --package-release-name debian/changelog
 
 deb-pkg-build-dep::
-	@./parse_debian control --build-depends debian/control |\
+	@./debian-parser control --build-depends debian/control |\
 	    xargs sudo apt-get install -y
 
 deb-pkg-update-build-dep:
