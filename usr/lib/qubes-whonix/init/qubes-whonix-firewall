@@ -9,13 +9,18 @@ echo "0" > /proc/sys/net/ipv4/ip_forward
 
 if [ -e '/var/run/qubes-service/qubes-network' ]; then
 
-    if [ -x /usr/sbin/xenstore-read ]; then
-        XENSTORE_READ="/usr/sbin/xenstore-read"
+    # Qubes R3
+    if which qubesdb-read > /dev/null; then
+        QUBESDB=qubesdb
+        PREFIX='/'
+
+    # Qubes R2
     else
-        XENSTORE_READ="/usr/bin/xenstore-read"
+        QUBESDB=xenstore
+        PREFIX=''
     fi
 
-    ip=$(${XENSTORE_READ} qubes-netvm-gateway 2> /dev/null)
+    ip=$(${QUBESDB}-read ${PREFIX}qubes-netvm-gateway 2> /dev/null)
 
     # Start Whonix Firewall
     if [ "${QUBES_WHONIX}" == "gateway" ]; then

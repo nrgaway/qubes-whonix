@@ -3,7 +3,6 @@
 
 source /usr/lib/qubes-whonix/utility_functions.sh
 
-
 # Files that will have the immutable bit set
 # since we don't want them modified by other programs
 IMMUTABLE_FILES=(

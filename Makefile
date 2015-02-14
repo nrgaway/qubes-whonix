@@ -1,6 +1,10 @@
 #!/usr/bin/make -f
 
-## generic deb build script version 1.0
+## This file is part of Whonix.
+## Copyright (C) 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
+## See the file COPYING for copying conditions.
+
+## generic deb build script version 1.3
 
 ## This is a copy.
 ## master location:
@@ -10,16 +14,6 @@ DESTDIR ?= /
 
 all:
 	@echo "make all is not required."
-
-version:
-	@./debian-parser changelog --package-release-name debian/changelog
-
-deb-pkg-build-dep::
-	@./debian-parser control --build-depends debian/control |\
-	    xargs sudo apt-get install -y
-
-deb-pkg-update-build-dep:
-	@sudo apt-get update
 
 dist:
 	./make-helper.bsh dist
@@ -42,10 +36,10 @@ uch:
 install:
 	./make-helper.bsh install
 
-deb-pkg: deb-pkg-build-dep
+deb-pkg:
 	./make-helper.bsh deb-pkg ${ARGS}
 
-deb-pkg-signed: deb-pkg-build-dep
+deb-pkg-signed:
 	./make-helper.bsh deb-pkg-signed ${ARGS}
 
 deb-pkg-install:
@@ -71,6 +65,9 @@ deb-clean:
 
 deb-cleanup:
 	./make-helper.bsh deb-cleanup
+
+lintian:
+	./make-helper.bsh lintian
 
 dput-ubuntu-ppa:
 	./make-helper.bsh dput-ubuntu-ppa
@@ -101,6 +98,9 @@ uninstallsim:
 
 deb-chl-bumpup:
 	./make-helper.bsh deb-chl-bumpup
+
+deb-uachl-bumpup:
+	./make-helper.bsh deb-uachl-bumpup
 
 git-tag-sign:
 	./make-helper.bsh git-tag-sign

@@ -175,6 +175,10 @@ case "${1}" in
         mkdir -p /home/user/.gateway
         touch /home/user/.gateway/first_use_check.done
 
+        # make sure user is added to debian-tor group
+        groupadd --force debian-tor
+        usermod -a --groups debian-tor user
+
         # Prevent whonixcheck error
         echo 'WHONIXCHECK_NO_EXIT_ON_UNSUPPORTED_VIRTUALIZER="1"' >> /etc/whonix.d/30_whonixcheck_default
 

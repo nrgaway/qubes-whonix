@@ -14,6 +14,11 @@ if [ "${QUBES_WHONIX}" == "gateway" ]; then
     else
         sudo service sdwdate restart
         sudo service tor stop
+
+        # Whonix setup complete 
+        sudo mkdir -p /var/lib/whonix/do_once
+        sudo touch /var/lib/whonix/do_once/whonixsetup.done
+
         #sudo /usr/bin/whonixsetup
         XDG_CURRENT_DESKTOP=gnome sudo /usr/bin/whonix-setup-wizard setup -style gtk+
     fi
@@ -21,6 +26,10 @@ if [ "${QUBES_WHONIX}" == "gateway" ]; then
 elif [ "${QUBES_WHONIX}" == "workstation" ]; then
     sudo service sdwdate restart
     if ! [ -f "/var/lib/whonix/do_once/whonixsetup.done" ]; then
+        # Whonix setup complete 
+        sudo mkdir -p /var/lib/whonix/do_once
+        sudo touch /var/lib/whonix/do_once/whonixsetup.done
+
         #sudo /usr/bin/whonixsetup
         XDG_CURRENT_DESKTOP=gnome sudo /usr/bin/whonix-setup-wizard setup -style gtk+
     fi

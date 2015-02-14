@@ -141,10 +141,20 @@ def main(args):
     last_ip_gateway = get_ip_address(WHONIX_IP_GATEWAY, '10.152.152.10')
     last_ip_local = get_ip_address(WHONIX_IP_LOCAL, '10.152.152.11')
 
+    # Qubes R3
+    if os.path.exists('/usr/bin/qubesdb-read'):
+        qubesdb_read = 'qubesdb-read'
+        prefix = '/'
+
+    # Qubes R2
+    else:
+        qubesdb_read = 'xenstore-read'
+        prefix = ''
+
     if last_ip_gateway:
         if whonix_mode() == 'gateway':
             try:
-                current_ip_gateway = subprocess.check_output(['xenstore-read', 'qubes-netvm-gateway']).rstrip()
+                current_ip_gateway = subprocess.check_output([qubesdb_read, prefix + 'qubes-netvm-gateway']).rstrip()
             except (OSError, subprocess.CalledProcessError):
                 return
 
@@ -155,8 +165,8 @@ def main(args):
 
         if whonix_mode() == 'workstation' and last_ip_local:
             try:
-                current_ip_local = subprocess.check_output(['xenstore-read', 'qubes-ip']).rstrip()
-                current_ip_gateway = subprocess.check_output(['xenstore-read', 'qubes-gateway']).rstrip()
+                current_ip_local = subprocess.check_output([qubesdb_read, prefix + 'qubes-ip']).rstrip()
+                current_ip_gateway = subprocess.check_output(['qubesdb_read, prefix + qubes-gateway']).rstrip()
             except (OSError, subprocess.CalledProcessError):
                 return
 
