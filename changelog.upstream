@@ -1,0 +1,238 @@
+commit 7592d6b49004e7d9151195a768d8a0ff384f5268
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Feb 16 10:59:40 2015 +0000
+
+    added "Uploaders: Patrick Schleizer <adrelanos@riseup.net>" to debian/control
+
+commit 6d88b9284c5cc634e57a95b2c9993f39a21431ac
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Feb 16 10:42:45 2015 +0000
+
+    synced COPYING with debian/copyright
+
+commit a86b58c6fcc02face96f4e101a6ebbdcfc5c2bc3
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Mon Feb 16 03:08:27 2015 -0500
+
+    Create new file 35_qubes_stream_isolation_plugin and use it instead of replacing IPs in 31_anon_dist_stream_isolation_plugin
+
+commit f2678cf2de8ebde15a62929d5c1ea14d16a37008
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Mon Feb 16 02:49:08 2015 -0500
+
+    Don't need to replace IPs in /etc/whonix_firewall.d/30_default since all the IP's in that file are commented out
+
+commit 559694e1f699f52a1fb099786843efbfa101ddf6
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Mon Feb 16 02:38:14 2015 -0500
+
+    Renamed  32_uwt_default to 32_qubes
+
+commit 0dc46aa4d8809fb19046465b107a79a2c247d39e
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Mon Feb 16 01:53:20 2015 -0500
+
+    Fix typos
+
+commit 4c22b942418cd650e5fd9c26c2a202da81152b80
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Mon Feb 16 01:17:11 2015 -0500
+
+    Remove duplicate trigger /etc/network/interfaces.whonix
+
+commit b4bc545e315dc27a76ac2490192f78731fa32fc4
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Fri Feb 13 20:23:41 2015 -0500
+
+    Whonix 9.6 and added compatibility for Qubes R3
+
+commit 6fe9c10100bd026e4b957e429ee3939cdc68738c
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Tue Feb 3 04:11:07 2015 -0500
+
+    Modified make-helper.bsh to work with Qubes builder
+
+commit 51ec5194008e71bcfdd9b8e82aa9f76dc2077dc3
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sun Feb 1 05:45:51 2015 -0500
+
+    Make sure timezone is set to UTC
+
+commit 09563f814b40a14fba452f137eedfb9944e5ef55
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Fri Jan 30 00:30:35 2015 -0500
+
+    Tweaked scripts to work with Whonix 9.6 properly
+
+commit ff5045ebb8179dc94b4669413412015345a8163b
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Thu Jan 29 23:54:38 2015 -0500
+
+    Forgot to change references to renamed scripts in postinit
+
+commit 5747f05c5ff589e79dc5176626ef88869c115a6e
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Thu Jan 29 23:41:54 2015 -0500
+
+    Make sure /home/user/.gateway exists before attempting to touch file in directory
+
+commit 9bdc376c194f4be9f800c712e950e24c07f7c32a
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Thu Jan 29 23:20:15 2015 -0500
+
+    Add missing line continuation symbol
+
+commit c283336c4dcfc0b286979f5977fd50edd1c9ced6
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Thu Jan 29 22:52:53 2015 -0500
+
+    Fix interest-noawait typo in triggers
+
+commit 765d0792d55f771b780197f7c7a2243e1779a90a
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Thu Jan 29 20:46:25 2015 -0500
+
+    Renamed all bash libs with .sh extension; not executable and removed from scripts to be more standardized
+
+commit ac9427363b267d9040f55ee4a55167b225c0c2aa
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Thu Jan 29 20:42:32 2015 -0500
+
+    Added depends and triggers for whonix-setup-wizard
+    Added trigger for kde-audio to prevent showing in Qubes
+    Ignore first-use notice
+    Dropped some un-needed depends in control file
+
+commit b5964ae53da09d51e0045189b6329a2296af75e3
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Thu Jan 29 20:41:27 2015 -0500
+
+    Ignore Wing Project files
+
+commit 255ba447b6cecb9c83437923e3bbc606172d503b
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Thu Jan 29 20:38:40 2015 -0500
+
+    Added CONTRIBUTING text
+
+commit 7313fc2372b19bb8671d363cd8a9c1f157ec9fbc
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Tue Jan 27 19:34:08 2015 -0500
+
+    Make sure immutable files are locked always to prevent qubes programs from over-writing
+
+commit 9320fd5928b565def5edefd913c52f676b84ec88
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Tue Jan 13 23:46:50 2015 -0500
+
+    Removed qubes-whonix-init.service and added it as a ExecStartPost to qubes-whonix-network.service
+    
+    Changed WHONIX to QUBES_WHONIX in 32_uwt_default
+    Set QUBES_WHONIX to unknown if /var/lib/qubes is not available
+    Added a profile for unknown to allow override of UWT
+
+commit b422495caa557e5916e8c7a4b823d56917215043
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Wed Jan 7 12:31:44 2015 -0500
+
+    Added haveged, nautilus-open-terminal as depends
+
+commit 28ddc33f47c169b750ecc9fda5a5dbe3fbf304ad
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Tue Jan 6 19:31:39 2015 -0500
+
+    Removed un-needed enables for services in this package
+
+commit 5279a0a28e8a8e0941567d6e5ef7c93ad2be8e87
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Tue Jan 6 18:05:36 2015 -0500
+
+    move xenstore-read within a conditional statement
+
+commit 7eac4fee94516f02403414a4df2bb587c78df546
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Tue Jan 6 12:41:04 2015 -0500
+
+    Make replacement make-helper.bsh executable
+
+commit cdd1a44a9893d1f3a7f95ef2e7a1ad2b34c1dcdb
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Tue Jan 6 12:37:52 2015 -0500
+
+    Remove duplicate entry from Makefile
+
+commit 02db6aef959936addccdef7c2f35789e9a43004b
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Tue Jan 6 12:32:27 2015 -0500
+
+    Modified Makefile to read better
+
+commit b4a3344555ae5d8a60bdfc03819cf651024e16d5
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Tue Jan 6 11:29:38 2015 -0500
+
+    replaced make-helper.bsh script incase it was corrupt
+
+commit 606cbbc100aa84ebbbd913d041f327adc3d757c6
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Tue Jan 6 10:28:56 2015 -0500
+
+    Changed WHONIX_QUBES to QUBES_WHONIX and exit 0 if not running in Qubes environment
+
+commit 1f0a9c68002ba4f3b83c8998e39ed73f23172676
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Mon Jan 5 17:06:32 2015 -0500
+
+    Removed extra linefeed at end of files
+
+commit 21f6f1a478a9da1b66f60788fe836f85a668d7fa
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Mon Jan 5 17:06:00 2015 -0500
+
+    Removed un-needed directives to create directories since the package builder will automatically create any required directories
+
+commit 31c4a83e38b3a296bfe29d1023089dfe42da60a1
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Mon Jan 5 16:39:48 2015 -0500
+
+    Renamed 50_uwt_defaults per Patrick's request
+
+commit 951ad4982dcdc19fe9cf5234b62c465a515da20f
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Mon Jan 5 16:38:10 2015 -0500
+
+    Package rename fixes
+    
+    Some text got changed to qubes-whonix when it should have remained just whonix
+
+commit 7a3d8d6e7f54acbb5392701e4885735073ac6d79
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Mon Jan 5 00:03:32 2015 -0500
+
+    Changed package name to qubes-whonix
+    
+    Moved custom config files into their own directory to prevent future conflicts
+    /usr/lib/qubes-whonix
+    
+    Refactored lots.
+    
+    Wrote some Debian helper scripts to help get this building in Qubes as well
+     as Whonix development environment
+
+commit 5494901b601d5c03841513208d689284179bc6ce
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Mon Dec 29 01:15:15 2014 -0500
+
+    Tweaked rules to allow building on both Qubes and Whonix
+
+commit 2a408877f9459fe39e82be7100285312f5e3a3f2
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sun Dec 28 17:25:09 2014 -0500
+
+    Lintian package modifications
+
+commit a10bc6c8c28baccd56cda5a1e19d20a6b752927a
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sun Dec 28 13:52:47 2014 -0500
+
+    Initial commit
