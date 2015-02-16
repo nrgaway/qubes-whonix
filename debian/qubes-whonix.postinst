@@ -252,7 +252,7 @@ case "${1}" in
                 /usr/bin/update-torbrowser | \
                 /etc/network/interfaces.whonix | \
                 /etc/resolv.conf.anondist | \
-                /etc/sdwdate.d/31_anon_dist_stream_isolation_plugin | \
+                /etc/sdwdate.d/35_qubes_stream_isolation_plugin | \
                 /etc/rinetd.conf.anondist | \
                 /etc/network/interfaces.whonix | \
                 /usr/share/anon-torchat/.torchat/torchat.ini)
