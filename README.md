@@ -4,7 +4,7 @@ This package contains all the scripts and configuration options to be able to ru
 
 Whonix Gateway should run as a ProxyVM
 
-honix Workstation should run as an AppVM
+Whonix Workstation should run as an AppVM
 
 Template updates over Tor
 
