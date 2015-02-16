@@ -50,7 +50,7 @@ EOF
     fi
 
     # Load the firewall
-    # XXX: TODO:  Take down all network accesss if firewall fails
+    # XXX: TODO:  Take down all network access if firewall fails
     /usr/bin/whonix_firewall
 
     systemctl restart qubes-updates-proxy.service

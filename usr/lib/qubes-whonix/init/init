@@ -17,8 +17,8 @@ IMMUTABLE_FILES=(
 immutableFilesEnable "${IMMUTABLE_FILES}"
 immutableFilesEnable "${IMMUTABLE_FILES}" ".anondist"
 
-# Make sure we are using a copy of the annondist file and if not
-# copy the annondist file and set it immutable
+# Make sure we are using a copy of the anondist file and if not
+# copy the anondist file and set it immutable
 copyAnondist "/etc/resolv.conf"
 copyAnondist "/etc/hosts"
 copyAnondist "/etc/hostname"
