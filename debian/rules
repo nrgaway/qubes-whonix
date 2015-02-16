@@ -16,3 +16,6 @@ export DESTDIR=$(shell pwd)/debian/qubes-whonix
 
 %:
 	dh $@ --with systemd
+
+override_dh_installchangelogs:
+	dh_installchangelogs changelog.upstream upstream
