@@ -1,3 +1,9 @@
+qubes-whonix (0:9.7-1) unstable; urgency=low
+
+  * New upstream version.
+
+ -- Patrick Schleizer <adrelanos@riseup.net>  Mon, 16 Feb 2015 11:03:29 +0000
+
 qubes-whonix (0:9.6-1) unstable; urgency=low
 
   * Initial release.
