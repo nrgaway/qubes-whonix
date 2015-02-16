@@ -27,7 +27,6 @@ interest-noawait /usr/lib/anon-shared-helper-scripts/tor_bootstrap_check.bsh
 interest-noawait /usr/bin/uwt
 interest-noawait /etc/uwt.d/30_uwt_default
 interest-noawait /usr/bin/update-torbrowser
-interest-noawait /etc/network/interfaces.whonix
 interest-noawait /etc/resolv.conf.anondist
 interest-noawait /etc/sdwdate.d/31_anon_dist_stream_isolation_plugin
 interest-noawait /etc/rinetd.conf.anondist
