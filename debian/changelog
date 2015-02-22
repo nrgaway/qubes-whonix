@@ -1,10 +1,76 @@
-qubes-whonix (0:9.7-1) unstable; urgency=low
+qubes-whonix (0:9.6.2-1) unstable; urgency=medium
 
-  * New upstream version.
+  [ Jason Mehring ]
+  * Remove duplicate trigger /etc/network/interfaces.whonix
+  * Fix typos
+  * Renamed  32_uwt_default to 32_qubes
+  * Don't need to replace IPs in /etc/whonix_firewall.d/30_default since
+    all the IP's in that file are commented out
+  * Create new file 35_qubes_stream_isolation_plugin and use it instead
+    of replacing IPs in 31_anon_dist_stream_isolation_plugin
+  * Fixed typo in README.md
+  * Removed developer enable-iptables-logging script
 
- -- Patrick Schleizer <adrelanos@riseup.net>  Mon, 16 Feb 2015 11:03:29 +0000
+  [ Patrick Schleizer ]
+  * synced COPYING with debian/copyright
+  * added "Uploaders: Patrick Schleizer <adrelanos@riseup.net>" to
+    debian/control
 
-qubes-whonix (0:9.6-1) unstable; urgency=low
+  [ Jason Mehring ]
+  * Updated 9.6.1 changelog with commit details and new versioning
+    scheme
+  * Changed Architecture to all from any as per Patricks request
+  * Remove verbose tar and exclude directories like deb from orig tar
+    file
+  * Debian options to ignore directories like deb
+  * Add version file and bump version to 9.6.2
+
+ -- Jason Mehring <nrgaway@gmail.com>  Sun, 22 Feb 2015 14:22:45 -0500
+
+qubes-whonix (0:9.6.1-1) unstable; urgency=medium
+
+  [ Jason Mehring ]
+  * Lintian package modifications
+  * Tweaked rules to allow building on both Qubes and Whonix
+  * Changed package name to qubes-whonix
+  * Package rename fixes
+  * Renamed 50_uwt_defaults per Patrick's request
+  * Removed un-needed directives to create directories since the package
+    builder will automatically create any required directories
+  * Removed extra linefeed at end of files
+  * Changed WHONIX_QUBES to QUBES_WHONIX and exit 0 if not running in
+    Qubes environment
+  * replaced make-helper.bsh script incase it was corrupt
+  * Modified Makefile to read better
+  * Remove duplicate entry from Makefile
+  * Make replacement make-helper.bsh executable
+  * move xenstore-read within a conditional statement
+  * Removed un-needed enables for services in this package
+  * Added haveged, nautilus-open-terminal as depends
+  * Removed qubes-whonix-init.service and added it as a ExecStartPost to
+    qubes-whonix-network.service
+  * Make sure immutable files are locked always to prevent qubes
+    programs from over-writing
+  * Added CONTRIBUTING text
+  * Ignore Wing Project files
+  * Added depends and triggers for whonix-setup-wizard Added trigger for
+    kde-audio to prevent showing in Qubes Ignore first-use notice
+    Dropped some un-needed depends in control file
+  * Renamed all bash libs with .sh extension; not executable and removed
+    from scripts to be more standardized
+  * Fix interest-noawait typo in triggers
+  * Add missing line continuation symbol
+  * Make sure /home/user/.gateway exists before attempting to touch file
+    in directory
+  * Forgot to change references to renamed scripts in postinit
+  * Tweaked scripts to work with Whonix 9.6 properly
+  * Make sure timezone is set to UTC
+  * Modified make-helper.bsh to work with Qubes builder
+  * Whonix 9.6 and added compatibility for Qubes R3
+
+ -- Jason Mehring <nrgaway@gmail.com>  Sun, 22 Feb 2015 13:41:14 -0500
+
+qubes-whonix (0:9.6.0-1) unstable; urgency=low
 
   * Initial release.
 
