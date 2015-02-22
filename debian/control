@@ -18,7 +18,7 @@ Vcs-Git: https://github.com/Whonix/qubes-whonix.git
 Standards-Version: 3.9.4
 
 Package: qubes-whonix
-Architecture: any
+Architecture: all
 Depends: python-guimessages, whonix-setup-wizard, ethtool, initscripts, iptables, lintian, locales, net-tools, notify-osd, python, sudo, systemd, xen-utils-common, xinit, xsettingsd, xdg-user-dirs, ${misc:Depends}
 Recommends: nautilus-open-terminal, gnome-packagekit, gnome-terminal, network-manager (>= 0.8.1-1), network-manager-gnome
 Description: Qubes Configuration for Whonix-Gateway and Whonix-Workstation
