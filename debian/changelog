@@ -1,3 +1,32 @@
+qubes-whonix (0:9.6.2-1) unstable; urgency=medium
+
+  [ Jason Mehring ]
+  * Remove duplicate trigger /etc/network/interfaces.whonix
+  * Fix typos
+  * Renamed  32_uwt_default to 32_qubes
+  * Don't need to replace IPs in /etc/whonix_firewall.d/30_default since
+    all the IP's in that file are commented out
+  * Create new file 35_qubes_stream_isolation_plugin and use it instead
+    of replacing IPs in 31_anon_dist_stream_isolation_plugin
+  * Fixed typo in README.md
+  * Removed developer enable-iptables-logging script
+
+  [ Patrick Schleizer ]
+  * synced COPYING with debian/copyright
+  * added "Uploaders: Patrick Schleizer <adrelanos@riseup.net>" to
+    debian/control
+
+  [ Jason Mehring ]
+  * Updated 9.6.1 changelog with commit details and new versioning
+    scheme
+  * Changed Architecture to all from any as per Patricks request
+  * Remove verbose tar and exclude directories like deb from orig tar
+    file
+  * Debian options to ignore directories like deb
+  * Add version file and bump version to 9.6.2
+
+ -- Jason Mehring <nrgaway@gmail.com>  Sun, 22 Feb 2015 14:22:45 -0500
+
 qubes-whonix (0:9.6.1-1) unstable; urgency=medium
 
   [ Jason Mehring ]
