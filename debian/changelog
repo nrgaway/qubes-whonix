@@ -1,4 +1,47 @@
-qubes-whonix (0:9.6-1) unstable; urgency=low
+qubes-whonix (0:9.6.1-1) unstable; urgency=medium
+
+  [ Jason Mehring ]
+  * Lintian package modifications
+  * Tweaked rules to allow building on both Qubes and Whonix
+  * Changed package name to qubes-whonix
+  * Package rename fixes
+  * Renamed 50_uwt_defaults per Patrick's request
+  * Removed un-needed directives to create directories since the package
+    builder will automatically create any required directories
+  * Removed extra linefeed at end of files
+  * Changed WHONIX_QUBES to QUBES_WHONIX and exit 0 if not running in
+    Qubes environment
+  * replaced make-helper.bsh script incase it was corrupt
+  * Modified Makefile to read better
+  * Remove duplicate entry from Makefile
+  * Make replacement make-helper.bsh executable
+  * move xenstore-read within a conditional statement
+  * Removed un-needed enables for services in this package
+  * Added haveged, nautilus-open-terminal as depends
+  * Removed qubes-whonix-init.service and added it as a ExecStartPost to
+    qubes-whonix-network.service
+  * Make sure immutable files are locked always to prevent qubes
+    programs from over-writing
+  * Added CONTRIBUTING text
+  * Ignore Wing Project files
+  * Added depends and triggers for whonix-setup-wizard Added trigger for
+    kde-audio to prevent showing in Qubes Ignore first-use notice
+    Dropped some un-needed depends in control file
+  * Renamed all bash libs with .sh extension; not executable and removed
+    from scripts to be more standardized
+  * Fix interest-noawait typo in triggers
+  * Add missing line continuation symbol
+  * Make sure /home/user/.gateway exists before attempting to touch file
+    in directory
+  * Forgot to change references to renamed scripts in postinit
+  * Tweaked scripts to work with Whonix 9.6 properly
+  * Make sure timezone is set to UTC
+  * Modified make-helper.bsh to work with Qubes builder
+  * Whonix 9.6 and added compatibility for Qubes R3
+
+ -- Jason Mehring <nrgaway@gmail.com>  Sun, 22 Feb 2015 13:41:14 -0500
+
+qubes-whonix (0:9.6.0-1) unstable; urgency=low
 
   * Initial release.
 
