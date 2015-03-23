@@ -12,7 +12,15 @@
 # Uncomment this to turn on verbose mode.
 export DH_VERBOSE=1
 
-export DESTDIR=$(shell pwd)/debian/qubes-whonix
+export DESTDIR=$(shell pwd)/debian/tmp
 
 %:
 	dh $@ --with systemd
+
+override_dh_auto_build:
+	dh_clean --keep
+	make install DESTDIR=$(DESTDIR)
+
+override_dh_auto_install:
+	@true
+
