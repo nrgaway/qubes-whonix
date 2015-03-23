@@ -175,6 +175,9 @@ case "${1}" in
         mkdir -p /home/user/.gateway
         touch /home/user/.gateway/first_use_check.done
 
+        # make sure /var/cache/whonix-setup-wizard directory exists
+        mkdir -p /var/cache/whonix-setup-wizard
+
         # make sure user is added to debian-tor group
         groupadd --force debian-tor
         usermod -a --groups debian-tor user
@@ -193,8 +196,8 @@ case "${1}" in
         update-rc.d whonix-initializer disable || true
 
         # Will not be restarted in chroot which is what is expected
-        systemctl restart /usr/lib/qubes-whonix/init/init
-        systemctl restart /usr/lib/qubes-whonix/init/qubes-whonix-firewall
+        systemctl restart qubes-whonix-network.service
+        systemctl restart qubes-whonix-firewall.service
 
         # Modify desktop files not to show in Qubes
         for item in = /etc/xdg/autostart/pulseaudio-kde.desktop \
