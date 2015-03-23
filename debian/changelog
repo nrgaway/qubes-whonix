@@ -1,3 +1,13 @@
+qubes-whonix (0:9.6.3-1) wheezy; urgency=medium
+
+  [ Jason Mehring ]
+  * Added /var/cache/whonix-setup-wizard to list of dirs to bind on
+    startup
+  * Updated Makefile.builder to work with new qubes-builder api
+  * Bumped version to 9.6.3
+
+ -- Jason Mehring <nrgaway@gmail.com>  Mon, 23 Mar 2015 06:12:02 -0400
+
 qubes-whonix (0:9.6.2-1) unstable; urgency=medium
 
   [ Jason Mehring ]
