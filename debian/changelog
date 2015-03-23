@@ -1,3 +1,18 @@
+qubes-whonix (0:9.6.4-1) wheezy; urgency=medium
+
+  [ Jason Mehring ]
+  * Bump version to 9.6.4
+  * Fix a bug that gave error on upgrade when restarting service
+  * Use debhelper package install to install files to prevent tests from being part of package
+  * Fixed an issue with restarting services and added whonix-setup-wizard cache dir
+  * Added more options to make sure unwanted dirs like rpm or deb do not make it into Debian package
+  * Removed stale references from notes
+  * Added a update test script that will install a local repo and perform an update of package
+    The test suite is excluded from built package
+  * Updated changelog for 9.6.3
+
+ -- Jason Mehring <nrgaway@gmail.com>  Mon, 23 Mar 2015 12:07:39 -0400
+
 qubes-whonix (0:9.6.3-1) wheezy; urgency=medium
 
   [ Jason Mehring ]
