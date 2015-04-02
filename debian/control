@@ -11,7 +11,7 @@ Section: admin
 Priority: extra
 Maintainer: Jason Mehring <nrgaway@gmail.com>
 Uploaders: Patrick Schleizer <adrelanos@riseup.net>
-Build-Depends: debhelper (>= 9), faketime, python, dh-systemd (>= 1.5)
+Build-Depends: debhelper (>= 9), faketime, genmkfile, python, dh-systemd (>= 1.5)
 Homepage: https://github.com/Whonix/qubes-whonix
 Vcs-Browser: https://github.com/Whonix/qubes-whonix
 Vcs-Git: https://github.com/Whonix/qubes-whonix.git
