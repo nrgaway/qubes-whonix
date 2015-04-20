@@ -9,6 +9,21 @@
                           Whonix Checks and Issues
 ---------------------------------------------------------------------------------
 Current issues:
+  - locales not being set correctly or retained after updates?
+  - systemctl is-enabled does not work for sysv init configurations
+    - IS TEHRE A COMMAND to tell what kind of file (init unit)
+  - modified template utilities.sh for enable_sysv
+
+  - no route being set with new config ... check for errors
+  - modified qubes-whonix-network.service -- set init to Pre, not Post for test
+  - NetworkManager has been starting!  -- could it be cause of broken disable? on qubes-admin-install?
+  - hrmm; network-manager too?
+
+  - /etc/hosts.anondist-orig is being replaced on install from ???
+
+  - Getting 'Disconnected' popup alot; maybe since we have not managed a 
+    connection yet
+
   - Need a utility to search for files with IP address pattern during installation.
     Currently the list is manually generated
     - Make sure Whonix provides a trigger
