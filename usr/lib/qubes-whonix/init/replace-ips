@@ -131,7 +131,6 @@ def maybe_reload_tor():
         try:
             if subprocess.check_output(['systemctl', 'is-enabled', 'tor']).strip() == 'enabled':
                 subprocess.call(['systemctl', 'reload', 'tor'])
-                pass
         except (subprocess.CalledProcessError):
             pass
 

@@ -8,12 +8,16 @@ if ! [ "${QUBES_WHONIX}" == "template" ]; then
 fi
 
 if [ "${QUBES_WHONIX}" == "gateway" ]; then
-    if grep "^DisableNetwork 0$" /etc/tor/torrc ;then
-        sudo service sdwdate restart
-        sudo service tor restart
+    enable_sysv tor
+    enable_sysv sdwdate
+
+    if grep "^DisableNetwork 0$" /etc/tor/torrc; then
+        sudo systemctl restart sdwdate
+        sudo systemctl restart tor
     else
-        sudo service sdwdate restart
-        sudo service tor stop
+        sudo systemctl restart sdwdate
+        #sudo systemctl stop tor
+        sudo systemctl restart tor
 
         # Whonix setup complete 
         sudo mkdir -p /var/lib/whonix/do_once
@@ -24,7 +28,9 @@ if [ "${QUBES_WHONIX}" == "gateway" ]; then
     fi
 
 elif [ "${QUBES_WHONIX}" == "workstation" ]; then
-    sudo service sdwdate restart
+    enable_sysv sdwdate
+    sudo systemctl restart sdwdate
+
     if ! [ -f "/var/lib/whonix/do_once/whonixsetup.done" ]; then
         # Whonix setup complete 
         sudo mkdir -p /var/lib/whonix/do_once

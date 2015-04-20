@@ -30,97 +30,48 @@
 # Directory that modified desktop entry config files are stored in
 XDG_CONFIG_QUBES="/usr/share/qubes/xdg"
 
-setArrayAsGlobal() {
-    local array="$1"
-    local export_as="$2"
-    local code=$(declare -p "$array")
-    local replaced="${code/$array/$export_as}"
-    eval ${replaced/declare -/declare -g}
-}
-
-systemdInfo() {
+changeSystemdStatus() {
     unit=${1}
-    return_global_var=${2}
+    disable=${2-0}
+    
+    # Check if unit file is currently active (running)
+    systemctl is-active ${unit} > /dev/null 2>&1 && active=true || unset active
 
-    declare -A INFO=()
-    while read line; do
-        INFO[${line%%=*}]="${line##*=}"
-    done < <(systemctl show ${unit} 2> /dev/null)
+    case ${disable} in
+        0)
+            systemctl --quiet enable ${unit} > /dev/null 2>&1 || true
+            ;;
+        1)  
+            if [ $active ]; then
+                systemctl --quiet stop ${unit} > /dev/null 2>&1 || true
+            fi  
 
-    setArrayAsGlobal INFO $return_global_var
-    return ${#INFO[@]}
-}
-
-displayFailedStatus() {
-    action=${1}
-    unit=${2}
-
-    # Only display if there are results.  In chroot environment there will be
-    # no results to 'systemctl show' command
-    systemdInfo ${unit} info || {
-        echo
-        echo "==================================================="
-        echo "FAILED: systemd ${action} ${unit}"
-        echo "==================================================="
-        echo "    LoadState = ${info[LoadState]}"
-        echo "    LoadError = ${info[LoadError]}"
-        echo "  ActiveState = ${info[ActiveState]}"
-        echo "     SubState = ${info[SubState]}"
-        echo "UnitFileState = ${info[UnitFileState]}"
-        echo
-    }
+            if [ -f /lib/systemd/system/${unit} ]; then
+                if fgrep -q '[Install]' /lib/systemd/system/${unit}; then
+                    systemctl --quiet disable ${unit} > /dev/null 2>&1 || true
+                else
+                    # Forcibly disable
+                    ln -sf /dev/null /etc/systemd/system/${unit}
+                fi
+            else
+                systemctl --quiet disable ${unit} > /dev/null 2>&1 || true
+            fi
+            ;;
+    esac
 }
 
 # Disable systemd units
 disableSystemdUnits() {
     for unit in $*; do
-        systemctl is-enabled ${unit} > /dev/null 2>&1 && {
-            echo "Disabling ${unit}..."
-            systemctl is-active ${unit} > /dev/null 2>&1 && {
-                systemctl stop ${unit} > /dev/null 2>&1 || displayFailedStatus stop ${unit}
-            }
-            if [ -f /lib/systemd/system/${unit} ]; then
-                if fgrep -q '[Install]' /lib/systemd/system/${unit}; then
-                    systemctl disable ${unit} > /dev/null 2>&1 || displayFailedStatus disable ${unit}
-                else
-                    # Forcibly disable
-                    echo "Forcibly disabling: ${unit}"
-                    ln -sf /dev/null /etc/systemd/system/${unit}
-                fi
-            else
-                    systemctl disable ${unit} > /dev/null 2>&1 || displayFailedStatus disable ${unit}
-            fi
-        } || {
-            echo "It appears ${unit} is already disabled!"
-        }
+        changeSystemdStatus ${unit} || true
     done
 }
 
 # Enable systemd units
 enableSystemdUnits() {
     for unit in $*; do
-        systemctl is-enabled ${unit} > /dev/null 2>&1 && {
-            echo "It appears ${unit} is already enabled!"
-        } || {
-            echo "Enabling: ${unit}..."
-            systemctl enable ${unit} > /dev/null 2>&1 && {
-                systemctl start ${unit} > /dev/null 2>&1 || displayFailedStatus start ${unit}
-            } || {
-                echo "Could not enable: ${unit}"
-                displayFailedStatus enable ${unit}
-            }
-        }
+        changeSystemdStatus ${unit} 1 || true
     done
-}
-
-setPermissions() {
-    local owner="${1}"
-    local group="${2}"
-    local mode="${3}"
-    local file="${4}"
-
-    chmod ${mode} "${file}"
-    chown ${owner}:${group} "${file}"
 }
 
 remove_ShowIn() {
@@ -186,14 +137,18 @@ case "${1}" in
         echo 'WHONIXCHECK_NO_EXIT_ON_UNSUPPORTED_VIRTUALIZER="1"' >> /etc/whonix.d/30_whonixcheck_default
 
         # Tor will be re-enabled upon initial configuration
-        update-rc.d tor disable || true
-        update-rc.d sdwdate disable || true
+        if grep "^DisableNetwork 0$" /etc/tor/torrc; then
+            disableSystemdUnits \
+                tor \
+                sdwdate 
+        fi
 
         # Disable unwanted applications
-        update-rc.d network-manager disable || true
-        update-rc.d spice-vdagent disable || true
-        update-rc.d swap-file-creator disable || true
-        update-rc.d whonix-initializer disable || true
+        disableSystemdUnits \
+            network-manager \
+            spice-vdagent \
+            swap-file-creator \
+            whonix-initializer
 
         # Will not be restarted in chroot which is what is expected
         systemctl restart qubes-whonix-network.service
@@ -208,7 +163,7 @@ case "${1}" in
             showIn "${item}" 'NotShowIn=QUBES;'
         done
 
-        # Set timezone to UTC and make files immutable
+        # Set timezone to UTC
         timezone='UTC'
         chattr -i /etc/localtime
         chattr -i /etc/timezone
@@ -216,8 +171,6 @@ case "${1}" in
         cp -p /usr/share/zoneinfo/${timezone} /etc/localtime.anondist | true
         echo "${timezone}" > /etc/timezone | true
         echo "${timezone}" > /etc/timezone.anondist | true
-        chattr +i /etc/localtime
-        chattr +i /etc/timezone
 
         ;;
 
