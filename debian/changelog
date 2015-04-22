@@ -1,3 +1,21 @@
+qubes-whonix (0:9.6.5-1) wheezy; urgency=medium
+
+  [ Jason Mehring ]
+  * Remove chattr +i and replace with a protected files routine
+  * Notes with issues not yet resolved due to changes in Qubes or qubes-
+    whonix
+  * Added wip whonixcheck systemd unit file
+  * Added a tor systemd unit files along with a wip unit file to
+    implement hardening
+  * Added ability to upgrade and dist-upgrade from local test repo
+  * Streamlined enable/disable services; remove immutable bits
+  * Make sure qubes-network is started before qubes-firewall
+  * Keep whonixcheck and sdwdate disabled and manually start them to
+    prevent false positive errors that tor is not started
+  * Send a 0 when enabling a service
+
+ -- Jason Mehring <nrgaway@gmail.com>  Wed, 22 Apr 2015 02:40:48 -0400
+
 qubes-whonix (0:9.6.4-1) wheezy; urgency=medium
 
   [ Jason Mehring ]
