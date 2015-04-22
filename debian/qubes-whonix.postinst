@@ -60,15 +60,15 @@ changeSystemdStatus() {
     esac
 }
 
-# Disable systemd units
-disableSystemdUnits() {
+# Enable systemd units
+enableSystemdUnits() {
     for unit in $*; do
-        changeSystemdStatus ${unit} || true
+        changeSystemdStatus ${unit} 0 || true
     done
 }
 
-# Enable systemd units
-enableSystemdUnits() {
+# Disable systemd units
+disableSystemdUnits() {
     for unit in $*; do
         changeSystemdStatus ${unit} 1 || true
     done
@@ -136,12 +136,14 @@ case "${1}" in
         # Prevent whonixcheck error
         echo 'WHONIXCHECK_NO_EXIT_ON_UNSUPPORTED_VIRTUALIZER="1"' >> /etc/whonix.d/30_whonixcheck_default
 
-        # Tor will be re-enabled upon initial configuration
-        if grep "^DisableNetwork 0$" /etc/tor/torrc; then
-            disableSystemdUnits \
-                tor \
-                sdwdate 
-        fi
+        # sdwdate and whonixcheck get started manually to prevent false positive errors
+        disableSystemdUnits \
+            sdwdate \
+            whonixcheck
+
+        # Disable old Tor sysv init style and enable systemd unit
+        disableSystemdUnits tor
+        enableSystemdUnits tor.service
 
         # Disable unwanted applications
         disableSystemdUnits \
