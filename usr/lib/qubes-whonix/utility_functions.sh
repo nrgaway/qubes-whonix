@@ -102,7 +102,7 @@ changeSystemdStatus() {
 }
 
 enable_sysv() {
-    changeSystemdStatus ${1}
+    changeSystemdStatus ${1} 0
 }
 
 disable_sysv() {
