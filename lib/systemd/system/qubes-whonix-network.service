@@ -1,6 +1,6 @@
 [Unit]
 Description=Qubes Whonix network proxy setup
-Before=network.target
+Before=network.target qubes-whonix-firewall
 After=iptables.service
 
 [Service]
