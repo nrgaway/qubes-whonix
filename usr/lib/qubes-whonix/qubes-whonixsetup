@@ -8,28 +8,24 @@ if ! [ "${QUBES_WHONIX}" == "template" ]; then
 fi
 
 if [ "${QUBES_WHONIX}" == "gateway" ]; then
-    enable_sysv tor
-    enable_sysv sdwdate
-
     if grep "^DisableNetwork 0$" /etc/tor/torrc; then
-        sudo systemctl restart sdwdate
+        sudo systemctl start whonixcheck
+        sudo systemctl start sdwdate
         sudo systemctl restart tor
     else
-        sudo systemctl restart sdwdate
-        #sudo systemctl stop tor
+        sudo systemctl start whonixcheck
+        sudo systemctl start sdwdate
         sudo systemctl restart tor
 
         # Whonix setup complete 
         sudo mkdir -p /var/lib/whonix/do_once
         sudo touch /var/lib/whonix/do_once/whonixsetup.done
 
-        #sudo /usr/bin/whonixsetup
         XDG_CURRENT_DESKTOP=gnome sudo /usr/bin/whonix-setup-wizard setup -style gtk+
     fi
 
 elif [ "${QUBES_WHONIX}" == "workstation" ]; then
-    enable_sysv sdwdate
-    sudo systemctl restart sdwdate
+    sudo systemctl start sdwdate
 
     if ! [ -f "/var/lib/whonix/do_once/whonixsetup.done" ]; then
         # Whonix setup complete 
