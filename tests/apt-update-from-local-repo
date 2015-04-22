@@ -20,7 +20,7 @@ Description: Apt repository for ${DISTRIBUTION_CAP} ${DIST}
 EOF
 
 if [ $# -eq 0 ]; then
-    echo "usage $0 <package-name> [package-name]..."
+    echo "usage $0 [upgrade|dist-upgrade] | [reinstall] <package-name> [package-name]..."
     exit
 fi
 
@@ -33,6 +33,10 @@ fi
 if [ "${1}" == "reinstall" ]; then
     APT_GET_OPTIONS+=" --reinstall"
     shift 1
+elif [ "${1}" == "upgrade" ]; then
+    UPGRADE=true
+elif [ "${1}" == "dist-upgrade" ]; then
+    DIST_UPGRADE=true
 fi
 
 PACKAGES="$@"
@@ -155,6 +159,22 @@ function aptUpdate() {
     debug "Updating system..."
     DEBIAN_FRONTEND="noninteractive" DEBIAN_PRIORITY="critical" DEBCONF_NOWARNINGS="yes" \
         apt-get update
+}
+
+# ==============================================================================
+# apt-get upgrade
+# ==============================================================================
+function aptUpgrade() {
+    DEBIAN_FRONTEND="noninteractive" DEBIAN_PRIORITY="critical" DEBCONF_NOWARNINGS="yes" \
+        env APT_LISTCHANGES_FRONTEND=none apt-get upgrade -u -y --force-yes
+}
+
+# ==============================================================================
+# apt-get dist-upgrade
+# ==============================================================================
+function aptDistUpgrade() {
+    DEBIAN_FRONTEND="noninteractive" DEBIAN_PRIORITY="critical" DEBCONF_NOWARNINGS="yes" \
+        env APT_LISTCHANGES_FRONTEND=none apt-get dist-upgrade -u -y --force-yes
 }
 
 # ==============================================================================
@@ -290,7 +310,7 @@ for dir in conf db dists pool; do
     rm -rf "${LOCAL_REPO}/${dir}"
 done
 for package in "${LOCAL_REPO}/deb/"*.changes; do
-    updateLocalRepo qubes-whonix_9.6.3-1+wheezy1_amd64.changes
+    updateLocalRepo ${package##*/}
 done
 
 installLocalRepo
@@ -299,7 +319,13 @@ aptUpdate
 #### '----------------------------------------------------------------------
 info " Installing ${PACKAGES}..."
 #### '----------------------------------------------------------------------
-aptInstall "${PACKAGES}"
+if [ "${UPGRADE}" == true ]; then
+    aptUpgrade
+elif [ "${DIST_UPGRADE}" == true ]; then
+    aptDistUpgrade
+else
+    aptInstall "${PACKAGES}"
+fi
 
 #### '----------------------------------------------------------------------
 info ' Cleaning up...'
