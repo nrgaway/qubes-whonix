@@ -13,21 +13,32 @@ WHONIX_IP_LOCAL = '/etc/whonix-ip-local'
 IP_ADDRESS = re.compile(r'(?:[0-9]{1,3}\.){3}[0-9]{1,3}')
 
 FILES=[
+    '/etc/apt/apt.conf.d/90whonix',
+    '/etc/cpfpy.d/30_controlportfilt_default',
+    '/etc/network/interfaces.whonix',
+    '/etc/network/interfaces.whonix',
+    '/etc/resolv.conf',
+    '/etc/resolv.conf.anondist',
+    '/etc/rinetd.conf.anondist',
+    '/etc/sdwdate.d/31_anon_dist_stream_isolation_plugin',
+    '/etc/sdwdate.d/35_qubes_stream_isolation_plugin',
+    '/etc/tor/torrc.examples',
+    '/etc/uwt.d/30_uwt_default',
+    '/etc/whonix_firewall.d/30_default',
+    '/home/user/.torchat/torchat.ini',
+    '/home/user/.xchat2/xchat.conf',
+    '/usr/bin/update-torbrowser',
+    '/usr/bin/uwt',
+    '/usr/bin/whonix_firewall',
+    '/usr/lib/anon-shared-helper-scripts/tor_bootstrap_check.bsh',
+    '/usr/lib/anon-ws-disable-stacked-tor/torbrowser.sh',
+    '/usr/lib/control-port-filter-python/cpfp.py',
     '/usr/lib/leaktest-workstation/simple_ping.py',
     '/usr/lib/whonixcheck/preparation',
     '/usr/share/anon-kde-streamiso/share/config/kioslaverc',
-    '/usr/bin/whonix_firewall',
-    '/usr/lib/anon-shared-helper-scripts/tor_bootstrap_check.bsh',
-    '/usr/bin/uwt',
-    '/etc/uwt.d/30_uwt_default',
-    '/usr/share/tor/tor-service-defaults-torrc.anondist',
-    '/usr/bin/update-torbrowser',
-    '/etc/network/interfaces.whonix',
-    '/etc/resolv.conf.anondist',
-    '/etc/sdwdate.d/35_qubes_stream_isolation_plugin',
-    '/etc/rinetd.conf.anondist',
-    '/etc/network/interfaces.whonix',
     '/usr/share/anon-torchat/.torchat/torchat.ini',
+    '/usr/share/tor/tor-service-defaults-torrc.anondist',
+    '/usr/share/xchat-improved-privacy/.xchat2/xchat.conf',
 ]
 
 
@@ -88,8 +99,8 @@ def replace_ip(ips, current_ip, files, ip_file):
                     with open(filename, 'w') as outfile:
                         outfile.writelines(match)
 
-                    if immutable:
-                        subprocess.call(['chattr', '+i', os.path.abspath(filename)])
+                    #if immutable:
+                    #    subprocess.call(['chattr', '+i', os.path.abspath(filename)])
 
                     replaced = True
                 except (IOError):
@@ -164,7 +175,7 @@ def main(args):
         if whonix_mode() == 'workstation' and last_ip_local:
             try:
                 current_ip_local = subprocess.check_output([qubesdb_read, prefix + 'qubes-ip']).rstrip()
-                current_ip_gateway = subprocess.check_output(['qubesdb_read, prefix + qubes-gateway']).rstrip()
+                current_ip_gateway = subprocess.check_output([qubesdb_read, prefix + 'qubes-gateway']).rstrip()
             except (OSError, subprocess.CalledProcessError):
                 return
 
