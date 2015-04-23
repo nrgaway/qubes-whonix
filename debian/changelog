@@ -1,3 +1,18 @@
+qubes-whonix (0:9.6.6-1) wheezy; urgency=medium
+
+  [ Patrick Schleizer ]
+  * added genmkfile to Build-Depends
+  * updated makefile generic to version 1.5
+  * updated readme
+  * updated makefile generic to version 1.4
+
+  [ Jason Mehring ]
+  * Commented out watchdog as it was resetting tor every minute
+  * More specific reference to be able to inject firewall code was
+    needed for Whonix 10
+
+ -- Jason Mehring <nrgaway@gmail.com>  Wed, 22 Apr 2015 22:45:53 -0400
+
 qubes-whonix (0:9.6.5-1) wheezy; urgency=medium
 
   [ Jason Mehring ]
