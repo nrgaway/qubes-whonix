@@ -25,6 +25,7 @@ if [ "${QUBES_WHONIX}" == "gateway" ]; then
     fi
 
 elif [ "${QUBES_WHONIX}" == "workstation" ]; then
+    sudo systemctl start whonixcheck
     sudo systemctl start sdwdate
 
     if ! [ -f "/var/lib/whonix/do_once/whonixsetup.done" ]; then
