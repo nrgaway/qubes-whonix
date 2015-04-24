@@ -118,39 +118,43 @@ case "${1}" in
             update-alternatives --force --install /usr/bin/dialog dialog /usr/bin/gdialog 100
         fi
 
-        # Fake that initializer was already run
-        mkdir -p /root/.whonix
-        touch /root/.whonix/first_run_initializer.done
-
-        # prevent first-use notice:
-        mkdir -p /home/user/.gateway
-        touch /home/user/.gateway/first_use_check.done
-
         # make sure /var/cache/whonix-setup-wizard directory exists
         mkdir -p /var/cache/whonix-setup-wizard
+
+        # Fake that initializer was already run
+        mkdir -p /var/lib/whonix-initializer/status-files
+        touch /var/lib/whonix-initializer/status-files/first_run_initializer.done
+
+        # prevent first-use notice:
+        mkdir -p /var/cache/whonix-setup-wizard/status-files
+        touch /var/cache/whonix-setup-wizard/status-files/first_use_check.done
 
         # make sure user is added to debian-tor group
         groupadd --force debian-tor
         usermod -a --groups debian-tor user
 
         # Prevent whonixcheck error
-        echo 'WHONIXCHECK_NO_EXIT_ON_UNSUPPORTED_VIRTUALIZER="1"' >> /etc/whonix.d/30_whonixcheck_default
+        touch /etc/whonix.d/50_whonixcheck_user
+        echo 'WHONIXCHECK_NO_EXIT_ON_UNSUPPORTED_VIRTUALIZER="1"' >> /etc/whonix.d/50_whonixcheck_user
 
-        # sdwdate and whonixcheck get started manually to prevent false positive errors
+        # Disable unwanted or manually started applications
         disableSystemdUnits \
             sdwdate \
-            whonixcheck
-
-        # Disable old Tor sysv init style and enable systemd unit
-        disableSystemdUnits tor
-        enableSystemdUnits tor.service
-
-        # Disable unwanted applications
-        disableSystemdUnits \
+            whonixcheck \
             network-manager \
             spice-vdagent \
             swap-file-creator \
-            whonix-initializer
+            whonix-initializer \
+            tor \
+            control-port-filter-python
+
+        # Enable new Tor systemd unit
+        enableSystemdUnits tor.service
+
+        # Enable new control-port-filter-python systemd unit (Whonix 10+)
+        if [ -e "/usr/lib/control-port-filter-python/cpfp.py" ]; then
+            enableSystemdUnits control-port-filter-python.service
+        fi
 
         # Will not be restarted in chroot which is what is expected
         systemctl restart qubes-whonix-network.service
