@@ -1,3 +1,87 @@
+qubes-whonix (0:10.0.2-1) wheezy; urgency=medium
+
+  [ Jason Mehring ]
+  * Update files to search and replace IP addresses Fix syntax typo for
+    whonix workstation that prevented search and replace
+  * start whonixcheck on startup for workstation
+  * Use new whonix-setup-wizard directory for *.done files Use
+    50_whonixcheck_user instead of 30_whonixcheck_default Enable new
+    control-port-filter-python.service
+  * Remove unneeded bind directories due to new localtion of whonix
+    status files
+  * - Remove references to old whonix status files; use new references -
+    Start whonixcheck last - Add missing whonixcheck for workstation -
+    Don't prompt to install repository in AppVM (Gateway or Workstation)
+    - Prompt to install repository in templatevm
+  * Add missing whonixcheck.conf file
+  * Add systemd unit file for control-port-filter-python.service
+
+ -- Jason Mehring <nrgaway@gmail.com>  Fri, 24 Apr 2015 06:04:21 -0400
+
+qubes-whonix (0:10.0.1-1) wheezy; urgency=medium
+
+  * version 10.0.1
+
+ -- Jason Mehring <nrgaway@gmail.com>  Wed, 22 Apr 2015 23:02:29 -0400
+
+qubes-whonix (0:9.6.6-1) wheezy; urgency=medium
+
+  [ Patrick Schleizer ]
+  * added genmkfile to Build-Depends
+  * updated makefile generic to version 1.5
+  * updated readme
+  * updated makefile generic to version 1.4
+
+  [ Jason Mehring ]
+  * Commented out watchdog as it was resetting tor every minute
+  * More specific reference to be able to inject firewall code was
+    needed for Whonix 10
+
+ -- Jason Mehring <nrgaway@gmail.com>  Wed, 22 Apr 2015 22:45:53 -0400
+
+qubes-whonix (0:9.6.5-1) wheezy; urgency=medium
+
+  [ Jason Mehring ]
+  * Remove chattr +i and replace with a protected files routine
+  * Notes with issues not yet resolved due to changes in Qubes or qubes-
+    whonix
+  * Added wip whonixcheck systemd unit file
+  * Added a tor systemd unit files along with a wip unit file to
+    implement hardening
+  * Added ability to upgrade and dist-upgrade from local test repo
+  * Streamlined enable/disable services; remove immutable bits
+  * Make sure qubes-network is started before qubes-firewall
+  * Keep whonixcheck and sdwdate disabled and manually start them to
+    prevent false positive errors that tor is not started
+  * Send a 0 when enabling a service
+
+ -- Jason Mehring <nrgaway@gmail.com>  Wed, 22 Apr 2015 02:40:48 -0400
+
+qubes-whonix (0:9.6.4-1) wheezy; urgency=medium
+
+  [ Jason Mehring ]
+  * Bump version to 9.6.4
+  * Fix a bug that gave error on upgrade when restarting service
+  * Use debhelper package install to install files to prevent tests from being part of package
+  * Fixed an issue with restarting services and added whonix-setup-wizard cache dir
+  * Added more options to make sure unwanted dirs like rpm or deb do not make it into Debian package
+  * Removed stale references from notes
+  * Added a update test script that will install a local repo and perform an update of package
+    The test suite is excluded from built package
+  * Updated changelog for 9.6.3
+
+ -- Jason Mehring <nrgaway@gmail.com>  Mon, 23 Mar 2015 12:07:39 -0400
+
+qubes-whonix (0:9.6.3-1) wheezy; urgency=medium
+
+  [ Jason Mehring ]
+  * Added /var/cache/whonix-setup-wizard to list of dirs to bind on
+    startup
+  * Updated Makefile.builder to work with new qubes-builder api
+  * Bumped version to 9.6.3
+
+ -- Jason Mehring <nrgaway@gmail.com>  Mon, 23 Mar 2015 06:12:02 -0400
+
 qubes-whonix (0:9.6.2-1) unstable; urgency=medium
 
   [ Jason Mehring ]

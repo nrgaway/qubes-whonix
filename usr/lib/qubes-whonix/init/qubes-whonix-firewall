@@ -29,7 +29,7 @@ if [ -e '/var/run/qubes-service/qubes-network' ]; then
 
         # Inject custom firewall rules into whonix_firewall
         sed -i -f - /usr/bin/whonix_firewall <<-EOF
-/^## IPv4 DROP INVALID INCOMING PACKAGES/,/######################################/c \\
+/^## IPv4 DROP INVALID INCOMING PACKAGES[ ]*$/,/######################################/c \\
 ## IPv4 DROP INVALID INCOMING PACKAGES \\
 ## \\
 ## --- THE FOLLOWING WS INJECTED --- \\

@@ -1,0 +1,104 @@
+# tor.service -- this systemd configuration file for Tor sets up a
+# relatively conservative, hardened Tor service.
+#
+# Based on:
+# https://github.com/nusenu/ansible-relayor/blob/master/files/debian_tor%40.service
+#
+# See also related configuration file:
+# /etc/tmpfiles.d/tor.conf
+
+[Unit]
+Description = Whonix Tor anonymizing overlay network for TCP
+After = syslog.target network.target nss-lookup.target
+
+[Service]
+Type = simple
+ExecStartPre = /usr/bin/tor --defaults-torrc /usr/share/tor/tor-service-defaults-torrc --verify-config
+ExecStart = /usr/bin/tor --defaults-torrc /usr/share/tor/tor-service-defaults-torrc --runasdaemon 0
+ExecReload = /bin/kill -HUP ${MAINPID}
+
+## General options
+KillSignal = SIGINT
+TimeoutSec = 30
+Restart = on-failure
+WatchdogSec = 1m
+LimitNOFILE = 32768
+StandardOutput = syslog
+
+##
+## Hardening
+##
+
+NoNewPrivileges = yes
+
+## PrivateDevices - ProtectHome and ProtectSystem not yet available for Wheezy
+PrivateTmp = yes
+PrivateDevices = yes
+ProtectHome = yes
+ProtectSystem = full
+
+ReadOnlyDirectories = /
+ReadWriteDirectories = /var/lib/tor
+ReadWriteDirectories = /var/log/tor
+ReadWriteDirectories = /var/run/tor
+
+## Capabilities - See: http://linux.die.net/man/7/capabilities
+##
+## CAP_KILL in the following line is just a workaround for an apparent bug
+## http://lists.freedesktop.org/archives/systemd-devel/2015-March/029609.html
+## The service works also without it but you won't be able to reload it via systemctl.
+##
+## CAP_DAC_OVERRIDE CAP_CHOWN is required for ControlSocket
+## https://bugs.torproject.org/15659
+## https://github.com/nusenu/ansible-relayor/issues/18
+CapabilityBoundingSet = \
+  CAP_SETUID \
+  CAP_SETGID \
+  CAP_NET_BIND_SERVICE \
+  CAP_KILL \
+  CAP_DAC_OVERRIDE \
+  CAP_CHOWN \
+  CAP_SYSLOG \
+  CAP_FOWNER \
+  CAP_NET_ADMIN \
+  CAP_NET_BROADCAST  \
+  CAP_NET_RAW 
+
+#CapabilityBoundingSet = CAP_SETUID CAP_SETGID CAP_NET_BIND_SERVICE CAP_KILL CAP_DAC_OVERRIDE CAP_CHOWN CAP_SYSLOG CAP_FOWNER \
+#CAP_AUDIT_CONTROL \
+#CAP_AUDIT_WRITE \
+#CAP_BLOCK_SUSPEND \
+#CAP_DAC_READ_SEARCH \
+#CAP_FSETID \
+#CAP_IPC_LOCK \
+#CAP_IPC_OWNER \
+#CAP_LEASE \
+#CAP_LINUX_IMMUTABLE \
+#CAP_MAC_ADMIN \
+#CAP_MAC_OVERRIDE \
+#CAP_MKNOD \
+#CAP_NET_ADMIN \
+#CAP_NET_BROADCAST \
+#CAP_NET_RAW \
+#CAP_SETFCAP \
+#CAP_SETPCAP \
+#CAP_SYS_ADMIN \
+#CAP_SYS_BOOT \
+#CAP_SYS_CHROOT \
+#CAP_SYS_MODULE \
+#CAP_SYS_NICE \
+#CAP_SYS_PACCT \
+#CAP_SYS_PTRACE \
+#CAP_SYS_RAWIO \
+#CAP_SYS_RESOURCE \
+#CAP_SYS_TIME \
+#CAP_SYS_TTY_CONFIG \
+#SECBIT_KEEP_CAPS \
+#SECBIT_NO_SETUID_FIXUP \
+#SECBIT_NOROOT 
+
+## AppArmorProfile - Not yet available for Wheezy
+AppArmorProfile=-system_tor
+
+[Install]
+WantedBy=multi-user.target

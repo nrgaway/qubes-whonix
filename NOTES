@@ -9,11 +9,20 @@
                           Whonix Checks and Issues
 ---------------------------------------------------------------------------------
 Current issues:
-  - Whonix notifications seems to have reverted back to old style
+  - locales not being set correctly or retained after updates?
+  - systemctl is-enabled does not work for sysv init configurations
+    - IS TEHRE A COMMAND to tell what kind of file (init unit)
+  - modified template utilities.sh for enable_sysv
 
-  - /etc/profile.d/20_power_savings_disable_in_vms.sh prevents qvm-run from
-    operating within dom0.  Think Patrick will fix on his end.  I suggested
-    redirecting the error output to /dev/null for the setterm commands
+  - no route being set with new config ... check for errors
+  - modified qubes-whonix-network.service -- set init to Pre, not Post for test
+  - NetworkManager has been starting!  -- could it be cause of broken disable? on qubes-admin-install?
+  - hrmm; network-manager too?
+
+  - /etc/hosts.anondist-orig is being replaced on install from ???
+
+  - Getting 'Disconnected' popup alot; maybe since we have not managed a 
+    connection yet
 
   - Need a utility to search for files with IP address pattern during installation.
     Currently the list is manually generated
@@ -28,27 +37,11 @@ Build issues:
 ---------------------------------------------------------------------------------
   - check VM time to see if its set to proper timezone based on dom0?
 
-  - netvm works in d8 - no wireless
-    - firmware-linux-free ??
-    - firmware-linux-nonfree ??
-
-  - xdg-utils ??
-
 
 ---------------------------------------------------------------------------------
                       Qubes Related Configuration Issues
 ---------------------------------------------------------------------------------
-  - qvm-sync-appmenu errors:
-    Failed to get icon for xxx.desktop: Image format violation (for lots of apps)
-    setterm: $TERM is not defined (again for many apps)
 
-
----------------------------------------------------------------------------------
-                     Issues to Leave Unresolved (For Now :)
----------------------------------------------------------------------------------
-  - qvm-sync-appmenu should be run on install; add to postinst maybe (but appvm will
-    need to be running already) -- or add a better parser in chroot b4 rpm created?
-    - Most like not going to happen since VM would need to be started?
 
 ---------------------------------------------------------------------------------
                            Most Likely Solved Issues
