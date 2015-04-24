@@ -1,3 +1,23 @@
+qubes-whonix (0:9.6.7-1) wheezy; urgency=medium
+
+  [ Jason Mehring ]
+  * Update files to search and replace IP addresses Fix syntax typo for
+    whonix workstation that prevented search and replace
+  * start whonixcheck on startup for workstation
+  * Use new whonix-setup-wizard directory for *.done files Use
+    50_whonixcheck_user instead of 30_whonixcheck_default Enable new
+    control-port-filter-python.service
+  * Remove unneeded bind directories due to new localtion of whonix
+    status files
+  * - Remove references to old whonix status files; use new references -
+    Start whonixcheck last - Add missing whonixcheck for workstation -
+    Don't prompt to install repository in AppVM (Gateway or Workstation)
+    - Prompt to install repository in templatevm
+  * Add missing whonixcheck.conf file
+  * Add systemd unit file for control-port-filter-python.service
+
+ -- Jason Mehring <nrgaway@gmail.com>  Fri, 24 Apr 2015 06:16:17 -0400
+
 qubes-whonix (0:9.6.6-1) wheezy; urgency=medium
 
   [ Patrick Schleizer ]
