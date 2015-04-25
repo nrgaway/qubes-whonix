@@ -4,7 +4,7 @@
 source /usr/lib/qubes-whonix/utility_functions.sh
 
 # Location of files which contains list of protected files
-PROTECTED_FILE_LIST='/var/lib/qubes/protected-files'
+PROTECTED_FILE_LIST='/etc/qubes/protected-files.d/qubes-whonix'
 
 # Files that will marked as being protected to eliminate modification from Qubes
 PROTECTED_FILES=(
