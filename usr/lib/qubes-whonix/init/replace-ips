@@ -16,7 +16,6 @@ FILES=[
     '/etc/apt/apt.conf.d/90whonix',
     '/etc/cpfpy.d/30_controlportfilt_default',
     '/etc/network/interfaces.whonix',
-    '/etc/network/interfaces.whonix',
     '/etc/resolv.conf',
     '/etc/resolv.conf.anondist',
     '/etc/rinetd.conf.anondist',
