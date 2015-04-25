@@ -2,10 +2,11 @@
 # relatively conservative, hardened Tor service.
 #
 # See also related configuration file:
-# /etc/tmpfiles.d/tor.conf
+# /etc/tmpfiles.d/qubes-whonix-tor.conf
 
 [Unit]
 Description = Whonix Tor anonymizing overlay network for TCP
+ConditionPathExists = /etc/init.d/tor
 After = syslog.target network.target nss-lookup.target
 
 [Service]
@@ -23,4 +24,5 @@ LimitNOFILE = 32768
 StandardOutput = syslog
 
 [Install]
-WantedBy=multi-user.target
+WantedBy = multi-user.target
+Alias = tor.service
