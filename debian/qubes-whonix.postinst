@@ -134,11 +134,13 @@ case "${1}" in
         usermod -a --groups debian-tor user
 
         # Prevent whonixcheck error
-        touch /etc/whonix.d/50_whonixcheck_user
-        echo 'WHONIXCHECK_NO_EXIT_ON_UNSUPPORTED_VIRTUALIZER="1"' >> /etc/whonix.d/50_whonixcheck_user
+        touch /etc/whonix.d/50_whonixcheck_qubes
+        echo 'WHONIXCHECK_NO_EXIT_ON_UNSUPPORTED_VIRTUALIZER="1"' >> /etc/whonix.d/50_whonixcheck_qubes
 
         # Disable unwanted or manually started applications
         disableSystemdUnits \
+            qubes-whonix-network \
+            qubes-whonix-firewall \
             sdwdate \
             whonixcheck \
             network-manager \
@@ -148,12 +150,15 @@ case "${1}" in
             tor \
             control-port-filter-python
 
-        # Enable new Tor systemd unit
-        enableSystemdUnits tor.service
+        # Re-enable 'Aliased' services
+        enableSystemdUnits \
+            qubes-whonix-network \
+            qubes-whonix-firewall \
+            qubes-whonix-tor.service
 
         # Enable new control-port-filter-python systemd unit (Whonix 10+)
         if [ -e "/usr/lib/control-port-filter-python/cpfp.py" ]; then
-            enableSystemdUnits control-port-filter-python.service
+            enableSystemdUnits qubes-whonix-control-port-filter-python.service
         fi
 
         # Will not be restarted in chroot which is what is expected
@@ -203,21 +208,31 @@ case "${1}" in
                     ;;
 
                 # Replace IP addresses
+                /etc/apt/apt.conf.d/90whonix | \
+                /etc/cpfpy.d/30_controlportfilt_default | \
+                /etc/network/interfaces.whonix | \
+                /etc/resolv.conf | \
+                /etc/resolv.conf.anondist | \
+                /etc/rinetd.conf.anondist | \
+                /etc/sdwdate.d/31_anon_dist_stream_isolation_plugin | \
+                /etc/sdwdate.d/35_qubes_stream_isolation_plugin | \
+                /etc/tor/torrc.examples | \
+                /etc/uwt.d/30_uwt_default | \
+                /etc/whonix_firewall.d/30_default | \
+                /home/user/.torchat/torchat.ini | \
+                /home/user/.xchat2/xchat.conf | \
+                /usr/bin/update-torbrowser | \
+                /usr/bin/uwt | \
+                /usr/bin/whonix_firewall | \
+                /usr/lib/anon-shared-helper-scripts/tor_bootstrap_check.bsh | \
+                /usr/lib/anon-ws-disable-stacked-tor/torbrowser.sh | \
+                /usr/lib/control-port-filter-python/cpfp.py | \
                 /usr/lib/leaktest-workstation/simple_ping.py | \
                 /usr/lib/whonixcheck/preparation | \
                 /usr/share/anon-kde-streamiso/share/config/kioslaverc | \
-                /usr/bin/whonix_firewall | \
-                /etc/whonix_firewall.d/30_default | \
-                /usr/lib/anon-shared-helper-scripts/tor_bootstrap_check.bsh | \
-                /usr/bin/uwt | \
-                /etc/uwt.d/30_uwt_default | \
-                /usr/bin/update-torbrowser | \
-                /etc/network/interfaces.whonix | \
-                /etc/resolv.conf.anondist | \
-                /etc/sdwdate.d/35_qubes_stream_isolation_plugin | \
-                /etc/rinetd.conf.anondist | \
-                /etc/network/interfaces.whonix | \
-                /usr/share/anon-torchat/.torchat/torchat.ini)
+                /usr/share/anon-torchat/.torchat/torchat.ini | \
+                /usr/share/tor/tor-service-defaults-torrc.anondist | \
+                /usr/share/xchat-improved-privacy/.xchat2/xchat.conf)
                     /usr/lib/qubes-whonix/init/replace-ips
                     ;;
 
