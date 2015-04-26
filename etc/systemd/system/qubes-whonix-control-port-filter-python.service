@@ -2,10 +2,11 @@
 # messages in Tor control port.
 #
 # See also related configuration file:
-# /etc/tmpfiles.d/control-port-filter-python.conf
+# /etc/tmpfiles.d/qubes-whonix-control-port-filter-python.conf
 
 [Unit]
 Description = Control Port Filter Proxy
+ConditionPathExists = /etc/init.d/control-port-filter-python
 ConditionPathExists = /usr/lib/control-port-filter-python/cpfp.py
 After = remote-fs.target syslog.target network.target
 
@@ -17,8 +18,8 @@ Group = debian-tor
 ## Run ExecStartPre with root-permissions
 PermissionsStartOnly=true
 ExecStartPre = /usr/lib/anon-shared-helper-scripts/torsocks-remove-ld-preload
-ExecStartPre = /bin/touch /var/log/%p.log ; /bin/chown --recursive debian-tor:debian-tor /var/log/%p.log
-PIDFile = /var/run/%p/pid
+ExecStartPre = /bin/touch /var/log/control-port-filter-python.log ; /bin/chown --recursive debian-tor:debian-tor /var/log/control-port-filter-python.log
+PIDFile = /var/run/control-port-filter-python/pid
 
 ## Run ExecStart with User=debian-tor / Group=debian-tor
 # ExecStart = /usr/lib/control-port-filter-python/cpfp.py
@@ -29,7 +30,7 @@ ExecStart = /sbin/start-stop-daemon \
       --quiet \
       --background \
       --make-pidfile \
-      --pidfile /var/run/%p/pid \
+      --pidfile /var/run/control-port-filter-python/pid \
       --chuid debian-tor:debian-tor \
       --exec /usr/lib/control-port-filter-python/cpfp.py
 
@@ -48,7 +49,8 @@ StandardOutput = syslog
 ## Hardening
 ##
 
-PrivateTmp=yes
+PrivateTmp = yes
 
 [Install]
-WantedBy=multi-user.target
+WantedBy = multi-user.target
+Alias = control-port-filter-python.service

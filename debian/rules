@@ -12,7 +12,7 @@
 # Uncomment this to turn on verbose mode.
 export DH_VERBOSE=1
 
-export DESTDIR=$(shell pwd)/debian/tmp
+export DESTDIR=$(shell pwd)/debian/qubes-whonix
 
 %:
 	dh $@ --with systemd

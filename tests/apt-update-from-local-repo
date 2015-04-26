@@ -3,7 +3,6 @@
 
 DIST="wheezy"
 DISTRIBUTION="debian"
-KEYS_DIR="/tmp/repo_keys"
 export LOCAL_REPO="repo"
 
 APT_GET_OPTIONS="-o Dpkg::Options::="--force-confnew" --force-yes --yes"
@@ -187,38 +186,6 @@ function aptInstall() {
 }
 
 # ==============================================================================
-# Install keyrings
-# ==============================================================================
-function installKeyrings() {
-    if ! [ -e "${KEYS_DIR}/repo-secring.gpg" ]; then
-        mkdir -p "${KEYS_DIR}"
-        gpg --gen-key --batch <<EOF
-Key-Type: RSA
-Key-Length: 1024
-Key-Usage: sign
-Name-Real: Qubes builder
-Expire-Date: 0
-%pubring ${KEYS_DIR}/repo-pubring.gpg
-%secring ${KEYS_DIR}/repo-secring.gpg
-%commit
-EOF
-    fi
-
-    if ! [ -d "${LOCAL_REPO}/dists/${DIST}" ]; then
-    	mkdir -p "${LOCAL_REPO}/dists/${DIST}"
-    fi
-
-    if [ ! -e "${LOCAL_REPO}/dists/${DIST}/Release.gpg" ]; then
-        gpg -abs --no-default-keyring \
-            --secret-keyring "${KEYS_DIR}/repo-secring.gpg" \
-            --keyring "${KEYS_DIR}/repo-pubring.gpg" \
-            -o "${LOCAL_REPO}/dists/${DIST}/Release.gpg" \
-            "${LOCAL_REPO}/dists/${DIST}/Release"
-        cp "${KEYS_DIR}/repo-pubring.gpg" "/etc/apt/trusted.gpg.d/local-repo.gpg"
-    fi
-}
-
-# ==============================================================================
 # Install local repo
 # ==============================================================================
 installLocalRepo() {
@@ -228,11 +195,10 @@ installLocalRepo() {
     mkdir -p "${LOCAL_REPO}"
 
     cat > "/etc/apt/sources.list.d/local-repo.list" <<EOF
-deb file:$(readlink -m ${LOCAL_REPO}) ${DIST} main
+deb [trusted=yes] file:$(readlink -m ${LOCAL_REPO}) ${DIST} main
 EOF
 
     info ' Installing keyrings'  # Relies on $LOCAL_REPO
-    installKeyrings
 }
 
 # ==============================================================================
