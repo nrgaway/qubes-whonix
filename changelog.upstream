@@ -1,3 +1,78 @@
+commit 5df5d4c5e4bf8345e22aa06d7cb8bcbb4f115a9d
+Merge: 3055fc1 b92b7d9
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Apr 26 12:46:32 2015 +0000
+
+    Merge remote-tracking branch 'nrgaway/master'
+
+commit b92b7d950a12f1049907daffdebf84be27026d2a
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sun Apr 26 03:00:46 2015 -0400
+
+    version 10.0.3
+
+commit 9b56022aca9a4898ad49e291bf858486641d80bc
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sat Apr 25 05:07:02 2015 -0400
+
+    Added qubes-core-agent (>= 2.1.60) as a depend
+
+commit 57556b0c7e655982bbd1471a1d5b2cd35bf3412a
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sat Apr 25 05:06:29 2015 -0400
+
+    Sorted and added more replaceip triggers
+
+commit 011d5489566e2130f0be51a8ac633d0ec2b6b64b
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sat Apr 25 05:03:51 2015 -0400
+
+    - Use /etc/whonix.d/50_whonixcheck_qubes
+    - Disable/Re-enable qubes-whonix-network/firewall, tor, control-port-filter
+    - sorted and added more replaceip triggers
+
+commit 05d0cdec6ef98de18277fa463d08839addb27043
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sat Apr 25 05:01:49 2015 -0400
+
+    Renamed and configured systemd configurations files so they will not conflict with future Whonix versions
+
+commit 4c30ca00b4c494dea81295643d63ef06c67953df
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sat Apr 25 05:00:53 2015 -0400
+
+    removed duplicate FILES entry
+
+commit 1fd8bfce872421f3c8593a0435beeb759281b76b
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sat Apr 25 04:59:46 2015 -0400
+
+    Updated Qubes protected-files location
+
+commit 56960eb0eae5c5d02663f969fd75b990203e15d3
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sat Apr 25 04:57:11 2015 -0400
+
+    Use trusted mode instead of installing keyring for local repo testing
+
+commit 5783286d2dbd0b624fb39d97b5b3f7904e984180
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Apr 24 13:31:49 2015 +0000
+
+    updated changelog.upstream
+
+commit 965d332c50b376bbaee15cfbf6a45c3bd31ff280
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Feb 16 11:06:07 2015 +0000
+
+    added creation of upstream changelog to fix lintian warning
+
+commit 3055fc137ac666902581c717ae2183dbdfaafa93
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Apr 24 13:31:49 2015 +0000
+
+    updated changelog.upstream
+
 commit 5c43662196c07042c5e98d24516e7d0ca98b0a97
 Merge: 17f0775 e6933af
 Author: Patrick Schleizer <adrelanos@riseup.net>
