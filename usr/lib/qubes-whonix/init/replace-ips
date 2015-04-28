@@ -12,18 +12,27 @@ WHONIX_IP_GATEWAY = '/etc/whonix-ip-gateway'
 WHONIX_IP_LOCAL = '/etc/whonix-ip-local'
 IP_ADDRESS = re.compile(r'(?:[0-9]{1,3}\.){3}[0-9]{1,3}')
 
+# The following files do not need to be replaced since they already have
+# an additional configuration file that overrides it
+#
+#   '/etc/cpfpy.d/30_controlportfilt_default',
+#   '/etc/sdwdate.d/31_anon_dist_stream_isolation_plugin',
+#   '/etc/uwt.d/30_uwt_default',
+#   '/etc/whonix_firewall.d/30_default',
+
+# This is a list of all Whonix files that contain IP addresses that will
+# be searched and replaces with the current assigned IP address
 FILES=[
     '/etc/apt/apt.conf.d/90whonix',
-    '/etc/cpfpy.d/30_controlportfilt_default',
+    '/etc/cpfpy.d/32_qubes',
     '/etc/network/interfaces.whonix',
     '/etc/resolv.conf',
     '/etc/resolv.conf.anondist',
     '/etc/rinetd.conf.anondist',
-    '/etc/sdwdate.d/31_anon_dist_stream_isolation_plugin',
     '/etc/sdwdate.d/35_qubes_stream_isolation_plugin',
     '/etc/tor/torrc.examples',
-    '/etc/uwt.d/30_uwt_default',
-    '/etc/whonix_firewall.d/30_default',
+    '/etc/uwt.d/32_qubes',
+    '/etc/whonix_firewall.d/32_qubes',
     '/home/user/.torchat/torchat.ini',
     '/home/user/.xchat2/xchat.conf',
     '/usr/bin/update-torbrowser',
