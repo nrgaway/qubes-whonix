@@ -9,6 +9,17 @@ export XDG_CURRENT_DESKTOP=gnome
 PROXY_SERVER="http://10.137.255.254:8082/"
 PROXY_META='<meta name=\"application-name\" content=\"tor proxy\"\/>'
 
+# Qubes R3
+if which qubesdb-read > /dev/null; then
+    QUBESDB=qubesdb
+    PREFIX='/'
+
+# Qubes R2
+else
+    QUBESDB=xenstore
+    PREFIX=''
+fi
+
 if [ ! -d "/var/run/qubes" ]; then
     QUBES_WHONIX="unknown"
     exit 0
