@@ -1,3 +1,14 @@
+qubes-whonix (0:10.0.4-1) wheezy; urgency=medium
+
+  [ Jason Mehring ]
+  * Updated NOTES
+  * Removed injected whonix_firewall rules and added to
+    /etc/whonix_firewall.d/32_qubes
+  * Moved qubesdb to utility_functions.sh
+  * Changed ip-replace filelist and triggers
+
+ -- Jason Mehring <nrgaway@gmail.com>  Tue, 28 Apr 2015 09:39:29 -0400
+
 qubes-whonix (0:10.0.3-1) wheezy; urgency=medium
 
   [ Patrick Schleizer ]
