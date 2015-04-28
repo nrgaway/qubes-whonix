@@ -8,29 +8,31 @@ if ! [ "${QUBES_WHONIX}" == "template" ]; then
 fi
 
 if [ "${QUBES_WHONIX}" == "gateway" ]; then
-    if grep "^DisableNetwork 0$" /etc/tor/torrc ;then
-        sudo service sdwdate restart
-        sudo service tor restart
+    if grep "^DisableNetwork 0$" /etc/tor/torrc; then
+        sudo systemctl start sdwdate
+        sudo systemctl restart tor
+        sudo systemctl start whonixcheck
     else
-        sudo service sdwdate restart
-        sudo service tor stop
+        sudo systemctl start sdwdate
+        sudo systemctl restart tor
+        sudo systemctl start whonixcheck
 
-        # Whonix setup complete 
-        sudo mkdir -p /var/lib/whonix/do_once
-        sudo touch /var/lib/whonix/do_once/whonixsetup.done
+        # Setup repository in template
+        sudo mkdir -p /var/cache/whonix-setup-wizard/status-files
+        sudo touch /var/cache/whonix-setup-wizard/status-files/whonix_repository.done
 
-        #sudo /usr/bin/whonixsetup
         XDG_CURRENT_DESKTOP=gnome sudo /usr/bin/whonix-setup-wizard setup -style gtk+
     fi
 
 elif [ "${QUBES_WHONIX}" == "workstation" ]; then
-    sudo service sdwdate restart
-    if ! [ -f "/var/lib/whonix/do_once/whonixsetup.done" ]; then
-        # Whonix setup complete 
-        sudo mkdir -p /var/lib/whonix/do_once
-        sudo touch /var/lib/whonix/do_once/whonixsetup.done
+    sudo systemctl start sdwdate
+    sudo systemctl start whonixcheck
 
-        #sudo /usr/bin/whonixsetup
+    if ! [ -f "/var/cache/whonix-setup-wizard/status-files/disclaimer.done" ]; then
+        # Setup repository in template
+        sudo mkdir -p /var/cache/whonix-setup-wizard/status-files
+        sudo touch /var/cache/whonix-setup-wizard/status-files/whonix_repository.done
+
         XDG_CURRENT_DESKTOP=gnome sudo /usr/bin/whonix-setup-wizard setup -style gtk+
     fi
 
@@ -50,4 +52,11 @@ elif [ "${QUBES_WHONIX}" == "template" ] && [ ! -e '/var/run/qubes-service/qubes
 
     # Display warning that netvm is not connected to a torvm
     /usr/lib/qubes-whonix/alert update /usr/lib/qubes-whonix/messages.yaml
+fi
+
+if [ "${QUBES_WHONIX}" == "template" ]; then
+    # Setup repository
+    if ! [ -f "/var/cache/whonix-setup-wizard/status-files/whonix_repository.done" ]; then
+        XDG_CURRENT_DESKTOP=gnome sudo /usr/bin/whonix-setup-wizard repository -style gtk+
+    fi
 fi

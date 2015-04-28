@@ -19,3 +19,10 @@ export DESTDIR=$(shell pwd)/debian/qubes-whonix
 
 override_dh_installchangelogs:
 	dh_installchangelogs changelog.upstream upstream
+
+override_dh_auto_build:
+	dh_clean --keep
+	make install DESTDIR=$(DESTDIR)
+
+override_dh_auto_install:
+	@true

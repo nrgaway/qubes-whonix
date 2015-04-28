@@ -3,9 +3,11 @@
 
 source /usr/lib/qubes-whonix/utility_functions.sh
 
-# Files that will have the immutable bit set
-# since we don't want them modified by other programs
-IMMUTABLE_FILES=(
+# Location of files which contains list of protected files
+PROTECTED_FILE_LIST='/etc/qubes/protected-files.d/qubes-whonix'
+
+# Files that will marked as being protected to eliminate modification from Qubes
+PROTECTED_FILES=(
     '/etc/resolv.conf'
     '/etc/hostname'
     '/etc/hosts'
@@ -13,17 +15,20 @@ IMMUTABLE_FILES=(
     '/etc/timezone'
 )
 
-# Make sure all .anondist files in list are immutable
-immutableFilesEnable "${IMMUTABLE_FILES}"
-immutableFilesEnable "${IMMUTABLE_FILES}" ".anondist"
+# Make sure all .anondist files in list are not immutable. Fixes immutable issue
+immutableFilesDisable "${PROTECTED_FILES}"
+immutableFilesDisable "${PROTECTED_FILES}" ".anondist"
 
-# Make sure we are using a copy of the anondist file and if not
-# copy the anondist file and set it immutable
-copyAnondist "/etc/resolv.conf"
-copyAnondist "/etc/hosts"
-copyAnondist "/etc/hostname"
-copyAnondist "/etc/localtime"
-copyAnondist "/etc/timezone"
+for protected_file in "${PROTECTED_FILES[@]}"; do
+    # Enable protected services
+    if ! grep -q "^${protected_file}$" "${PROTECTED_FILE_LIST}" 2>/dev/null; then
+	    echo -e "${protected_file}" >> "${PROTECTED_FILE_LIST}"
+    fi
+
+    # Make sure we are using a copy of the anondist file and if not
+    # copy the anondist file and set it immutable
+    copyAnondist "${protected_file}"
+done
 
 if [ "${QUBES_WHONIX}" == "gateway" ] || [ "${QUBES_WHONIX}" == "workstation" ]; then
     # Replace IP addresses in known configuration files / scripts with

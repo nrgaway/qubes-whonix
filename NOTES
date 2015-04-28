@@ -9,15 +9,19 @@
                           Whonix Checks and Issues
 ---------------------------------------------------------------------------------
 Current issues:
-  - Whonix notifications seems to have reverted back to old style
-
-  - /etc/profile.d/20_power_savings_disable_in_vms.sh prevents qvm-run from
-    operating within dom0.  Think Patrick will fix on his end.  I suggested
-    redirecting the error output to /dev/null for the setterm commands
-
   - Need a utility to search for files with IP address pattern during installation.
-    Currently the list is manually generated
-    - Make sure Whonix provides a trigger
+    - consider a FUSE type module that 'intercepts' file open and can change
+      output of the configuration file on the fly with something like jinja2.
+    - Currently the list is manually generated
+
+  - tmpfile.d:
+      Files in /etc/tmpfiles.d override files with the same name in
+      /usr/lib/tmpfiles.d and /run/tmpfiles.d. Files in /run/tmpfiles.d
+      override files with the same name in /usr/lib/tmpfiles.d. Packages
+      should install their configuration files in /usr/lib/tmpfiles.d.
+      Files in /etc/tmpfiles.d are reserved for the local administrator,
+      who may use this logic to override the configuration files installed
+      by vendor packages
 
 Build issues:
   - None
@@ -28,27 +32,11 @@ Build issues:
 ---------------------------------------------------------------------------------
   - check VM time to see if its set to proper timezone based on dom0?
 
-  - netvm works in d8 - no wireless
-    - firmware-linux-free ??
-    - firmware-linux-nonfree ??
-
-  - xdg-utils ??
-
 
 ---------------------------------------------------------------------------------
                       Qubes Related Configuration Issues
 ---------------------------------------------------------------------------------
-  - qvm-sync-appmenu errors:
-    Failed to get icon for xxx.desktop: Image format violation (for lots of apps)
-    setterm: $TERM is not defined (again for many apps)
 
-
----------------------------------------------------------------------------------
-                     Issues to Leave Unresolved (For Now :)
----------------------------------------------------------------------------------
-  - qvm-sync-appmenu should be run on install; add to postinst maybe (but appvm will
-    need to be running already) -- or add a better parser in chroot b4 rpm created?
-    - Most like not going to happen since VM would need to be started?
 
 ---------------------------------------------------------------------------------
                            Most Likely Solved Issues

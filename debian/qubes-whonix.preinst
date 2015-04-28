@@ -42,11 +42,11 @@
 # the debian-policy package
 
 if [ "$1" = "install" ] ; then
-    exit 0
+    true
 fi
 
 if [ "$1" = "upgrade" ] ; then
-    exit 0
+    true
 fi
 
 # dh_installdeb will replace this with shell code automatically

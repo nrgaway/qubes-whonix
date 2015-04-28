@@ -1,0 +1,56 @@
+# control-port-filter-python.service -- Filters out dangerous control port 
+# messages in Tor control port.
+#
+# See also related configuration file:
+# /etc/tmpfiles.d/qubes-whonix-control-port-filter-python.conf
+
+[Unit]
+Description = Control Port Filter Proxy
+ConditionPathExists = /etc/init.d/control-port-filter-python
+ConditionPathExists = /usr/lib/control-port-filter-python/cpfp.py
+After = remote-fs.target syslog.target network.target
+
+[Service]
+Type = forking
+User = debian-tor
+Group = debian-tor
+
+## Run ExecStartPre with root-permissions
+PermissionsStartOnly=true
+ExecStartPre = /usr/lib/anon-shared-helper-scripts/torsocks-remove-ld-preload
+ExecStartPre = /bin/touch /var/log/control-port-filter-python.log ; /bin/chown --recursive debian-tor:debian-tor /var/log/control-port-filter-python.log
+PIDFile = /var/run/control-port-filter-python/pid
+
+## Run ExecStart with User=debian-tor / Group=debian-tor
+# ExecStart = /usr/lib/control-port-filter-python/cpfp.py
+#
+## TODO: cpfp.py should daemonize itself and handle pid file creation
+ExecStart = /sbin/start-stop-daemon \
+      --start \
+      --quiet \
+      --background \
+      --make-pidfile \
+      --pidfile /var/run/control-port-filter-python/pid \
+      --chuid debian-tor:debian-tor \
+      --exec /usr/lib/control-port-filter-python/cpfp.py
+
+##
+## General options
+##
+
+TimeoutSec = 30
+Restart = always
+StandardOutput = syslog
+
+## TODO: Watchdog disabled.  cpfp.py would need to implement the sd_notify protocol
+# WatchdogSec = 1m
+
+##
+## Hardening
+##
+
+PrivateTmp = yes
+
+[Install]
+WantedBy = multi-user.target
+Alias = control-port-filter-python.service

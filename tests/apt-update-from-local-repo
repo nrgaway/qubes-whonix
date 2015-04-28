@@ -1,0 +1,303 @@
+#!/bin/bash -e
+# vim: set ts=4 sw=4 sts=4 et :
+
+DIST="wheezy"
+DISTRIBUTION="debian"
+export LOCAL_REPO="repo"
+
+APT_GET_OPTIONS="-o Dpkg::Options::="--force-confnew" --force-yes --yes"
+
+DISTRIBUTION_CAP=$(echo ${DISTRIBUTION} | sed -e 's/^./\U&/';)
+read -r -d '' APT_DISTRIBUTIONS <<EOF || true
+Origin: Local ${DISTRIBUTION_CAP}
+Label: Local ${DISTRIBUTION_CAP}
+Codename: ${DIST}
+Architectures: amd64 source
+Components: main
+Description: Apt repository for ${DISTRIBUTION_CAP} ${DIST}
+
+EOF
+
+if [ $# -eq 0 ]; then
+    echo "usage $0 [upgrade|dist-upgrade] | [reinstall] <package-name> [package-name]..."
+    exit
+fi
+
+ID=$(id -ur)
+if [ $ID != 0 ] ; then
+    echo "This script should be run as root user."
+    exit 1
+fi
+
+if [ "${1}" == "reinstall" ]; then
+    APT_GET_OPTIONS+=" --reinstall"
+    shift 1
+elif [ "${1}" == "upgrade" ]; then
+    UPGRADE=true
+elif [ "${1}" == "dist-upgrade" ]; then
+    DIST_UPGRADE=true
+fi
+
+PACKAGES="$@"
+
+# ==============================================================================
+# Cleanup function
+# ==============================================================================
+function cleanup() {
+    errval=$?
+    error "EXITING!!"
+    trap - ERR EXIT
+    trap
+    exit $errval
+}
+
+# ==============================================================================
+# Define colors
+# ==============================================================================
+colors() {
+   ## Thanks to:
+   ## http://mywiki.wooledge.org/BashFAQ/037
+   ## Variables for terminal requests.
+   [[ -t 2 ]] && {
+       export alt=$(      tput smcup  || tput ti      ) # Start alt display
+       export ealt=$(     tput rmcup  || tput te      ) # End   alt display
+       export hide=$(     tput civis  || tput vi      ) # Hide cursor
+       export show=$(     tput cnorm  || tput ve      ) # Show cursor
+       export save=$(     tput sc                     ) # Save cursor
+       export load=$(     tput rc                     ) # Load cursor
+       export bold=$(     tput bold   || tput md      ) # Start bold
+       export stout=$(    tput smso   || tput so      ) # Start stand-out
+       export estout=$(   tput rmso   || tput se      ) # End stand-out
+       export under=$(    tput smul   || tput us      ) # Start underline
+       export eunder=$(   tput rmul   || tput ue      ) # End   underline
+       export reset=$(    tput sgr0   || tput me      ) # Reset cursor
+       export blink=$(    tput blink  || tput mb      ) # Start blinking
+       export italic=$(   tput sitm   || tput ZH      ) # Start italic
+       export eitalic=$(  tput ritm   || tput ZR      ) # End   italic
+   [[ ${TERM} != *-m ]] && {
+       export red=$(      tput setaf 1|| tput AF 1    )
+       export green=$(    tput setaf 2|| tput AF 2    )
+       export yellow=$(   tput setaf 3|| tput AF 3    )
+       export blue=$(     tput setaf 4|| tput AF 4    )
+       export magenta=$(  tput setaf 5|| tput AF 5    )
+       export cyan=$(     tput setaf 6|| tput AF 6    )
+   }
+       export white=$(    tput setaf 7|| tput AF 7    )
+       export default=$(  tput op                     )
+       export eed=$(      tput ed     || tput cd      )   # Erase to end of display
+       export eel=$(      tput el     || tput ce      )   # Erase to end of line
+       export ebl=$(      tput el1    || tput cb      )   # Erase to beginning of line
+       export ewl=$eel$ebl                                # Erase whole line
+       export draw=$(     tput -S <<< '   enacs
+                                   smacs
+                                   acsc
+                                   rmacs' || { \
+                   tput eA; tput as;
+                   tput ac; tput ae;         } )   # Drawing characters
+       export back=$'\b'
+   } 2>/dev/null ||:
+
+   export build_already_defined_colors="true"
+}
+
+if [ ! "$build_already_defined_colors" = "true" ]; then
+   colors
+fi
+
+if [ "${VERBOSE}" -ge 2 -o "${DEBUG}" == "1" ]; then
+    chroot() {
+        local retval
+        true ${blue}
+        if [ "${SYSTEMD_NSPAWN_ENABLE}"  == "1" ]; then
+            systemd-nspawn $systemd_bind -D "${INSTALLDIR}" -M "${DIST}" "$@" && { retval=$?; true; } || { retval=$?; true; }
+        else
+            /usr/sbin/chroot "${INSTALLDIR}" "$@" && { retval=$?; true; } || { retval=$?; true; }
+        fi
+        true ${reset}
+        return $retval
+    }
+else
+    chroot() {
+        /usr/sbin/chroot "${INSTALLDIR}" "$@"
+    }
+fi
+
+# ==============================================================================
+# Display messages in color
+# ==============================================================================
+output() {
+    echo -e ""$@""
+}
+
+outputc() {
+    color=${1}
+    shift
+    output "${!color}"$@"${reset}" || :
+}
+
+info() {
+    output "${bold}${blue}INFO: "$@"${reset}" || :
+}
+
+debug() {
+    output "${bold}${green}DEBUG: "$@"${reset}" || :
+}
+
+warn() {
+    output "${stout}${yellow}WARNING: "$@"${reset}" || :
+}
+
+error() {
+    output "${bold}${red}ERROR: "$@"${reset}" || :
+}
+
+# ==============================================================================
+# apt-get update
+# ==============================================================================
+function aptUpdate() {
+    debug "Updating system..."
+    DEBIAN_FRONTEND="noninteractive" DEBIAN_PRIORITY="critical" DEBCONF_NOWARNINGS="yes" \
+        apt-get update
+}
+
+# ==============================================================================
+# apt-get upgrade
+# ==============================================================================
+function aptUpgrade() {
+    DEBIAN_FRONTEND="noninteractive" DEBIAN_PRIORITY="critical" DEBCONF_NOWARNINGS="yes" \
+        env APT_LISTCHANGES_FRONTEND=none apt-get upgrade -u -y --force-yes
+}
+
+# ==============================================================================
+# apt-get dist-upgrade
+# ==============================================================================
+function aptDistUpgrade() {
+    DEBIAN_FRONTEND="noninteractive" DEBIAN_PRIORITY="critical" DEBCONF_NOWARNINGS="yes" \
+        env APT_LISTCHANGES_FRONTEND=none apt-get dist-upgrade -u -y --force-yes
+}
+
+# ==============================================================================
+# apt-get install
+# ==============================================================================
+function aptInstall() {
+    files="$@"
+    DEBIAN_FRONTEND="noninteractive" DEBIAN_PRIORITY="critical" DEBCONF_NOWARNINGS="yes" \
+        apt-get ${APT_GET_OPTIONS} install ${files[@]}
+}
+
+# ==============================================================================
+# Install local repo
+# ==============================================================================
+installLocalRepo() {
+    info " Defining local LOCAL_REPO location: ${LOCAL_REPO}"
+
+    info "Creating local qubes_repo"
+    mkdir -p "${LOCAL_REPO}"
+
+    cat > "/etc/apt/sources.list.d/local-repo.list" <<EOF
+deb [trusted=yes] file:$(readlink -m ${LOCAL_REPO}) ${DIST} main
+EOF
+
+    info ' Installing keyrings'  # Relies on $LOCAL_REPO
+}
+
+# ==============================================================================
+# Uninstall local Repo
+# ==============================================================================
+uninstallLocalRepo() {
+    info ' Removing local build repo from sources.list.d'
+    rm -f "/etc/apt/sources.list.d/local-repo.list"
+}
+
+# ==============================================================================
+# Calculate sha1
+# ==============================================================================
+calc_sha1() {
+    f=dists/${DIST}/${1}
+    echo -n " "
+    echo -n `sha1sum $f|cut -d' ' -f 1` ""
+    echo -n `stat -c %s $f` ""
+    echo ${1}
+}
+
+# ==============================================================================
+# Update local repo packages and release
+# ==============================================================================
+updateLocalRepo() {
+    info "Update local repo packages and release"
+
+    local release_name_changes="${1}"
+
+    mkdir -p "${LOCAL_REPO}/conf"
+    if [ ! -e "${LOCAL_REPO}/conf/distributions" ]; then
+        touch "${LOCAL_REPO}/conf/distributions"
+    fi
+
+    echo "${APT_DISTRIBUTIONS}" > "${LOCAL_REPO}/conf/distributions"
+
+    reprepro -b "${LOCAL_REPO}" include "${DIST}" "${LOCAL_REPO}/deb/${release_name_changes}"
+
+    pushd "${LOCAL_REPO}"
+    mkdir -p "dists/${DIST}/main/binary-amd64"
+    dpkg-scanpackages --multiversion . > "dists/${DIST}/main/binary-amd64/Packages"
+    gzip -9c "dists/${DIST}/main/binary-amd64/Packages" > "dists/${DIST}/main/binary-amd64/Packages.gz"
+    cat > "dists/${DIST}/Release" <<EOF
+Label: Local Repo
+Suite: ${DIST}
+Codename: ${DIST}
+Date: `date -R`
+Architectures: amd64
+Components: main
+SHA1:
+EOF
+
+    info "Calculating sha1 for ${1}"
+    calc_sha1 "main/binary-amd64/Packages" >> "dists/${DIST}/Release"
+    calc_sha1 "main/binary-amd64/Packages" >> "dists/${DIST}/Release.gz"
+    rm -f "dists/${DIST}/Release.gpg"
+    popd
+}
+
+
+##### '-------------------------------------------------------------------------
+debug " Upgrading ${PACKAGES}"
+##### '-------------------------------------------------------------------------
+
+#### '----------------------------------------------------------------------
+info ' Traping ERR and EXIT signals and cleanup (umount)'
+#### '----------------------------------------------------------------------
+trap cleanup ERR
+trap cleanup EXIT
+
+#### '----------------------------------------------------------------------
+info ' Removing existing local repo and re-building it'
+#### '----------------------------------------------------------------------
+for dir in conf db dists pool; do
+    rm -rf "${LOCAL_REPO}/${dir}"
+done
+for package in "${LOCAL_REPO}/deb/"*.changes; do
+    updateLocalRepo ${package##*/}
+done
+
+installLocalRepo
+aptUpdate
+
+#### '----------------------------------------------------------------------
+info " Installing ${PACKAGES}..."
+#### '----------------------------------------------------------------------
+if [ "${UPGRADE}" == true ]; then
+    aptUpgrade
+elif [ "${DIST_UPGRADE}" == true ]; then
+    aptDistUpgrade
+else
+    aptInstall "${PACKAGES}"
+fi
+
+#### '----------------------------------------------------------------------
+info ' Cleaning up...'
+#### '----------------------------------------------------------------------
+uninstallLocalRepo
+aptUpdate
+trap - ERR EXIT
+trap
+
