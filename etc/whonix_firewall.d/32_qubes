@@ -1,0 +1,23 @@
+#
+# qubes-whonix setting for whonix_firewall
+#
+
+source /usr/lib/qubes-whonix/utility_functions.sh
+
+# Set interfaces for Whonix firewall
+if [ "${QUBES_WHONIX}" == "gateway" ]; then
+    export INT_IF="vif+"
+    export INT_TIF="vif+"
+fi
+
+## Destinations you don not want routed through the VPN.
+## 10.0.2.2/24: VirtualBox DHCP
+#LOCAL_NET="192.168.1.0/24 192.168.0.0/24 127.0.0.0/8 10.152.152.0/24 10.0.2.2/24"
+
+## Destinations you don not want routed through Tor, only for Whonix-Gateway!
+## 10.0.2.2/24: VirtualBox DHCP
+#NON_TOR_GATEWAY="192.168.1.0/24 192.168.0.0/24 127.0.0.0/8 10.152.152.0/24 10.0.2.2/24"
+
+## Run this script after loading firewall rules for dropping invalid incoming packages.
+## Defaults to: none
+GATEWAY_IPv4_DROP_INVALID_INCOMING_PACKAGES_POST_HOOK="/usr/lib/qubes-whonix/init/whonix-firewall"

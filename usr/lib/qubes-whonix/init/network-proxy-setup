@@ -7,17 +7,6 @@ INTERFACE="eth1"
 
 if [ "${QUBES_WHONIX}" == "gateway" ]; then
 
-    # Qubes R3
-    if which qubesdb-read > /dev/null; then
-        QUBESDB=qubesdb
-        PREFIX='/'
-
-    # Qubes R2
-    else
-        QUBESDB=xenstore
-        PREFIX=''
-    fi
-
     # Setup Xen / Qubes proxy
     network=$(${QUBESDB}-read ${PREFIX}qubes-netvm-network 2>/dev/null)
     if [ "x$network" != "x" ]; then
