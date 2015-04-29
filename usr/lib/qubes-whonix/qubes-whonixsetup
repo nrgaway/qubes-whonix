@@ -21,6 +21,10 @@ if [ "${QUBES_WHONIX}" == "gateway" ]; then
         sudo mkdir -p /var/cache/whonix-setup-wizard/status-files
         sudo touch /var/cache/whonix-setup-wizard/status-files/whonix_repository.done
 
+        # Whonix setup complete 
+        sudo mkdir -p /var/lib/whonix/do_once
+        sudo touch /var/lib/whonix/do_once/whonixsetup.done 
+
         XDG_CURRENT_DESKTOP=gnome sudo /usr/bin/whonix-setup-wizard setup -style gtk+
     fi
 
@@ -32,6 +36,10 @@ elif [ "${QUBES_WHONIX}" == "workstation" ]; then
         # Setup repository in template
         sudo mkdir -p /var/cache/whonix-setup-wizard/status-files
         sudo touch /var/cache/whonix-setup-wizard/status-files/whonix_repository.done
+
+        # Whonix setup complete 
+        sudo mkdir -p /var/lib/whonix/do_once
+        sudo touch /var/lib/whonix/do_once/whonixsetup.done
 
         XDG_CURRENT_DESKTOP=gnome sudo /usr/bin/whonix-setup-wizard setup -style gtk+
     fi
