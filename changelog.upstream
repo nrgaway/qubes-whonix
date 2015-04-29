@@ -1,12 +1,130 @@
-commit 5c43662196c07042c5e98d24516e7d0ca98b0a97
-Merge: 17f0775 e6933af
+commit b9be1281cbdc02f1ad0a904569b37c4be0163061
+Merge: 75f93d0 3d47d71
 Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Fri Apr 24 13:00:52 2015 +0000
+Date:   Wed Apr 29 23:51:59 2015 +0000
 
-    Merge remote-tracking branch 'nrgaway/master' into mergetest
+    Merge remote-tracking branch 'nrgaway/Whonix10' into Whonix10
+
+commit 3d47d7105dec6ec5a5b8d3a3e87cd96d4b74e96a
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Wed Apr 29 06:58:35 2015 -0400
+
+    version 10.0.5
+
+commit 62f152e47c721411fb413319f4467511d7348c36
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Wed Apr 29 06:56:34 2015 -0400
+
+    Fix re-enable control-port-filter
+
+commit 37b248e4c9d8458482bc7111c40ce68b7dafd535
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Wed Apr 29 06:55:11 2015 -0400
+
+    Add pkgs directory to .gitignore
+
+commit 75f93d037e17d2cdcce57d908e439cd5a4ddcff9
+Merge: 17f0775 21d33fb
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Apr 28 14:18:42 2015 +0000
+
+    Merge remote-tracking branch 'nrgaway/Whonix10' into Whonix10
     
     Conflicts:
+    	changelog.upstream
     	debian/rules
+
+commit 21d33fbf054f4ee9b6722731c704509847d975f6
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Tue Apr 28 09:41:10 2015 -0400
+
+    version 10.0.4
+
+commit 9b8fb801768fe148ba44d22c554a8249def5c0f8
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Tue Apr 28 09:35:34 2015 -0400
+
+    Changed ip-replace filelist and triggers
+
+commit 7ac56d4622d76e4bf977f9e2a332ac7562c39f7d
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Tue Apr 28 09:34:21 2015 -0400
+
+    Moved qubesdb to utility_functions.sh
+
+commit ae0e432f8e3494a38cfe1791fe93fdf11de01633
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Tue Apr 28 09:32:45 2015 -0400
+
+    Removed injected whonix_firewall rules and added to /etc/whonix_firewall.d/32_qubes
+
+commit f3b988d7b1251e11fbb3c2d1ffa0cc01e85e1806
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Tue Apr 28 09:26:28 2015 -0400
+
+    Updated NOTES
+
+commit b92b7d950a12f1049907daffdebf84be27026d2a
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sun Apr 26 03:00:46 2015 -0400
+
+    version 10.0.3
+
+commit 9b56022aca9a4898ad49e291bf858486641d80bc
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sat Apr 25 05:07:02 2015 -0400
+
+    Added qubes-core-agent (>= 2.1.60) as a depend
+
+commit 57556b0c7e655982bbd1471a1d5b2cd35bf3412a
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sat Apr 25 05:06:29 2015 -0400
+
+    Sorted and added more replaceip triggers
+
+commit 011d5489566e2130f0be51a8ac633d0ec2b6b64b
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sat Apr 25 05:03:51 2015 -0400
+
+    - Use /etc/whonix.d/50_whonixcheck_qubes
+    - Disable/Re-enable qubes-whonix-network/firewall, tor, control-port-filter
+    - sorted and added more replaceip triggers
+
+commit 05d0cdec6ef98de18277fa463d08839addb27043
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sat Apr 25 05:01:49 2015 -0400
+
+    Renamed and configured systemd configurations files so they will not conflict with future Whonix versions
+
+commit 4c30ca00b4c494dea81295643d63ef06c67953df
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sat Apr 25 05:00:53 2015 -0400
+
+    removed duplicate FILES entry
+
+commit 1fd8bfce872421f3c8593a0435beeb759281b76b
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sat Apr 25 04:59:46 2015 -0400
+
+    Updated Qubes protected-files location
+
+commit 56960eb0eae5c5d02663f969fd75b990203e15d3
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sat Apr 25 04:57:11 2015 -0400
+
+    Use trusted mode instead of installing keyring for local repo testing
+
+commit 5783286d2dbd0b624fb39d97b5b3f7904e984180
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Apr 24 13:31:49 2015 +0000
+
+    updated changelog.upstream
+
+commit 965d332c50b376bbaee15cfbf6a45c3bd31ff280
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Feb 16 11:06:07 2015 +0000
+
+    added creation of upstream changelog to fix lintian warning
 
 commit e6933afac073651016524690759e1483ec884270
 Author: Jason Mehring <nrgaway@gmail.com>
