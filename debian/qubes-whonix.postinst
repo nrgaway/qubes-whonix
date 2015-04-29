@@ -157,7 +157,8 @@ case "${1}" in
 
         # Enable new control-port-filter-python systemd unit (Whonix 10+)
         if [ -e "/usr/lib/control-port-filter-python/cpfp.py" ]; then
-            disableSystemdUnits qubes-whonix-control-port-filter
+            disableSystemdUnits control-port-filter
+            disableSystemdUnits control-port-filter-python
             disableSystemdUnits qubes-whonix-control-port-filter-python
             enableSystemdUnits qubes-whonix-control-port-filter-python.service
         fi
@@ -198,7 +199,8 @@ case "${1}" in
                 /usr/lib/control-port-filter-python/cpfp.py)
                     # Enable new control-port-filter-python systemd unit (Whonix 10+)
                     if [ -e "/usr/lib/control-port-filter-python/cpfp.py" ]; then
-                        disableSystemdUnits qubes-whonix-control-port-filter
+                        disableSystemdUnits control-port-filter
+                        disableSystemdUnits control-port-filter-python
                         disableSystemdUnits qubes-whonix-control-port-filter-python
                         enableSystemdUnits qubes-whonix-control-port-filter-python.service
                     fi
