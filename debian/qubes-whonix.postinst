@@ -122,10 +122,16 @@ case "${1}" in
         mkdir -p /var/cache/whonix-setup-wizard
 
         # Fake that initializer was already run
+        mkdir -p /root/.whonix
+        touch /root/.whonix/first_run_initializer.done
         mkdir -p /var/lib/whonix-initializer/status-files
         touch /var/lib/whonix-initializer/status-files/first_run_initializer.done
 
         # prevent first-use notice:
+        mkdir -p /home/user/.gateway
+        touch /home/user/.gateway/first_use_check.done
+
+        # make sure /var/cache/whonix-setup-wizard directory exists
         mkdir -p /var/cache/whonix-setup-wizard/status-files
         touch /var/cache/whonix-setup-wizard/status-files/first_use_check.done
 
@@ -147,19 +153,13 @@ case "${1}" in
             spice-vdagent \
             swap-file-creator \
             whonix-initializer \
-            tor \
-            control-port-filter-python
+            tor
 
         # Re-enable 'Aliased' services
         enableSystemdUnits \
             qubes-whonix-network \
             qubes-whonix-firewall \
             qubes-whonix-tor.service
-
-        # Enable new control-port-filter-python systemd unit (Whonix 10+)
-        if [ -e "/usr/lib/control-port-filter-python/cpfp.py" ]; then
-            enableSystemdUnits qubes-whonix-control-port-filter-python.service
-        fi
 
         # Will not be restarted in chroot which is what is expected
         systemctl restart qubes-whonix-network.service
@@ -209,16 +209,13 @@ case "${1}" in
 
                 # Replace IP addresses
                 /etc/apt/apt.conf.d/90whonix | \
-                /etc/cpfpy.d/30_controlportfilt_default | \
                 /etc/network/interfaces.whonix | \
                 /etc/resolv.conf | \
                 /etc/resolv.conf.anondist | \
                 /etc/rinetd.conf.anondist | \
-                /etc/sdwdate.d/31_anon_dist_stream_isolation_plugin | \
                 /etc/sdwdate.d/35_qubes_stream_isolation_plugin | \
                 /etc/tor/torrc.examples | \
-                /etc/uwt.d/30_uwt_default | \
-                /etc/whonix_firewall.d/30_default | \
+                /etc/uwt.d/32_qubes | \
                 /home/user/.torchat/torchat.ini | \
                 /home/user/.xchat2/xchat.conf | \
                 /usr/bin/update-torbrowser | \

@@ -19,16 +19,13 @@ interest-noawait /etc/hostname
 
 # Replace IP adresses
 interest-noawait /etc/apt/apt.conf.d/90whonix
-interest-noawait /etc/cpfpy.d/30_controlportfilt_default
 interest-noawait /etc/network/interfaces.whonix
 interest-noawait /etc/resolv.conf
 interest-noawait /etc/resolv.conf.anondist
 interest-noawait /etc/rinetd.conf.anondist
-interest-noawait /etc/sdwdate.d/31_anon_dist_stream_isolation_plugin
 interest-noawait /etc/sdwdate.d/35_qubes_stream_isolation_plugin
 interest-noawait /etc/tor/torrc.examples
-interest-noawait /etc/uwt.d/30_uwt_default
-interest-noawait /etc/whonix_firewall.d/30_default
+interest-noawait /etc/uwt.d/32_qubes
 interest-noawait /home/user/.torchat/torchat.ini
 interest-noawait /home/user/.xchat2/xchat.conf
 interest-noawait /usr/bin/update-torbrowser
