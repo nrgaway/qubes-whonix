@@ -1,3 +1,11 @@
+qubes-whonix (0:10.0.5-1) wheezy; urgency=medium
+
+  [ Jason Mehring ]
+  * Add pkgs directory to .gitignore
+  * Fix re-enable control-port-filter
+
+ -- Jason Mehring <nrgaway@gmail.com>  Wed, 29 Apr 2015 06:57:48 -0400
+
 qubes-whonix (0:10.0.4-1) wheezy; urgency=medium
 
   [ Jason Mehring ]
