@@ -11,6 +11,8 @@ source /usr/lib/qubes-whonix/utility_functions.sh
 if ! [ "${QUBES_WHONIX}" == "template" ]; then
     # Array of directories to bind
     BINDS=(
+        '/rw/srv/whonix/root/.whonix:/root/.whonix'
+        '/rw/srv/whonix/root/.whonix.d:/root/.whonix.d'
         '/rw/srv/whonix/var/lib/whonix:/var/lib/whonix'
         '/rw/srv/whonix/var/lib/whonixcheck:/var/lib/whonixcheck'
         '/rw/srv/whonix/var/cache/whonix-setup-wizard:/var/cache/whonix-setup-wizard'
