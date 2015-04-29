@@ -1,32 +1,132 @@
-commit 5c43662196c07042c5e98d24516e7d0ca98b0a97
-Merge: 17f0775 e6933af
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Fri Apr 24 13:00:52 2015 +0000
-
-    Merge remote-tracking branch 'nrgaway/master' into mergetest
-    
-    Conflicts:
-    	debian/rules
-
-commit e6933afac073651016524690759e1483ec884270
+commit 08c839bd915f7d5820d6fb6e4d04886259ca4ce3
 Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Fri Apr 24 06:06:44 2015 -0400
+Date:   Wed Apr 29 07:36:12 2015 -0400
 
-    version 10.0.2
+    version 9.6.9
 
-commit e6d7e06db7cd42d0f76921b0d4cc12b7a64a1b9e
+commit b46d7165fc899c51d9ddd47913492a7e080c12b4
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Wed Apr 29 06:55:11 2015 -0400
+
+    Add pkgs directory to .gitignore
+
+commit 457c73dfd6b90d1ac6629b56a16e98a3b3eaa08a
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Wed Apr 29 07:33:20 2015 -0400
+
+    Updated replace-ip files and triggers
+
+commit c27f8b5a1830bd038d1996bfdf3d4f1687a7dd51
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Wed Apr 29 07:31:49 2015 -0400
+
+    Remove genmkfile from build depends
+
+commit 0cf43ae980c500df36867858586c38336ce89720
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Wed Apr 29 07:29:49 2015 -0400
+
+    Move qubesdb- to utility_functions.sh
+
+commit cefbe1c5285d0c8069c1091dcc20c9bded258163
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Wed Apr 29 07:24:52 2015 -0400
+
+    Re-add old whonix status files
+
+commit a416b2f3eb7bf55d1a206846a0acc094f4dce66a
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Wed Apr 29 07:22:41 2015 -0400
+
+    Re-enable 9.6 bind-dirs
+
+commit da4aa5d7c138d5e558494c2e553e5cf88adfedaa
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Wed Apr 29 07:21:35 2015 -0400
+
+    Update NOTES
+
+commit caa249fe8551797c1c51dcac3f0e5f0104f2b973
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sun Apr 26 02:43:35 2015 -0400
+
+    version 9.6.8
+
+commit 0dfe152ba3abacd4af5bd8c8cafbb96cfbdc2cab
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sat Apr 25 05:07:02 2015 -0400
+
+    Added qubes-core-agent (>= 2.1.60) as a depend
+
+commit 3674f4f8a4437365e70d464ef44f01fae7c8844c
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sat Apr 25 05:06:29 2015 -0400
+
+    Sorted and added more replaceip triggers
+
+commit 13c12c33f024323ee18f80905fceff3d7a5bb384
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sat Apr 25 05:03:51 2015 -0400
+
+    - Use /etc/whonix.d/50_whonixcheck_qubes
+    - Disable/Re-enable qubes-whonix-network/firewall, tor, control-port-filter
+    - sorted and added more replaceip triggers
+
+commit 4b8aa4f85fe2c49f9346128eda5daac902ed5324
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sat Apr 25 05:01:49 2015 -0400
+
+    Renamed and configured systemd configurations files so they will not conflict with future Whonix versions
+
+commit 615c9592b2297ac0b84893f05ae872d2a1437171
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sat Apr 25 05:00:53 2015 -0400
+
+    removed duplicate FILES entry
+
+commit 6590792a5a149a0797b1390f10ab436355ae46e0
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sat Apr 25 04:59:46 2015 -0400
+
+    Updated Qubes protected-files location
+
+commit b7fd14dc2a2dfce059ada5ac3a3f0e5c48ee1022
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Sat Apr 25 04:57:11 2015 -0400
+
+    Use trusted mode instead of installing keyring for local repo testing
+
+commit 7ed4a86faefe1992b5600929ab680917ece12d95
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Apr 24 13:31:49 2015 +0000
+
+    updated changelog.upstream
+
+commit a92c75e11e68ed7d90eb3006f76e40d12d07a7f3
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Feb 16 11:06:07 2015 +0000
+
+    added creation of upstream changelog to fix lintian warning
+
+commit cb800bef394f54f3a8f481752d5fdb2dadf022cb
+Author: Jason Mehring <nrgaway@gmail.com>
+Date:   Fri Apr 24 06:18:10 2015 -0400
+
+    version 9.6.7
+
+commit 9c2c018c058c54e495ec63e4597d61a9cc98e9bc
 Author: Jason Mehring <nrgaway@gmail.com>
 Date:   Fri Apr 24 06:03:31 2015 -0400
 
     Add systemd unit file for control-port-filter-python.service
 
-commit bcfb73951b045623b303acf087833e73da82f512
+commit cbc8ecfa044439f82a051a80c9121c8d11e84d49
 Author: Jason Mehring <nrgaway@gmail.com>
 Date:   Fri Apr 24 06:02:53 2015 -0400
 
     Add missing whonixcheck.conf file
 
-commit 974e398a4d4ea2e92458a972ec4df51583ef525b
+commit 89edad3e386bbddb783c372e61b866c12897d9da
 Author: Jason Mehring <nrgaway@gmail.com>
 Date:   Fri Apr 24 05:57:51 2015 -0400
 
@@ -36,13 +136,13 @@ Date:   Fri Apr 24 05:57:51 2015 -0400
     - Don't prompt to install repository in AppVM (Gateway or Workstation)
     - Prompt to install repository in templatevm
 
-commit 169bdc3a0a326ff828174264a03e0c11c5230594
+commit 7b789ccec818eb88c933eac38ef82afc98589574
 Author: Jason Mehring <nrgaway@gmail.com>
 Date:   Fri Apr 24 05:57:31 2015 -0400
 
     Remove unneeded bind directories due to new localtion of whonix status files
 
-commit 03beb6693d61cc9836711b3c744c27abc16ab5e2
+commit 6b7cfec7943f033432ad8ff21ce3a7a78657f333
 Author: Jason Mehring <nrgaway@gmail.com>
 Date:   Fri Apr 24 05:53:19 2015 -0400
 
@@ -50,31 +150,18 @@ Date:   Fri Apr 24 05:53:19 2015 -0400
     Use 50_whonixcheck_user instead of 30_whonixcheck_default
     Enable new control-port-filter-python.service
 
-commit b53ce641d0664b2c7e26bd83cb33f0d045f5c84c
+commit 8a670c5179ac4224fe2b54f8998ec725b35c646f
 Author: Jason Mehring <nrgaway@gmail.com>
 Date:   Thu Apr 23 04:36:47 2015 -0400
 
     start whonixcheck on startup for workstation
 
-commit 5ad388aeb52aa32b17f2bc24f688bad806ebaf36
+commit dc3bdd8278db0df6191c52fadd7e59ead030ee0b
 Author: Jason Mehring <nrgaway@gmail.com>
 Date:   Thu Apr 23 04:34:16 2015 -0400
 
     Update files to search and replace IP addresses
     Fix syntax typo for whonix workstation that prevented search and replace
-
-commit 96641fd385c47db534c5fa8eda17c1499240ddb2
-Merge: 11d7dc2 856e649
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Thu Apr 23 01:07:07 2015 -0400
-
-    Merge branch '10.0.1'
-
-commit 856e649fc87a22bb660e25f8db92596c07758cdf
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Wed Apr 22 23:04:57 2015 -0400
-
-    version 10.0.1
 
 commit 11d7dc249676821fa1f32cb2d8a8ae1b6604a58e
 Author: Jason Mehring <nrgaway@gmail.com>
@@ -181,30 +268,6 @@ Date:   Mon Apr 20 02:31:38 2015 -0400
     Cleanup and Improve enable/disable serivces
     Cleanup Debian maintainers scripts removing unneeded reporting on systemd status
 
-commit 17f0775a633a99835c90e93981f387ffd5324d8e
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Thu Apr 2 18:41:23 2015 +0000
-
-    added genmkfile to Build-Depends
-
-commit 6e2f55ac751e2643a27a8a9bbb0c7e7b8d207ddf
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Thu Apr 2 17:24:43 2015 +0000
-
-    updated makefile generic to version 1.5
-
-commit 0a920ae3970180400bde85a2612e285c5d117d2d
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Wed Apr 1 16:54:46 2015 +0000
-
-    updated readme
-
-commit 8b1b1ef119d433906e92b01fbb2d1fbcdc2926e8
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Tue Mar 24 17:26:45 2015 +0000
-
-    updated makefile generic to version 1.4
-
 commit 2d358fe7013648ab0043fbd2d477c62e1f59890c
 Author: Jason Mehring <nrgaway@gmail.com>
 Date:   Mon Mar 23 12:11:13 2015 -0400
@@ -279,16 +342,6 @@ Date:   Mon Mar 23 05:53:21 2015 -0400
 
     Added /var/cache/whonix-setup-wizard to list of dirs to bind on startup
 
-commit 42d207b2c7bd2fd0de9e0ec5e2a1569c531dea4f
-Merge: 5a13ac2 6ff6f30
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Sun Feb 22 21:32:31 2015 +0000
-
-    Merge remote-tracking branch 'nrgaway/master'
-    
-    Conflicts:
-    	debian/changelog
-
 commit 6ff6f30233e2a5d9434691c5b4b910600e20d36f
 Author: Jason Mehring <nrgaway@gmail.com>
 Date:   Sun Feb 22 14:33:50 2015 -0500
@@ -331,19 +384,6 @@ Date:   Mon Feb 16 10:42:45 2015 +0000
 
     synced COPYING with debian/copyright
 
-commit 5a13ac2617c974128cfb2b3b4c0613cb91ca3cfd
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Tue Feb 17 07:19:26 2015 +0000
-
-    debian/control: changed "Architecture:" from "any" to "all" - https://phabricator.whonix.org/T187
-
-commit 731e3e8ab0a5958341a96c4d4877b72ea0084209
-Merge: 8bbc0ae 18437a8
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Mon Feb 16 21:33:57 2015 +0000
-
-    Merge remote-tracking branch 'nrgaway/master'
-
 commit 18437a8d99281773dafc4bd2b25ccab948bba0dd
 Author: Jason Mehring <nrgaway@gmail.com>
 Date:   Mon Feb 16 06:51:57 2015 -0500
@@ -355,36 +395,6 @@ Author: Jason Mehring <nrgaway@gmail.com>
 Date:   Mon Feb 16 06:45:56 2015 -0500
 
     Fixed typo in README.md
-
-commit 8bbc0ae3a157e74621fb20ca3209cc67045f6f4b
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Mon Feb 16 11:06:07 2015 +0000
-
-    added creation of upstream changelog to fix lintian warning
-
-commit 448f0353be69442b466f28149b6e67d038461e5d
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Mon Feb 16 11:03:40 2015 +0000
-
-    bumped changelog version (to fix lintian warning about missing close ITP)
-
-commit cd5f3d83d36ec31867f78a73bf2fa9ea6ca7d171
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Mon Feb 16 11:02:00 2015 +0000
-
-    added changelog.upstream to fix lintian warning
-
-commit 7592d6b49004e7d9151195a768d8a0ff384f5268
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Mon Feb 16 10:59:40 2015 +0000
-
-    added "Uploaders: Patrick Schleizer <adrelanos@riseup.net>" to debian/control
-
-commit 6d88b9284c5cc634e57a95b2c9993f39a21431ac
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Mon Feb 16 10:42:45 2015 +0000
-
-    synced COPYING with debian/copyright
 
 commit a86b58c6fcc02face96f4e101a6ebbdcfc5c2bc3
 Author: Jason Mehring <nrgaway@gmail.com>
