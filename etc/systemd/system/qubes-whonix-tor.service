@@ -5,24 +5,24 @@
 # /etc/tmpfiles.d/qubes-whonix-tor.conf
 
 [Unit]
-Description = Whonix Tor anonymizing overlay network for TCP
-ConditionPathExists = /etc/init.d/tor
-After = syslog.target network.target nss-lookup.target
+Description=Whonix Tor anonymizing overlay network for TCP
+ConditionPathExists=/etc/init.d/tor
+After=syslog.target network.target nss-lookup.target
 
 [Service]
-Type = simple
-ExecStartPre = /usr/bin/tor --defaults-torrc /usr/share/tor/tor-service-defaults-torrc --verify-config
-ExecStart = /usr/bin/tor --defaults-torrc /usr/share/tor/tor-service-defaults-torrc --runasdaemon 0
-ExecReload = /bin/kill -HUP ${MAINPID}
+Type=simple
+ExecStartPre=/usr/bin/tor --defaults-torrc /usr/share/tor/tor-service-defaults-torrc --verify-config
+ExecStart=/usr/bin/tor --defaults-torrc /usr/share/tor/tor-service-defaults-torrc --runasdaemon 0
+ExecReload=/bin/kill -HUP ${MAINPID}
 
 ## General options
-KillSignal = SIGINT
-TimeoutSec = 30
-Restart = on-failure
+KillSignal=SIGINT
+TimeoutSec=30
+Restart=on-failure
 #WatchdogSec = 1m
-LimitNOFILE = 32768
-StandardOutput = syslog
+LimitNOFILE=32768
+StandardOutput=syslog
 
 [Install]
-WantedBy = multi-user.target
-Alias = tor.service
+WantedBy=multi-user.target
+Alias=tor.service
