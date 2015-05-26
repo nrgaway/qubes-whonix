@@ -2,14 +2,11 @@
 ## -- and --
 ## The Qubes OS Project, http://www.qubes-os.org
 ##
-## Copyright (C) 2014  Jason Mehring <nrgaway@gmail.com>
-## Copyright (C) 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
+## Copyright (C) 2014 - 2015 Jason Mehring <nrgaway@gmail.com>
+## Copyright (C) 2012 - 2015 Patrick Schleizer <adrelanos@riseup.net>
 ## See the file COPYING for copying conditions.
 ##
 ## triggers for qubes-whonix
-
-# Disable old control-port-filter; enable new
-interest-noawait /usr/lib/control-port-filter-python/cpfp.py
 
 # Replace IP address and restart firewall
 interest-noawait /usr/bin/whonix_firewall
@@ -22,15 +19,15 @@ interest-noawait /etc/hostname
 
 # Replace IP adresses
 interest-noawait /etc/apt/apt.conf.d/90whonix
-interest-noawait /etc/cpfpy.d/32_qubes
+interest-noawait /etc/cpfpy.d/40_qubes
 interest-noawait /etc/network/interfaces.whonix
 interest-noawait /etc/resolv.conf
 interest-noawait /etc/resolv.conf.anondist
 interest-noawait /etc/rinetd.conf.anondist
-interest-noawait /etc/sdwdate.d/35_qubes_stream_isolation_plugin
+interest-noawait /etc/sdwdate.d/40_qubes_stream_isolation_plugin
 interest-noawait /etc/tor/torrc.examples
-interest-noawait /etc/uwt.d/32_qubes
-interest-noawait /etc/whonix_firewall.d/32_qubes
+interest-noawait /etc/uwt.d/40_qubes
+interest-noawait /etc/whonix_firewall.d/40_qubes
 interest-noawait /home/user/.torchat/torchat.ini
 interest-noawait /home/user/.xchat2/xchat.conf
 interest-noawait /usr/bin/update-torbrowser
@@ -38,7 +35,6 @@ interest-noawait /usr/bin/uwt
 interest-noawait /usr/bin/whonix_firewall
 interest-noawait /usr/lib/anon-shared-helper-scripts/tor_bootstrap_check.bsh
 interest-noawait /usr/lib/anon-ws-disable-stacked-tor/torbrowser.sh
-interest-noawait /usr/lib/control-port-filter-python/cpfp.py
 interest-noawait /usr/lib/leaktest-workstation/simple_ping.py
 interest-noawait /usr/lib/whonixcheck/preparation
 interest-noawait /usr/share/anon-kde-streamiso/share/config/kioslaverc

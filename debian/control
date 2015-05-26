@@ -2,8 +2,8 @@
 ## -- and --
 ## The Qubes OS Project, http://www.qubes-os.org
 ##
-## Copyright (C) 2014  Jason Mehring <nrgaway@gmail.com>
-## Copyright (C) 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
+## Copyright (C) 2014 - 2015 Jason Mehring <nrgaway@gmail.com>
+## Copyright (C) 2012 - 2015 Patrick Schleizer <adrelanos@riseup.net>
 ## See the file COPYING for copying conditions.
 
 Source: qubes-whonix
