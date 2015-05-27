@@ -33,7 +33,7 @@ XDG_CONFIG_QUBES="/usr/share/qubes/xdg"
 changeSystemdStatus() {
     unit=${1}
     disable=${2-0}
-    
+
     # Check if unit file is currently active (running)
     systemctl is-active ${unit} > /dev/null 2>&1 && active=true || unset active
 
@@ -41,10 +41,10 @@ changeSystemdStatus() {
         0)
             systemctl --quiet enable ${unit} > /dev/null 2>&1 || true
             ;;
-        1)  
+        1)
             if [ $active ]; then
                 systemctl --quiet stop ${unit} > /dev/null 2>&1 || true
-            fi  
+            fi
 
             if [ -f /lib/systemd/system/${unit} ]; then
                 if fgrep -q '[Install]' /lib/systemd/system/${unit}; then
@@ -176,10 +176,10 @@ case "${1}" in
         timezone='UTC'
         chattr -i /etc/localtime
         chattr -i /etc/timezone
-        cp -p /usr/share/zoneinfo/${timezone} /etc/localtime | true
-        cp -p /usr/share/zoneinfo/${timezone} /etc/localtime.anondist | true
-        echo "${timezone}" > /etc/timezone | true
-        echo "${timezone}" > /etc/timezone.anondist | true
+        cp -p /usr/share/zoneinfo/${timezone} /etc/localtime || true
+        cp -p /usr/share/zoneinfo/${timezone} /etc/localtime.anondist || true
+        echo "${timezone}" > /etc/timezone || true
+        echo "${timezone}" > /etc/timezone.anondist || true
 
         ;;
 
