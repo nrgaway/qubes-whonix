@@ -33,7 +33,7 @@ XDG_CONFIG_QUBES="/usr/share/qubes/xdg"
 changeSystemdStatus() {
     unit=${1}
     disable=${2-0}
-    
+
     # Check if unit file is currently active (running)
     systemctl is-active ${unit} > /dev/null 2>&1 && active=true || unset active
 
@@ -41,10 +41,10 @@ changeSystemdStatus() {
         0)
             systemctl --quiet enable ${unit} > /dev/null 2>&1 || true
             ;;
-        1)  
+        1)
             if [ $active ]; then
                 systemctl --quiet stop ${unit} > /dev/null 2>&1 || true
-            fi  
+            fi
 
             if [ -f /lib/systemd/system/${unit} ]; then
                 if fgrep -q '[Install]' /lib/systemd/system/${unit}; then
@@ -117,17 +117,6 @@ case "${1}" in
             mv -f /usr/bin/dialog /usr/bin/dialog.dist
             update-alternatives --force --install /usr/bin/dialog dialog /usr/bin/gdialog 100
         fi
-
-        # make sure /var/cache/whonix-setup-wizard directory exists
-        mkdir -p /var/cache/whonix-setup-wizard
-
-        # Fake that initializer was already run
-        mkdir -p /var/lib/whonix-initializer/status-files
-        touch /var/lib/whonix-initializer/status-files/first_run_initializer.done
-
-        # prevent first-use notice:
-        mkdir -p /var/cache/whonix-setup-wizard/status-files
-        touch /var/cache/whonix-setup-wizard/status-files/first_use_check.done
 
         # make sure user is added to debian-tor group
         groupadd --force debian-tor
