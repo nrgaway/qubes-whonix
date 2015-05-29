@@ -118,17 +118,6 @@ case "${1}" in
             update-alternatives --force --install /usr/bin/dialog dialog /usr/bin/gdialog 100
         fi
 
-        # make sure /var/cache/whonix-setup-wizard directory exists
-        mkdir -p /var/cache/whonix-setup-wizard
-
-        # Fake that initializer was already run
-        mkdir -p /var/lib/whonix-initializer/status-files
-        touch /var/lib/whonix-initializer/status-files/first_run_initializer.done
-
-        # prevent first-use notice:
-        mkdir -p /var/cache/whonix-setup-wizard/status-files
-        touch /var/cache/whonix-setup-wizard/status-files/first_use_check.done
-
         # make sure user is added to debian-tor group
         groupadd --force debian-tor
         usermod -a --groups debian-tor user
