@@ -162,10 +162,10 @@ case "${1}" in
         timezone='UTC'
         chattr -i /etc/localtime
         chattr -i /etc/timezone
-        cp -p /usr/share/zoneinfo/${timezone} /etc/localtime | true
-        cp -p /usr/share/zoneinfo/${timezone} /etc/localtime.anondist | true
-        echo "${timezone}" > /etc/timezone | true
-        echo "${timezone}" > /etc/timezone.anondist | true
+        cp -p /usr/share/zoneinfo/${timezone} /etc/localtime || true
+        cp -p /usr/share/zoneinfo/${timezone} /etc/localtime.anondist || true
+        echo "${timezone}" > /etc/timezone || true
+        echo "${timezone}" > /etc/timezone.anondist || true
 
         ;;
 
