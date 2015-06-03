@@ -5,7 +5,7 @@ source /usr/lib/qubes-whonix/utility_functions.sh
 
 INTERFACE="eth1"
 
-if [ "${QUBES_WHONIX}" == "gateway" ]; then
+if [ -e /var/run/qubes-service/whonix-gateway ]; then
 
     # Setup Xen / Qubes proxy
     network=$(${QUBESDB}-read ${PREFIX}qubes-netvm-network 2>/dev/null)
@@ -38,18 +38,4 @@ if [ "${QUBES_WHONIX}" == "gateway" ]; then
             ip link set ${INTERFACE} up
         fi
     }
-
-    # Allow whonix-gateway to act as an update-proxy
-    touch /var/run/qubes-service/qubes-updates-proxy
-
-    # Search and replace tinyproxy error files so we can inject code that
-    # we can use to identify that its a tor proxy so updates are secure
-    error_file="/usr/share/tinyproxy/default.html"
-    grep -q "${PROXY_META}" "${error_file}" || {
-        sed -i "s/<\/head>/${PROXY_META}\n<\/head>/" "${error_file}"
-    }
 fi
-
-# Make sure ip forwarding is disabled
-echo "0" > /proc/sys/net/ipv4/ip_forward
-
