@@ -1,13 +1,12 @@
 [Unit]
 Description=Qubes Whonix network proxy setup
-Before=network.target qubes-whonix-firewall
+Before=network.target qubes-update-check.service qubes-update-check.timer
 After=iptables.service
 
 [Service]
 Type=oneshot
 RemainAfterExit=yes
 ExecStart=/usr/lib/qubes-whonix/init/network-proxy-setup
-ExecStartPost=/usr/lib/qubes-whonix/init/init
 StandardOutput=syslog
 
 [Install]
