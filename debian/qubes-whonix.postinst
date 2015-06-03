@@ -126,8 +126,6 @@ case "${1}" in
         disableSystemdUnits \
             qubes-whonix-network \
             qubes-whonix-firewall \
-            sdwdate \
-            whonixcheck \
             network-manager \
             tor
 
@@ -136,18 +134,6 @@ case "${1}" in
             qubes-whonix-network \
             qubes-whonix-firewall \
             qubes-whonix-tor.service
-
-        # Re-enable previously 'Aliased' services
-        disableSystemdUnits \
-            qubes-whonix-control-port-filter-python.service \
-            control-port-filter-python.service
-
-        enableSystemdUnits \
-            control-port-filter-python.service
-
-        # Will not be restarted in chroot which is what is expected
-        systemctl restart qubes-whonix-network.service
-        systemctl restart qubes-whonix-firewall.service
 
         # Modify desktop files not to show in Qubes
         for item in = /etc/xdg/autostart/pulseaudio-kde.desktop \
@@ -180,15 +166,15 @@ case "${1}" in
                 # Restart firewall
                 /usr/bin/whonix_firewall | \
                 /usr/share/tor/tor-service-defaults-torrc.anondist)
-                    /usr/lib/qubes-whonix/init/init
-                    /usr/lib/qubes-whonix/init/qubes-whonix-firewall
+                    /usr/lib/qubes-whonix/init/qubes-whonix-sysinit
+                    /usr/lib/qubes-whonix/init/enable-firewall
                     ;;
 
                 # Reset back to Whonix defaults
                 /etc/resolv.conf | \
                 /etc/hosts | \
                 /etc/hostname)
-                    /usr/lib/qubes-whonix/init/init
+                    /usr/lib/qubes-whonix/init/qubes-whonix-sysinit
                     ;;
 
                 # Replace IP addresses
