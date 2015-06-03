@@ -1,0 +1,62 @@
+#!/bin/bash -e
+# vim: set ts=4 sw=4 sts=4 et :
+
+source /usr/lib/qubes-whonix/utility_functions.sh
+
+# Location of files which contains list of protected files
+PROTECTED_FILE_LIST='/etc/qubes/protected-files.d/qubes-whonix'
+
+# Files that will marked as being protected to eliminate modification from Qubes
+PROTECTED_FILES=(
+    '/etc/resolv.conf'
+    '/etc/hostname'
+    '/etc/hosts'
+    '/etc/localtime'
+    '/etc/timezone'
+)
+
+# Make sure all .anondist files in list are not immutable. Fixes immutable issue
+immutableFilesDisable "${PROTECTED_FILES}"
+immutableFilesDisable "${PROTECTED_FILES}" ".anondist"
+
+for protected_file in "${PROTECTED_FILES[@]}"; do
+    # Enable protected services
+    if ! grep -q "^${protected_file}$" "${PROTECTED_FILE_LIST}" 2>/dev/null; then
+	    echo -e "${protected_file}" >> "${PROTECTED_FILE_LIST}"
+    fi
+
+    # Make sure we are using a copy of the anondist file and if not
+    # copy the anondist file and set it immutable
+    copyAnondist "${protected_file}"
+done
+
+# Gateway or Workstation
+if [ -e /var/run/qubes-service/whonix-gateway ] || [ -e /var/run/qubes-service/whonix-workstation ]; then
+
+    # Bind whonix directories to allow changes to persist
+    sudo /usr/lib/qubes-whonix/bind-dirs
+
+    # Replace IP addresses in known configuration files / scripts with
+    # currently discovered IP address
+    /usr/lib/qubes-whonix/init/replace-ips
+
+    # Repository setup should only be run in template
+    if [ ! -e /var/cache/whonix-setup-wizard/status-files/whonix_repository.done ]; then
+        sudo touch /var/cache/whonix-setup-wizard/status-files/whonix_repository.done
+    fi
+
+    if [ -e /var/run/qubes-service/whonix-gateway ]; then
+        # Allow whonix-gateway to act as an update-proxy
+        touch /var/run/qubes-service/qubes-updates-proxy
+
+        # Search and replace tinyproxy error files so we can inject code that
+        # we can use to identify that its a tor proxy so updates are secure
+        error_file=/usr/share/tinyproxy/default.html
+        grep -q "${PROXY_META}" "${error_file}" || {
+            sed -i "s/<\/head>/${PROXY_META}\n<\/head>/" "${error_file}"
+        }
+    fi
+fi
+
+# Make sure hostname is correct
+/bin/hostname host
