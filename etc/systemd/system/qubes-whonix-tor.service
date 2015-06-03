@@ -6,7 +6,7 @@
 
 [Unit]
 Description=Whonix Tor anonymizing overlay network for TCP
-ConditionPathExists=/etc/init.d/tor
+Before=whonixcheck.service
 After=syslog.target network.target nss-lookup.target
 
 [Service]
