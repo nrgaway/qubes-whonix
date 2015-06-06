@@ -1,9 +1,9 @@
 #!/bin/bash -e
 # vim: set ts=4 sw=4 sts=4 et :
 #
-# bind-dirs - Binds directories which allows changes in AppVM to persist
+# bind-directories - Binds directories which allows changes in AppVM to persist
 #
-# To umount all binds, just pass any arg in $1
+# To umount all binds, just pass any arg in $1, like umount
 #
 # This file is part of Qubes+Whonix.
 # Copyright (C) 2014 - 2015 Jason Mehring <nrgaway@gmail.com>
@@ -27,10 +27,10 @@
 if [ -e "/var/run/qubes-service/whonix-gateway" ] || [ -e "/var/run/qubes-service/whonix-workstation" ]; then
     # Array of directories to bind
     BINDS=(
-        '/rw/srv/qubes-whonix/var/cache/qubes-whonix:/var/cache/qubes-whonix'
         '/rw/srv/whonix/var/lib/whonix:/var/lib/whonix'
         '/rw/srv/whonix/var/lib/whonixcheck:/var/lib/whonixcheck'
         '/rw/srv/whonix/var/cache/whonix-setup-wizard:/var/cache/whonix-setup-wizard'
+        '/rw/srv/qubes-whonix/var/cache/qubes-whonix:/var/cache/qubes-whonix'
         '/rw/srv/whonix/etc/tor:/etc/tor'
     )
 
@@ -42,8 +42,8 @@ if [ -e "/var/run/qubes-service/whonix-gateway" ] || [ -e "/var/run/qubes-servic
         umount "${ro_dir}" 2> /dev/null || true
 
         if [ -n "${1}" ]; then
-            echo "Umounting only..."
-            exit 0
+            echo "Umounting ${1} only..."
+            continue
         fi
 
         # Make sure ro directory exists
