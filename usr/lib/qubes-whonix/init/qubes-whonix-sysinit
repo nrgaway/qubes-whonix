@@ -52,42 +52,8 @@ for protected_file in "${PROTECTED_FILES[@]}"; do
     copyAnondist "${protected_file}"
 done
 
-# Gateway or Workstation
-if [ -e /var/run/qubes-service/whonix-gateway ] || [ -e /var/run/qubes-service/whonix-workstation ]; then
-
-    # Bind whonix directories to allow changes to persist
-    /usr/lib/qubes-whonix/bind-dirs
-
-    # Replace IP addresses in known configuration files / scripts with
-    # currently discovered IP address
-    /usr/lib/qubes-whonix/init/replace-ips
-
-    # Repository setup should only be run in template
-    if [ ! -e /var/cache/whonix-setup-wizard/status-files/whonix_repository.skip ]; then
-        touch /var/cache/whonix-setup-wizard/status-files/whonix_repository.skip
-    fi
-fi
-
 # Gateway
 if [ -e /var/run/qubes-service/whonix-gateway ]; then
-
-    # Enable/Disable Tor if qubes-service is enabled
-    if [ -e /var/run/qubes-service/whonix-tor-enable ]; then
-        if grep "^#DisableNetwork 0$" /etc/tor/torrc; then
-            sed -i "s/^#DisableNetwork/DisableNetwork/g" /etc/tor/torrc
-        fi
-    elif [ -e /var/run/qubes-service/whonix-tor-disable ]; then
-        if grep "^DisableNetwork 0$" /etc/tor/torrc; then
-            sed -i "s/^DisableNetwork/#DisableNetwork/g" /etc/tor/torrc
-        fi
-    fi
-
-    # Make sure we remove whonixsetup.{skip, done} if Tor is not enabled so
-    # whonix-setup-wizard will prompt to enable
-    grep "^DisableNetwork 0$" /etc/tor/torrc || {
-        rm -f /var/cache/whonix-setup-wizard/status-files/whonixsetup.skip
-        rm -f /var/cache/whonix-setup-wizard/status-files/whonixsetup.done
-    }
 
     # Allow whonix-gateway to act as an update-proxy
     touch /var/run/qubes-service/qubes-updates-proxy
