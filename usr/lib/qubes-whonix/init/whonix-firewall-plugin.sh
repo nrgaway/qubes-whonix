@@ -13,22 +13,17 @@ if [ -e /var/run/qubes-service/whonix-gateway ]; then
     export INT_IF="vif+"
     export INT_TIF="vif+"
 
-    iptables -t nat -N PR-QBS-SERVICES
-    iptables -A INPUT -i vif+ -p tcp -m tcp --dport 8082 -j ACCEPT
-    iptables -A OUTPUT -o vif+ -p tcp -m tcp --sport 8082 -j ACCEPT
-    iptables -t nat -A PREROUTING -j PR-QBS-SERVICES
-    iptables -t nat -A PR-QBS-SERVICES -d 10.137.255.254/32 -i vif+ -p tcp -m tcp --dport 8082 -j REDIRECT
-    iptables -t nat -A OUTPUT -p udp -m owner --uid-owner tinyproxy -m conntrack --ctstate NEW -j DNAT --to ${ip}:53
-    iptables -t nat -A OUTPUT -p tcp -m owner --uid-owner tinyproxy -m conntrack --ctstate NEW -j DNAT --to ${ip}:9040
-
-    # Route any traffic FROM netvm TO netvm BACK-TO localhost \\
-    # Allows localhost access to tor network \\
-    #iptables -t nat -A OUTPUT -s ${ip} -d ${ip} -j DNAT --to-destination 127.0.0.1 \\
+    iptables --wait -t nat -N PR-QBS-SERVICES
+    iptables --wait -A INPUT -i vif+ -p tcp -m tcp --dport 8082 -j ACCEPT
+    iptables --wait -A OUTPUT -o vif+ -p tcp -m tcp --sport 8082 -j ACCEPT
+    iptables --wait -t nat -A PREROUTING -j PR-QBS-SERVICES
+    iptables --wait -t nat -A PR-QBS-SERVICES -d 10.137.255.254/32 -i vif+ -p tcp -m tcp --dport 8082 -j REDIRECT
+    iptables --wait -t nat -A OUTPUT -p udp -m owner --uid-owner tinyproxy -m conntrack --ctstate NEW -j DNAT --to ${ip}:53
+    iptables --wait -t nat -A OUTPUT -p tcp -m owner --uid-owner tinyproxy -m conntrack --ctstate NEW -j DNAT --to ${ip}:9040
 fi
 
 if [ -e /var/run/qubes-service/whonix-template ]; then
 
     # Allow access to qubes update proxy
-    iptables -A OUTPUT -o eth0 -p tcp -m tcp --dport 8082 -j ACCEPT
+    iptables --wait -A OUTPUT -o eth0 -p tcp -m tcp --dport 8082 -j ACCEPT
 fi
-
