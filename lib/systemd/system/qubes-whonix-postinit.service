@@ -1,0 +1,20 @@
+# This file is part of Qubes+Whonix.
+# Copyright (C) 2015 Jason Mehring <nrgaway@gmail.com>
+# License: GPL-2+
+
+[Unit]
+Description=Qubes+Whonix network-pre init
+ConditionPathExists=|/var/run/qubes-service/whonix-gateway
+ConditionPathExists=|/var/run/qubes-service/whonix-workstation
+Before=qubes-gui-agent.service qubes-whonix-network.service
+After=qubes-mount-home.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/lib/qubes-whonix/init/qubes-whonix-postinit
+ExecStop=/usr/lib/qubes-whonix/bind-directories umount
+StandardOutput=syslog
+
+[Install]
+WantedBy=multi-user.target
