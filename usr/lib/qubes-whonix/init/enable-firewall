@@ -25,16 +25,13 @@
 source /usr/lib/qubes-whonix/utility_functions.sh
 
 # Gateway or Workstation
-if [ -e /var/run/qubes-service/qubes-network ]; then
+if [ -e /var/run/qubes-service/whonix-gateway ] || [ -e /var/run/qubes-service/whonix-workstation ]; then
 
     # Gateway: Set interfaces for Whonix firewall
     if [ -e /var/run/qubes-service/whonix-gateway ]; then
         export INT_IF="vif+"
         export INT_TIF="vif+"
     fi
-
-    # Wait for xtables lock incase it's in use
-    iptables --wait -L >/dev/null
 
     # Load the Whonix firewall
     /usr/bin/whonix_firewall || touch /var/run/qubes-service/whonix-firewall-failed
