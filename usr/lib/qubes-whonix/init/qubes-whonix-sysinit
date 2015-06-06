@@ -20,13 +20,14 @@ immutableFilesDisable "${PROTECTED_FILES}"
 immutableFilesDisable "${PROTECTED_FILES}" ".anondist"
 
 for protected_file in "${PROTECTED_FILES[@]}"; do
+
     # Enable protected services
     if ! grep -q "^${protected_file}$" "${PROTECTED_FILE_LIST}" 2>/dev/null; then
-	    echo -e "${protected_file}" >> "${PROTECTED_FILE_LIST}"
+        echo -e "${protected_file}" >> "${PROTECTED_FILE_LIST}"
     fi
 
     # Make sure we are using a copy of the anondist file and if not
-    # copy the anondist file and set it immutable
+    # copy the anondist file
     copyAnondist "${protected_file}"
 done
 
@@ -34,15 +35,15 @@ done
 if [ -e /var/run/qubes-service/whonix-gateway ] || [ -e /var/run/qubes-service/whonix-workstation ]; then
 
     # Bind whonix directories to allow changes to persist
-    sudo /usr/lib/qubes-whonix/bind-dirs
+    /usr/lib/qubes-whonix/bind-dirs
 
     # Replace IP addresses in known configuration files / scripts with
     # currently discovered IP address
     /usr/lib/qubes-whonix/init/replace-ips
 
     # Repository setup should only be run in template
-    if [ ! -e /var/cache/whonix-setup-wizard/status-files/whonix_repository.done ]; then
-        sudo touch /var/cache/whonix-setup-wizard/status-files/whonix_repository.done
+    if [ ! -e /var/cache/whonix-setup-wizard/status-files/whonix_repository.skip ]; then
+        touch /var/cache/whonix-setup-wizard/status-files/whonix_repository.skip
     fi
 fi
 
