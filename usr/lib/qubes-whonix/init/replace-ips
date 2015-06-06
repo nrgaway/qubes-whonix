@@ -1,7 +1,35 @@
 #!/usr/bin/python2 -O
 # -*- coding: utf-8 -*-`
-#
 # vim: set ts=4 sw=4 sts=4 et :
+'''
+replace-ips - Search and repalce IP address in specified files.
+
+All Whonix configuration files provided are searched for the last known occurance
+of IP address that was used and replaced with the current IP address provided by
+Qubes.
+
+Initially the known IP addresses are 10.152.152.10 and 10.152.152.11 as defaults
+in Whonix configuration files.  They are also checked each time this module is
+run incase the configuration files were modified due to a system update.
+
+This file is part of Qubes+Whonix.
+Copyright (C) 2014 - 2015 Jason Mehring <nrgaway@gmail.com>
+License: GPL-2+
+Authors: Jason Mehring
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+'''
 
 import os
 import sys
@@ -12,13 +40,15 @@ WHONIX_IP_GATEWAY = '/var/cache/qubes-whonix/whonix-ip-gateway'
 WHONIX_IP_LOCAL = '/var/cache/qubes-whonix/whonix-ip-local'
 IP_ADDRESS = re.compile(r'(?:[0-9]{1,3}\.){3}[0-9]{1,3}')
 
-# The following files do not need to be replaced since they already have
-# an additional configuration file that overrides it
+# Do not modify any of the following files:
 #
-#   '/etc/cpfpy.d/30_controlportfilt_default',
-#   '/etc/sdwdate.d/31_anon_dist_stream_isolation_plugin',
-#   '/etc/uwt.d/30_uwt_default',
-#   '/etc/whonix_firewall.d/30_default',
+# They do not need to be replaced since they already have an additional
+# configuration file that overrides it.
+#
+#   /etc/cpfpy.d/30_controlportfilt_default
+#   /etc/sdwdate.d/31_anon_dist_stream_isolation_plugin
+#   /etc/uwt.d/30_uwt_default
+#   /etc/whonix_firewall.d/30_default
 
 # This is a list of all Whonix files that contain IP addresses that will
 # be searched and replaces with the current assigned IP address
@@ -67,12 +97,29 @@ def whonix_mode():
 
 
 def is_immutable(filename):
+    '''Determine if file has been set immutable.'''
     filename =  os.path.abspath(filename)
     lsattr = subprocess.check_output(['lsattr', filename])
     return lsattr[4] ==  'i'
 
 
 def replace_ip(ips, current_ip, files, ip_file):
+    '''Searches and replaces IP adresss of provided files.
+
+    ips:
+        List of IP addresses to replace.
+
+    current_ip:
+        IP replacement address
+
+    files:
+        List of files to search.  The list must contain full pathnames.
+
+    ip_files:
+        Full path to filename used to store last known value if IP address.  The
+        `current_ip` is stored in this file and used the next time this module
+        is executed.
+    '''
     replaced = False
     for filename in files:
         if os.path.exists(filename):
@@ -82,11 +129,8 @@ def replace_ip(ips, current_ip, files, ip_file):
             except (IOError):
                 return False
 
-            match = text 
+            match = text
             for last_ip in ips:
-                #if last_ip == current_ip:
-                #    continue
-
                 match = re.sub(r'(?m){0}'.
                                format(re.escape(last_ip)),
                                current_ip,
@@ -106,9 +150,6 @@ def replace_ip(ips, current_ip, files, ip_file):
                     with open(filename, 'w') as outfile:
                         outfile.writelines(match)
 
-                    #if immutable:
-                    #    subprocess.call(['chattr', '+i', os.path.abspath(filename)])
-
                     replaced = True
                 except (IOError):
                     return False
@@ -125,6 +166,11 @@ def replace_ip(ips, current_ip, files, ip_file):
 
 
 def get_ip_address(filename, default=''):
+    '''Retreive an IP address from a file.
+
+    The last know IP address is saved in a file so it can be referenced and used
+    the next time system is booted to assist in a relaiable search and replace.
+    '''
     if os.path.exists(filename):
         try:
             with open(filename, 'r') as infile:
@@ -137,6 +183,9 @@ def get_ip_address(filename, default=''):
 
 
 def maybe_reload_tor():
+    '''Reload Tor's configuration files if Tor is currently active and not
+    disabled.
+    '''
     torrc = '/etc/tor/torrc'
     if os.path.exists(torrc):
         try:
