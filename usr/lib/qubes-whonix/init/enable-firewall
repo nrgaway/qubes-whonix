@@ -3,6 +3,9 @@
 
 source /usr/lib/qubes-whonix/utility_functions.sh
 
+[ -n "$iptables_cmd" ] || iptables_cmd="iptables --wait"
+[ -n "$ip6tables_cmd" ] || ip6tables_cmd="ip6tables --wait"
+
 if [ -e /var/run/qubes-service/qubes-network ]; then
 
     # Set interfaces for Whonix firewall
@@ -12,7 +15,7 @@ if [ -e /var/run/qubes-service/qubes-network ]; then
     fi
 
     # Wait for xtables lock incase it's in use
-    iptables --wait -L >/dev/null
+    $iptables_cmd -L >/dev/null
 
     # Load the firewall
     /usr/bin/whonix_firewall
