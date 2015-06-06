@@ -1,6 +1,11 @@
-#
-# qubes-whonix setting for whonix_firewall
-#
+## This file is part of Whonix.
+## Copyright (C) 2012 - 2015 Patrick Schleizer <adrelanos@riseup.net>
+## See the file COPYING for copying conditions.
+
+##
+# whonix_firewall hook to allow the injection of custom firewall rules required
+# to enable Whonix and Qubes to work together.
+##
 
 if [ -e "/var/run/qubes-service/whonix-gateway" ] || [ -e /var/run/qubes-service/whonix-template ]; then
     GATEWAY_IPv4_DROP_INVALID_INCOMING_PACKAGES_POST_HOOK="/usr/lib/qubes-whonix/init/whonix-firewall-plugin.sh"

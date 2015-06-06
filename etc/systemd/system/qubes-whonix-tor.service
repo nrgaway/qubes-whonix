@@ -3,6 +3,10 @@
 #
 # See also related configuration file:
 # /etc/tmpfiles.d/qubes-whonix-tor.conf
+#
+# This file is part of Qubes+Whonix.
+# Copyright (C) 2015 Jason Mehring <nrgaway@gmail.com>
+# License: GPL-2+
 
 [Unit]
 Description=Whonix Tor anonymizing overlay network for TCP
@@ -15,7 +19,7 @@ ExecStartPre=/usr/bin/tor --defaults-torrc /usr/share/tor/tor-service-defaults-t
 ExecStart=/usr/bin/tor --defaults-torrc /usr/share/tor/tor-service-defaults-torrc --runasdaemon 0
 ExecReload=/bin/kill -HUP ${MAINPID}
 
-## General options
+# General options
 KillSignal=SIGINT
 TimeoutSec=30
 Restart=on-failure

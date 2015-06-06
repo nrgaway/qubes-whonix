@@ -1,3 +1,7 @@
+# This file is part of Qubes+Whonix.
+# Copyright (C) 2015 Jason Mehring <nrgaway@gmail.com>
+# License: GPL-2+
+
 [Unit]
 Description=Qubes Whonix network proxy setup
 Before=network.target qubes-update-check.service qubes-update-check.timer

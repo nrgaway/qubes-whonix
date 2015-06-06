@@ -1,5 +1,27 @@
-## This file is part of qubes-whonix.
-## See the file COPYING for copying conditions.
+# qubes-whonixsetup.desktop - Executes /usr/lib/qubes-whonix/qubes-whonixsetup
+#
+# /usr/lib/qubes-whonix/qubes-whonixsetup Performs various Whonix 'setup' related
+# tasks which will notify or prompt the user if any required configurations need
+# attention and also warn the user the VM is going to be powered off if a failure
+# of one of the configurations was detected.
+#
+# This file is part of Qubes+Whonix.
+# Copyright (C) 2014 - 2015 Jason Mehring <nrgaway@gmail.com>
+# License: GPL-2+
+# Authors: Jason Mehring
+#
+#   This program is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU General Public License
+#   as published by the Free Software Foundation; either version 2
+#   of the License, or (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 [Desktop Entry]
 Encoding=UTF-8
