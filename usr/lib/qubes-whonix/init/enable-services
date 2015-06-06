@@ -1,10 +1,37 @@
 #!/bin/bash
 # vim: set ts=4 sw=4 sts=4 et :
+#
+# enable-services - Called by systemd before qubes-whonix-sysinit during the
+#                   sysinit boot stage
+#
+# Sets the type of whonix mode that is currently running as a Qubes service
+#
+# This file is part of Qubes+Whonix.
+# Copyright (C) 2014 - 2015 Jason Mehring <nrgaway@gmail.com>
+# License: GPL-2+
+# Authors: Jason Mehring
+#
+#   This program is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU General Public License
+#   as published by the Free Software Foundation; either version 2
+#   of the License, or (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 source /usr/lib/qubes-whonix/utility_functions.sh
 
 VM_TYPE=$(${QUBESDB}-read ${PREFIX}qubes-vm-type 2> /dev/null)
 
+# This script should run after qubes-sysinit and should not need to create the
+# qubes-service directory as it should have already been created.  This is only
+# a defensive action since we rely on certain services being present to determine
+# the overall boot status of Whonix, like 'whonix-firewall-failed' notice.
 mkdir -p /var/run/qubes-service
 
 # Template
