@@ -11,6 +11,7 @@ source /usr/lib/qubes-whonix/utility_functions.sh
 if [ -e "/var/run/qubes-service/whonix-gateway" ] || [ -e "/var/run/qubes-service/whonix-workstation" ]; then
     # Array of directories to bind
     BINDS=(
+        '/rw/srv/qubes-whonix/var/cache/qubes-whonix:/var/cache/qubes-whonix'
         '/rw/srv/whonix/var/lib/whonix:/var/lib/whonix'
         '/rw/srv/whonix/var/lib/whonixcheck:/var/lib/whonixcheck'
         '/rw/srv/whonix/var/cache/whonix-setup-wizard:/var/cache/whonix-setup-wizard'
