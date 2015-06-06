@@ -3,9 +3,10 @@
 
 source /usr/lib/qubes-whonix/utility_functions.sh
 
+# Gateway or Workstation
 if [ -e /var/run/qubes-service/qubes-network ]; then
 
-    # Set interfaces for Whonix firewall
+    # Gateway: Set interfaces for Whonix firewall
     if [ -e /var/run/qubes-service/whonix-gateway ]; then
         export INT_IF="vif+"
         export INT_TIF="vif+"
@@ -14,19 +15,38 @@ if [ -e /var/run/qubes-service/qubes-network ]; then
     # Wait for xtables lock incase it's in use
     iptables --wait -L >/dev/null
 
-    # Load the firewall
-    /usr/bin/whonix_firewall
-fi
+    # Load the Whonix firewall
+    /usr/bin/whonix_firewall || touch /var/run/qubes-service/whonix-firewall-failed
 
 # Template
-if [ -e /var/run/qubes-service/whonix-template ]; then
+elif [ -e /var/run/qubes-service/whonix-template ]; then
 
     # Check if a secure Tor update server is available
     if [ ! -e /var/run/qubes-service/whonix-secure-proxy ]; then
         curl.anondist-orig --connect-timeout 3 "${PROXY_SERVER}" | grep -q "${PROXY_META}" && {
-            sudo touch /var/run/qubes-service/whonix-secure-proxy
+            touch /var/run/qubes-service/whonix-secure-proxy
         }
     fi
+
+else
+    touch /var/run/qubes-service/whonix-firewall-failed
+fi
+
+# Something is not right; lock down networking.  User will be notified
+if [ -e /var/run/qubes-service/whonix-firewall-failed ]; then
+
+    # Set secure defaults.
+    iptables --wait -P INPUT DROP
+    iptables --wait -P FORWARD DROP
+    iptables --wait -P OUTPUT DROP
+
+    # Flush old rules.
+    iptables --wait -F
+    iptables --wait -X
+    iptables --wait -t nat -F
+    iptables --wait -t nat -X
+    iptables --wait -t mangle -F
+    iptables --wait -t mangle -X
 fi
 
 exit 0
