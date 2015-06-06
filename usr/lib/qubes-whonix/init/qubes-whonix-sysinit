@@ -44,18 +44,38 @@ if [ -e /var/run/qubes-service/whonix-gateway ] || [ -e /var/run/qubes-service/w
     if [ ! -e /var/cache/whonix-setup-wizard/status-files/whonix_repository.done ]; then
         sudo touch /var/cache/whonix-setup-wizard/status-files/whonix_repository.done
     fi
+fi
 
-    if [ -e /var/run/qubes-service/whonix-gateway ]; then
-        # Allow whonix-gateway to act as an update-proxy
-        touch /var/run/qubes-service/qubes-updates-proxy
+# Gateway
+if [ -e /var/run/qubes-service/whonix-gateway ]; then
 
-        # Search and replace tinyproxy error files so we can inject code that
-        # we can use to identify that its a tor proxy so updates are secure
-        error_file=/usr/share/tinyproxy/default.html
-        grep -q "${PROXY_META}" "${error_file}" || {
-            sed -i "s/<\/head>/${PROXY_META}\n<\/head>/" "${error_file}"
-        }
+    # Enable/Disable Tor if qubes-service is enabled
+    if [ -e /var/run/qubes-service/whonix-tor-enable ]; then
+        if grep "^#DisableNetwork 0$" /etc/tor/torrc; then
+            sed -i "s/^#DisableNetwork/DisableNetwork/g" /etc/tor/torrc
+        fi
+    elif [ -e /var/run/qubes-service/whonix-tor-disable ]; then
+        if grep "^DisableNetwork 0$" /etc/tor/torrc; then
+            sed -i "s/^DisableNetwork/#DisableNetwork/g" /etc/tor/torrc
+        fi
     fi
+
+    # Make sure we remove whonixsetup.{skip, done} if Tor is not enabled so
+    # whonix-setup-wizard will prompt to enable
+    grep "^DisableNetwork 0$" /etc/tor/torrc || {
+        rm -f /var/cache/whonix-setup-wizard/status-files/whonixsetup.skip
+        rm -f /var/cache/whonix-setup-wizard/status-files/whonixsetup.done
+    }
+
+    # Allow whonix-gateway to act as an update-proxy
+    touch /var/run/qubes-service/qubes-updates-proxy
+
+    # Search and replace tinyproxy error files so we can inject code that
+    # we can use to identify that its a tor proxy so updates are secure
+    error_file=/usr/share/tinyproxy/default.html
+    grep -q "${PROXY_META}" "${error_file}" || {
+        sed -i "s/<\/head>/${PROXY_META}\n<\/head>/" "${error_file}"
+    }
 fi
 
 # Make sure hostname is correct
