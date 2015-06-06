@@ -1,0 +1,15 @@
+[Unit]
+Description=Init Qubes+Whonix services and settings
+DefaultDependencies=no
+Before=sysinit.target
+After=proc-xen.mount systemd-modules-load.service qubes-db.service qubes-sysinit.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStartPre=/usr/lib/qubes-whonix/init/enable-services
+ExecStart=/usr/lib/qubes-whonix/init/qubes-whonix-sysinit
+StandardOutput=syslog
+
+[Install]
+WantedBy=sysinit.target

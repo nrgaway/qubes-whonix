@@ -4,9 +4,9 @@
 export QT_X11_NO_MITSHM=1
 export XDG_CURRENT_DESKTOP=gnome
 
-# /etc/uwt.d/50_uwt_default relies on this in order to allow connection 
-# to proxy for template
-PROXY_SERVER="http://10.137.255.254:8082/"
+# /etc/uwt.d/40_qubes relies on 'whonix-secure-proxy' being
+# available to enable apt-get
+PROXY_SERVER='http://10.137.255.254:8082/'
 PROXY_META='<meta name=\"application-name\" content=\"tor proxy\"\/>'
 
 # Qubes R3
@@ -18,28 +18,6 @@ if which qubesdb-read > /dev/null; then
 else
     QUBESDB=xenstore
     PREFIX=''
-fi
-
-if [ ! -d "/var/run/qubes" ]; then
-    QUBES_WHONIX="unknown"
-    exit 0
-
-elif [ -f "/var/run/qubes-service/updates-proxy-setup" ]; then
-    QUBES_WHONIX="template"
-    if [ ! -e '/var/run/qubes-service/qubes-whonix-secure-proxy' ]; then
-        curl.anondist-orig --connect-timeout 3 "${PROXY_SERVER}" | grep -q "${PROXY_META}" && {
-            sudo touch '/var/run/qubes-service/qubes-whonix-secure-proxy'
-        }
-    fi
-
-elif [ -f "/usr/share/anon-gw-base-files/gateway" ]; then
-    QUBES_WHONIX="gateway"
-
-elif [ -f "/usr/share/anon-ws-base-files/workstation" ]; then
-    QUBES_WHONIX="workstation"
-
-else
-    QUBES_WHONIX="unknown"
 fi
 
 immutableFilesEnable() {

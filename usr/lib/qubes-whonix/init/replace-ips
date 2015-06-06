@@ -54,15 +54,15 @@ def whonix_mode():
 
     Can be either gateway, workstation, tempalte or unknown
     '''
-    mode = 'unknown'
+    mode = None
 
-    if os.path.exists('/var/run/qubes'):
-        if os.path.exists('/var/run/qubes-service/updates-proxy-setup'):
-            mode = 'template'
-        if os.path.exists('/usr/share/anon-gw-base-files'):
-            mode = 'gateway'
-        elif os.path.exists('/usr/share/anon-ws-base-files'):
-            mode = 'workstation'
+    if os.path.exists('/var/run/qubes-service/whonix-template'):
+        mode = 'template'
+    elif os.path.exists('/var/run/qubes-service/whonix-gateway'):
+        mode = 'gateway'
+    elif os.path.exists('/var/run/qubes-service/whonix-workstation'):
+        mode = 'workstation'
+
     return mode
 
 
@@ -147,7 +147,7 @@ def maybe_reload_tor():
 
     if re.search(r'^DisableNetwork 0$', text,  re.MULTILINE):
         try:
-            if subprocess.check_output(['systemctl', 'is-enabled', 'tor']).strip() == 'enabled':
+            if subprocess.check_output(['systemctl', 'is-active', 'tor']):
                 subprocess.call(['systemctl', 'reload', 'tor'])
         except (subprocess.CalledProcessError):
             pass

@@ -1,0 +1,32 @@
+#!/bin/bash
+# vim: set ts=4 sw=4 sts=4 et :
+
+source /usr/lib/qubes-whonix/utility_functions.sh
+
+if [ -e /var/run/qubes-service/qubes-network ]; then
+
+    # Set interfaces for Whonix firewall
+    if [ -e /var/run/qubes-service/whonix-gateway ]; then
+        export INT_IF="vif+"
+        export INT_TIF="vif+"
+    fi
+
+    # Wait for xtables lock incase it's in use
+    iptables --wait -L >/dev/null
+
+    # Load the firewall
+    /usr/bin/whonix_firewall
+fi
+
+# Template
+if [ -e /var/run/qubes-service/whonix-template ]; then
+
+    # Check if a secure Tor update server is available
+    if [ ! -e /var/run/qubes-service/whonix-secure-proxy ]; then
+        curl.anondist-orig --connect-timeout 3 "${PROXY_SERVER}" | grep -q "${PROXY_META}" && {
+            sudo touch /var/run/qubes-service/whonix-secure-proxy
+        }
+    fi
+fi
+
+exit 0

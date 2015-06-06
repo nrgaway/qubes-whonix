@@ -30,10 +30,32 @@ for protected_file in "${PROTECTED_FILES[@]}"; do
     copyAnondist "${protected_file}"
 done
 
-if [ "${QUBES_WHONIX}" == "gateway" ] || [ "${QUBES_WHONIX}" == "workstation" ]; then
+# Gateway or Workstation
+if [ -e /var/run/qubes-service/whonix-gateway ] || [ -e /var/run/qubes-service/whonix-workstation ]; then
+
+    # Bind whonix directories to allow changes to persist
+    sudo /usr/lib/qubes-whonix/bind-dirs
+
     # Replace IP addresses in known configuration files / scripts with
     # currently discovered IP address
     /usr/lib/qubes-whonix/init/replace-ips
+
+    # Repository setup should only be run in template
+    if [ ! -e /var/cache/whonix-setup-wizard/status-files/whonix_repository.done ]; then
+        sudo touch /var/cache/whonix-setup-wizard/status-files/whonix_repository.done
+    fi
+
+    if [ -e /var/run/qubes-service/whonix-gateway ]; then
+        # Allow whonix-gateway to act as an update-proxy
+        touch /var/run/qubes-service/qubes-updates-proxy
+
+        # Search and replace tinyproxy error files so we can inject code that
+        # we can use to identify that its a tor proxy so updates are secure
+        error_file=/usr/share/tinyproxy/default.html
+        grep -q "${PROXY_META}" "${error_file}" || {
+            sed -i "s/<\/head>/${PROXY_META}\n<\/head>/" "${error_file}"
+        }
+    fi
 fi
 
 # Make sure hostname is correct

@@ -1,0 +1,27 @@
+#!/bin/bash
+# vim: set ts=4 sw=4 sts=4 et :
+
+source /usr/lib/qubes-whonix/utility_functions.sh
+
+VM_TYPE=$(${QUBESDB}-read ${PREFIX}qubes-vm-type 2> /dev/null)
+
+mkdir -p /var/run/qubes-service
+
+# Template
+if [ "${VM_TYPE}" = "TemplateVM" ]; then
+    touch /var/run/qubes-service/whonix-template
+
+# Gateway
+elif [ -e /usr/share/anon-gw-base-files/gateway ]; then
+    if [ "${VM_TYPE}" = "NetVM" ] || [ "${VM_TYPE}" = "ProxyVM" ]; then
+        touch /var/run/qubes-service/whonix-gateway
+    fi
+
+# Workstation
+elif [ -e /usr/share/anon-ws-base-files/workstation ]; then
+    if [ "${VM_TYPE}" = "AppVM" ]; then
+        touch /var/run/qubes-service/whonix-workstation
+    fi
+fi
+
+exit 0

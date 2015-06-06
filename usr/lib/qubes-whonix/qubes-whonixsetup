@@ -3,60 +3,15 @@
 
 source /usr/lib/qubes-whonix/utility_functions.sh
 
-if ! [ "${QUBES_WHONIX}" == "template" ]; then
-    sudo /usr/lib/qubes-whonix/bind-dirs
-fi
+if [ -e /var/run/qubes-service/whonix-template ]; then
 
-if [ "${QUBES_WHONIX}" == "gateway" ]; then
-    if grep "^DisableNetwork 0$" /etc/tor/torrc; then
-        sudo systemctl start sdwdate
-        sudo systemctl restart tor
-        sudo systemctl start whonixcheck
-    else
-        sudo systemctl start sdwdate
-        sudo systemctl restart tor
-        sudo systemctl start whonixcheck
-
-        # Setup repository in template
-        sudo mkdir -p /var/cache/whonix-setup-wizard/status-files
-        sudo touch /var/cache/whonix-setup-wizard/status-files/whonix_repository.done
-
-        XDG_CURRENT_DESKTOP=gnome sudo /usr/bin/whonix-setup-wizard setup -style gtk+
+    # Display warning that TemplateVM is not connected to a Tor update proxy
+    if [ ! -e '/var/run/qubes-service/whonix-secure-proxy' ]; then
+        /usr/lib/qubes-whonix/alert update /usr/lib/qubes-whonix/messages.yaml
     fi
 
-elif [ "${QUBES_WHONIX}" == "workstation" ]; then
-    sudo systemctl start sdwdate
-    sudo systemctl start whonixcheck
-
-    if ! [ -f "/var/cache/whonix-setup-wizard/status-files/disclaimer.done" ]; then
-        # Setup repository in template
-        sudo mkdir -p /var/cache/whonix-setup-wizard/status-files
-        sudo touch /var/cache/whonix-setup-wizard/status-files/whonix_repository.done
-
-        XDG_CURRENT_DESKTOP=gnome sudo /usr/bin/whonix-setup-wizard setup -style gtk+
-    fi
-
-elif [ "${QUBES_WHONIX}" == "template" ] && [ ! -e '/var/run/qubes-service/qubes-whonix-secure-proxy' ]; then
-    # Set secure defaults.
-    sudo iptables -P INPUT DROP
-    sudo iptables -P FORWARD DROP
-    sudo iptables -P OUTPUT DROP
-
-    # Flush old rules.
-    sudo iptables -F
-    sudo iptables -X
-    sudo iptables -t nat -F
-    sudo iptables -t nat -X
-    sudo iptables -t mangle -F
-    sudo iptables -t mangle -X
-
-    # Display warning that netvm is not connected to a torvm
-    /usr/lib/qubes-whonix/alert update /usr/lib/qubes-whonix/messages.yaml
-fi
-
-if [ "${QUBES_WHONIX}" == "template" ]; then
     # Setup repository
-    if ! [ -f "/var/cache/whonix-setup-wizard/status-files/whonix_repository.done" ]; then
+    if [ ! -e "/var/cache/whonix-setup-wizard/status-files/whonix_repository.done" ]; then
         XDG_CURRENT_DESKTOP=gnome sudo /usr/bin/whonix-setup-wizard repository -style gtk+
     fi
 fi
