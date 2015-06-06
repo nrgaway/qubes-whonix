@@ -5,8 +5,6 @@
 # To umount all binds, just pass any arg in $1
 #
 
-source /usr/lib/qubes-whonix/utility_functions.sh
-
 # Don't run if started as a template
 if [ -e "/var/run/qubes-service/whonix-gateway" ] || [ -e "/var/run/qubes-service/whonix-workstation" ]; then
     # Array of directories to bind
@@ -46,14 +44,6 @@ if [ -e "/var/run/qubes-service/whonix-gateway" ] || [ -e "/var/run/qubes-servic
         mount --bind "${rw_dir}" "${ro_dir}"
     done
     sync
-fi
-
-if [ -e "/var/run/qubes-service/whonix-gateway" ]; then
-    # Make sure we remove whonixsetup.done if Tor is not enabled
-    # to allow choice of repo and prevent whonixcheck errors
-    grep "^DisableNetwork 0$" /etc/tor/torrc || {
-        sudo rm -f var/cache/whonix-setup-wizard/status-files/whonixsetup.done
-    }
 fi
 
 exit 0
