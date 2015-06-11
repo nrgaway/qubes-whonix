@@ -1,5 +1,6 @@
 #!/usr/bin/make -f
 # -*- makefile -*-
+# vim: set filetype=make syntax=sh ts=8 sw=8 sts=0 noexpandtab :
 
 ## This file is part of Whonix
 ## -- and --

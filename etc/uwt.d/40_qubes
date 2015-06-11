@@ -1,5 +1,6 @@
-#!/bin/bash -e
-# vim: set ts=4 sw=4 sts=4 et :
+## This file is part of Whonix.
+## Copyright (C) 2012 - 2015 Patrick Schleizer <adrelanos@riseup.net>
+## See the file COPYING for copying conditions.
 
 if [ -e '/var/run/qubes-service/whonix-secure-proxy' ]; then
     uwtwrapper["/usr/bin/apt-get"]="0"

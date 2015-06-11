@@ -2,5 +2,5 @@
 ## Copyright (C) 2012 - 2015 Patrick Schleizer <adrelanos@riseup.net>
 ## See the file COPYING for copying conditions.
 
-[Unit]
-ConditionPathExists=!/usr/lib/qubes-whonix
+# Install Tor browser to /home/user/opt by default.
+tb_home_folder=~/opt

@@ -1,5 +1,26 @@
 #!/bin/bash -e
 # vim: set ts=4 sw=4 sts=4 et :
+#
+# qubes-whonix-sysinit - Called by systemd during the sysinit boot stage to
+#                        initialize required configurations for Whonix
+#
+# This file is part of Qubes+Whonix.
+# Copyright (C) 2014 - 2015 Jason Mehring <nrgaway@gmail.com>
+# License: GPL-2+
+# Authors: Jason Mehring
+#
+#   This program is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU General Public License
+#   as published by the Free Software Foundation; either version 2
+#   of the License, or (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 source /usr/lib/qubes-whonix/utility_functions.sh
 
@@ -20,42 +41,29 @@ immutableFilesDisable "${PROTECTED_FILES}"
 immutableFilesDisable "${PROTECTED_FILES}" ".anondist"
 
 for protected_file in "${PROTECTED_FILES[@]}"; do
+
     # Enable protected services
     if ! grep -q "^${protected_file}$" "${PROTECTED_FILE_LIST}" 2>/dev/null; then
-	    echo -e "${protected_file}" >> "${PROTECTED_FILE_LIST}"
+        echo -e "${protected_file}" >> "${PROTECTED_FILE_LIST}"
     fi
 
     # Make sure we are using a copy of the anondist file and if not
-    # copy the anondist file and set it immutable
+    # copy the anondist file
     copyAnondist "${protected_file}"
 done
 
-# Gateway or Workstation
-if [ -e /var/run/qubes-service/whonix-gateway ] || [ -e /var/run/qubes-service/whonix-workstation ]; then
+# Gateway
+if [ -e /var/run/qubes-service/whonix-gateway ]; then
 
-    # Bind whonix directories to allow changes to persist
-    sudo /usr/lib/qubes-whonix/bind-dirs
+    # Allow whonix-gateway to act as an update-proxy
+    touch /var/run/qubes-service/qubes-updates-proxy
 
-    # Replace IP addresses in known configuration files / scripts with
-    # currently discovered IP address
-    /usr/lib/qubes-whonix/init/replace-ips
-
-    # Repository setup should only be run in template
-    if [ ! -e /var/cache/whonix-setup-wizard/status-files/whonix_repository.done ]; then
-        sudo touch /var/cache/whonix-setup-wizard/status-files/whonix_repository.done
-    fi
-
-    if [ -e /var/run/qubes-service/whonix-gateway ]; then
-        # Allow whonix-gateway to act as an update-proxy
-        touch /var/run/qubes-service/qubes-updates-proxy
-
-        # Search and replace tinyproxy error files so we can inject code that
-        # we can use to identify that its a tor proxy so updates are secure
-        error_file=/usr/share/tinyproxy/default.html
-        grep -q "${PROXY_META}" "${error_file}" || {
-            sed -i "s/<\/head>/${PROXY_META}\n<\/head>/" "${error_file}"
-        }
-    fi
+    # Search and replace tinyproxy error files so we can inject code that
+    # we can use to identify that its a tor proxy so updates are secure
+    error_file=/usr/share/tinyproxy/default.html
+    grep -q "${PROXY_META}" "${error_file}" || {
+        sed -i "s/<\/head>/${PROXY_META}\n<\/head>/" "${error_file}"
+    }
 fi
 
 # Make sure hostname is correct

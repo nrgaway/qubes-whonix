@@ -1,5 +1,0 @@
-#
-# qubes-whonix setting for allow xen
-#
-
-WHONIXCHECK_NO_EXIT_ON_UNSUPPORTED_VIRTUALIZER="1"

@@ -1,8 +1,43 @@
+# vim: set syntax=yaml ts=2 sw=2 sts=2 et :
+#
+# messages.yaml - /usr/lib/qubes-whonix/qubes-whonixsetup uses the alert module
+#                 and uses the message id's created in this YAML configuration.
+#
+# This file is part of Qubes+Whonix.
+# Copyright (C) 2015 Jason Mehring <nrgaway@gmail.com>
+# License: GPL-2+
+
 update:
   icon: Critical
   en:
     title: Tor netvm required for updates
     message: |
-      <p><B>Tor netvm required for updates!</B></p>
+      <p><b>Tor netvm required for updates!</b></p>
       <p>Please ensure your template vm has a Whonix gateway as it's VM.</p>
       <p>No updates are possible without an active (running) Whonix gateway VM.</p>
+
+firewall-failed:
+  icon: Critical
+  en:
+    title: Whonix firewall failed to load
+    message: |
+      <p><b>Whonix firewall failed to load!</b></p>
+      <p>The Whonix firewall failed to load for some unknown reason.  This could be
+      due to the firewall being mis-configured or race-condition.</p>
+      <p>Try restarting the VM to see if this error persists.</p>
+      <p>The virtual machine will now be shutdown!</p>
+
+tor-disabled:
+  icon: Warning
+  en:
+    title: Tor has been permanently set to disabled
+    message: |
+      <p><b>Tor has been permanently set to disabled!</b></p>
+      <p>The qubes service option <b>whonix-tor-disable</b> is currently set which
+      means the Whonix gateway will always start with Tor disabled.</p>
+      <p>This feature is useful to ensure Tor will not start and provide an
+      opportunity to configure a proxy before connecting to Tor for the first
+      time. After configuring the Gateway, be sure to remove the
+      <b>whonix-tor-disabled</b> service option before restarting the Gateway
+      which will then proceed to boot the Gateway with whatever settings have been
+      made and prevent this warning</p>
