@@ -201,7 +201,7 @@ case "${1}" in
                 /usr/share/anon-torchat/.torchat/torchat.ini | \
                 /usr/share/tor/tor-service-defaults-torrc.anondist | \
                 /usr/share/xchat-improved-privacy/.xchat2/xchat.conf)
-                    /usr/lib/qubes-whonix/init/replace-ips
+                    /usr/lib/qubes-whonix/replace-ips
                     ;;
 
                 # Desktop Entry Modification - Not shown in Qubes
