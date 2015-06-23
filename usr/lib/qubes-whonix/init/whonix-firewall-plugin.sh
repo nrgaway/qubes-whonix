@@ -26,6 +26,9 @@
 
 source /usr/lib/qubes-whonix/utility_functions.sh
 
+[ -n "$iptables_cmd" ] || iptables_cmd="iptables --wait"
+[ -n "$ip6tables_cmd" ] || ip6tables_cmd="ip6tables --wait"
+
 # Start Whonix Firewall
 if [ -e /var/run/qubes-service/whonix-gateway ]; then
     ip=$(${QUBESDB}-read ${PREFIX}qubes-netvm-gateway 2> /dev/null)
@@ -35,25 +38,25 @@ if [ -e /var/run/qubes-service/whonix-gateway ]; then
 
     # Allow connections from port 8082 of internal vif interface for tinyproxy
     # tinyproxy is responsible to handle TemplateVMs updates
-    iptables --wait -A INPUT -i vif+ -p tcp -m tcp --dport 8082 -j ACCEPT
-    iptables --wait -A OUTPUT -o vif+ -p tcp -m tcp --sport 8082 -j ACCEPT
+    $iptables_cmd -A INPUT -i vif+ -p tcp -m tcp --dport 8082 -j ACCEPT
+    $iptables_cmd -A OUTPUT -o vif+ -p tcp -m tcp --sport 8082 -j ACCEPT
 
     # Qubes pre-routing. Will be able to intercept traffic destined for
     # 10.137.255.254 to be re-routed to tinyproxy
-    iptables --wait -t nat -N PR-QBS-SERVICES
-    iptables --wait -t nat -A PREROUTING -j PR-QBS-SERVICES
+    $iptables_cmd -t nat -N PR-QBS-SERVICES
+    $iptables_cmd -t nat -A PREROUTING -j PR-QBS-SERVICES
 
     # Redirects traffic destined for 10.137.255.154 to port 8082 (tinyproxy)
-    iptables --wait -t nat -A PR-QBS-SERVICES -d 10.137.255.254/32 -i vif+ -p tcp -m tcp --dport 8082 -j REDIRECT
+    $iptables_cmd -t nat -A PR-QBS-SERVICES -d 10.137.255.254/32 -i vif+ -p tcp -m tcp --dport 8082 -j REDIRECT
 
     # Forward tinyproxy output to port 53/9040 on internal (Tor) interface (eth1) to be
     # able to connect to Internet (via Tor) to proxy updates for TemplateVM
-    iptables --wait -t nat -A OUTPUT -p udp -m owner --uid-owner tinyproxy -m conntrack --ctstate NEW -j DNAT --to ${ip}:53
-    iptables --wait -t nat -A OUTPUT -p tcp -m owner --uid-owner tinyproxy -m conntrack --ctstate NEW -j DNAT --to ${ip}:9040
+    $iptables_cmd -t nat -A OUTPUT -p udp -m owner --uid-owner tinyproxy -m conntrack --ctstate NEW -j DNAT --to ${ip}:53
+    $iptables_cmd -t nat -A OUTPUT -p tcp -m owner --uid-owner tinyproxy -m conntrack --ctstate NEW -j DNAT --to ${ip}:9040
 fi
 
 if [ -e /var/run/qubes-service/whonix-template ]; then
 
     # Allow access to qubes update proxy
-    iptables --wait -A OUTPUT -o eth0 -p tcp -m tcp --dport 8082 -j ACCEPT
+    $iptables_cmd -A OUTPUT -o eth0 -p tcp -m tcp --dport 8082 -j ACCEPT
 fi
