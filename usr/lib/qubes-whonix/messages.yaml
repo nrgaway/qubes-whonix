@@ -10,11 +10,11 @@
 update:
   icon: Critical
   en:
-    title: Tor netvm required for updates
+    title: Whonix-Gateway NetVM required for updates
     message: |
-      <p><b>Tor netvm required for updates!</b></p>
-      <p>Please ensure your template vm has a Whonix gateway as it's VM.</p>
-      <p>No updates are possible without an active (running) Whonix gateway VM.</p>
+      <p><B>Whonix-Gateway NetVM required for updates!</B></p>
+      <p>Please ensure that this TemplateVM has a Whonix-Gateway as its NetVM.</p>
+      <p>No updates are possible without an active (running) Whonix-Gateway VM.</p>
 
 firewall-failed:
   icon: Critical
