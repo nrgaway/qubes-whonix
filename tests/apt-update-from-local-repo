@@ -25,8 +25,9 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-DIST="wheezy"
+DIST="jessie"
 DISTRIBUTION="debian"
+VERBOSE=0
 export LOCAL_REPO="repo"
 
 APT_GET_OPTIONS="-o Dpkg::Options::="--force-confnew" --force-yes --yes"
