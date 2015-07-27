@@ -1,12 +1,13 @@
 #!/usr/bin/make -f
 # -*- makefile -*-
+# vim: set filetype=make syntax=sh ts=8 sw=8 sts=0 noexpandtab :
 
 ## This file is part of Whonix
 ## -- and --
 ## The Qubes OS Project, http://www.qubes-os.org
 ##
-## Copyright (C) 2014  Jason Mehring <nrgaway@gmail.com>
-## Copyright (C) 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
+## Copyright (C) 2014 - 2015 Jason Mehring <nrgaway@gmail.com>
+## Copyright (C) 2012 - 2015 Patrick Schleizer <adrelanos@riseup.net>
 ## See the file COPYING for copying conditions.
 
 # Uncomment this to turn on verbose mode.
@@ -26,4 +27,3 @@ override_dh_auto_build:
 
 override_dh_auto_install:
 	@true
-

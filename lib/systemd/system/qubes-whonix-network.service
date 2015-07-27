@@ -1,15 +1,18 @@
+# This file is part of Qubes+Whonix.
+# Copyright (C) 2015 Jason Mehring <nrgaway@gmail.com>
+# License: GPL-2+
+
 [Unit]
-Description = Qubes Whonix network proxy setup
-Before = network.target qubes-whonix-firewall
-After = iptables.service
+Description=Qubes Whonix network proxy setup
+Before=network.target qubes-update-check.service qubes-update-check.timer
+After=iptables.service
 
 [Service]
-Type = oneshot
-RemainAfterExit = yes
-ExecStart = /usr/lib/qubes-whonix/init/network-proxy-setup
-ExecStartPost = /usr/lib/qubes-whonix/init/init
-StandardOutput = syslog
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/lib/qubes-whonix/init/network-proxy-setup
+StandardOutput=syslog
 
 [Install]
-WantedBy = multi-user.target
-Alias = qubes-network.service
+WantedBy=multi-user.target
+Alias=qubes-network.service

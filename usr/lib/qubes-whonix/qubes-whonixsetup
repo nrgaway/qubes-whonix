@@ -1,62 +1,63 @@
 #!/bin/bash -e
 # vim: set ts=4 sw=4 sts=4 et :
+#
+# qubes-whonixsetup - Called by /etc/xdg/autostart/qubes-whonixsetup.desktop
+#
+# Performs various Whonix 'setup' related tasks which will notify or prompt the
+# user if any required configurations need attention and also warn the user the
+# VM is going to be powered off if a failure of one of the configurations was
+# detected.
+#
+# This file is part of Qubes+Whonix.
+# Copyright (C) 2014 - 2015 Jason Mehring <nrgaway@gmail.com>
+# License: GPL-2+
+# Authors: Jason Mehring
+#
+#   This program is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU General Public License
+#   as published by the Free Software Foundation; either version 2
+#   of the License, or (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 source /usr/lib/qubes-whonix/utility_functions.sh
 
-if ! [ "${QUBES_WHONIX}" == "template" ]; then
-    sudo /usr/lib/qubes-whonix/bind-dirs
+# Display alert that firewall was unable to be enabled and poweroff
+if [ -e /var/run/qubes-service/whonix-firewall-failed ]; then
+    /usr/lib/qubes-whonix/alert firewall-failed /usr/lib/qubes-whonix/messages.yaml
+    sudo poweroff
 fi
 
-if [ "${QUBES_WHONIX}" == "gateway" ]; then
-    if grep "^DisableNetwork 0$" /etc/tor/torrc; then
-        sudo systemctl start sdwdate
-        sudo systemctl restart tor
-        sudo systemctl start whonixcheck
-    else
-        sudo systemctl start sdwdate
-        sudo systemctl restart tor
-        sudo systemctl start whonixcheck
+# Gateway
+if [ -e /var/run/qubes-service/whonix-gateway ]; then
 
-        # Setup repository in template
-        sudo mkdir -p /var/cache/whonix-setup-wizard/status-files
-        sudo touch /var/cache/whonix-setup-wizard/status-files/whonix_repository.done
-
+    # If Tor is disabled, start whonix-setup-wizard in setup mode
+    if grep "^#DisableNetwork 0$" /etc/tor/torrc; then
         XDG_CURRENT_DESKTOP=gnome sudo /usr/bin/whonix-setup-wizard setup -style gtk+
     fi
 
-elif [ "${QUBES_WHONIX}" == "workstation" ]; then
-    sudo systemctl start sdwdate
-    sudo systemctl start whonixcheck
-
-    if ! [ -f "/var/cache/whonix-setup-wizard/status-files/disclaimer.done" ]; then
-        # Setup repository in template
-        sudo mkdir -p /var/cache/whonix-setup-wizard/status-files
-        sudo touch /var/cache/whonix-setup-wizard/status-files/whonix_repository.done
-
-        XDG_CURRENT_DESKTOP=gnome sudo /usr/bin/whonix-setup-wizard setup -style gtk+
+    # Display alert that 'whonix-tor-disable' service flag is set and it will need to
+    # to manually unset if user wants to be able to boot with Tor enabled
+    if [ -e /var/run/qubes-service/whonix-tor-disable ]; then
+        /usr/lib/qubes-whonix/alert tor-disabled /usr/lib/qubes-whonix/messages.yaml
     fi
 
-elif [ "${QUBES_WHONIX}" == "template" ] && [ ! -e '/var/run/qubes-service/qubes-whonix-secure-proxy' ]; then
-    # Set secure defaults.
-    sudo iptables -P INPUT DROP
-    sudo iptables -P FORWARD DROP
-    sudo iptables -P OUTPUT DROP
+# Template
+elif [ -e /var/run/qubes-service/whonix-template ]; then
 
-    # Flush old rules.
-    sudo iptables -F
-    sudo iptables -X
-    sudo iptables -t nat -F
-    sudo iptables -t nat -X
-    sudo iptables -t mangle -F
-    sudo iptables -t mangle -X
+    # Display warning that TemplateVM is not connected to a Tor update proxy
+    if [ ! -e '/var/run/qubes-service/whonix-secure-proxy' ]; then
+        /usr/lib/qubes-whonix/alert update /usr/lib/qubes-whonix/messages.yaml
+    fi
 
-    # Display warning that netvm is not connected to a torvm
-    /usr/lib/qubes-whonix/alert update /usr/lib/qubes-whonix/messages.yaml
-fi
-
-if [ "${QUBES_WHONIX}" == "template" ]; then
     # Setup repository
-    if ! [ -f "/var/cache/whonix-setup-wizard/status-files/whonix_repository.done" ]; then
+    if [ ! -e "/var/cache/whonix-setup-wizard/status-files/whonix_repository.done" ]; then
         XDG_CURRENT_DESKTOP=gnome sudo /usr/bin/whonix-setup-wizard repository -style gtk+
     fi
 fi

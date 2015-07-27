@@ -1,0 +1,67 @@
+#!/bin/bash -e
+# vim: set ts=4 sw=4 sts=4 et :
+#
+# bind-directories - Binds directories which allows changes in AppVM to persist
+#
+# To umount all binds, just pass any arg in $1, like umount
+#
+# This file is part of Qubes+Whonix.
+# Copyright (C) 2014 - 2015 Jason Mehring <nrgaway@gmail.com>
+# License: GPL-2+
+# Authors: Jason Mehring
+#
+#   This program is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU General Public License
+#   as published by the Free Software Foundation; either version 2
+#   of the License, or (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Don't run if started as a template
+if [ -e "/var/run/qubes-service/whonix-gateway" ] || [ -e "/var/run/qubes-service/whonix-workstation" ]; then
+    # Array of directories to bind
+    BINDS=(
+        '/rw/srv/whonix/var/lib/whonix:/var/lib/whonix'
+        '/rw/srv/whonix/var/lib/whonixcheck:/var/lib/whonixcheck'
+        '/rw/srv/whonix/var/cache/whonix-setup-wizard:/var/cache/whonix-setup-wizard'
+        '/rw/srv/qubes-whonix/var/cache/qubes-whonix:/var/cache/qubes-whonix'
+        '/rw/srv/whonix/etc/tor:/etc/tor'
+    )
+
+    for bind in ${BINDS[@]}; do
+        rw_dir="${bind%%:*}"
+        ro_dir="${bind##*:}"
+
+        # Make sure ro directory is not mounted
+        umount "${ro_dir}" 2> /dev/null || true
+
+        if [ -n "${1}" ]; then
+            echo "Umounting ${1} only..."
+            continue
+        fi
+
+        # Make sure ro directory exists
+        if ! [ -d "${ro_dir}" ]; then
+            mkdir -p "${ro_dir}"
+        fi
+
+        # Initially copy over data directories to /rw if rw directory does not exist
+        if ! [ -d "${rw_dir}" ]; then
+            mkdir -p "${rw_dir}"
+            rsync -hax "${ro_dir}/." "${rw_dir}"
+        fi
+
+        # Bind the directory
+        sync
+        mount --bind "${rw_dir}" "${ro_dir}"
+    done
+    sync
+fi
+
+exit 0
