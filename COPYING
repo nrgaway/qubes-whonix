@@ -1,7 +1,7 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 
 Files: *
-Copyright: 2014 Jason Mehring <nrgaway@gmail.com>
+Copyright: 2014 - 2015 Jason Mehring <nrgaway@gmail.com>
 License: GPL-2+
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ License: GPL-2+
  `/usr/share/common-licenses/GPL-2'.
 
 Files: debian/gain-root-command debian/watch Makefile
-Copyright: 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
+Copyright: 2012 - 2015 Patrick Schleizer <adrelanos@riseup.net>
 License: GPL-3+
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by

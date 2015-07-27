@@ -1,689 +1,359 @@
-commit 5df5d4c5e4bf8345e22aa06d7cb8bcbb4f115a9d
-Merge: 3055fc1 b92b7d9
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Sun Apr 26 12:46:32 2015 +0000
+qubes-whonix (0:11.0.0-1) jessie; urgency=medium
 
-    Merge remote-tracking branch 'nrgaway/master'
+  [ Jason Mehring ]
+  * bump version to 11.0.0
 
-commit b92b7d950a12f1049907daffdebf84be27026d2a
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Sun Apr 26 03:00:46 2015 -0400
+  [ Patrick Schleizer ]
+  * synced COPYING with debian/copyright
+  * added "Uploaders: Patrick Schleizer <adrelanos@riseup.net>" to
+    debian/control
+  * added changelog.upstream to fix lintian warning
+  * bumped changelog version (to fix lintian warning about missing close
+    ITP)
+  * added creation of upstream changelog to fix lintian warning
+  * debian/control: changed "Architecture:" from "any" to "all" -
+    https://phabricator.whonix.org/T187
+  * updated makefile generic to version 1.4
+  * updated readme
+  * updated makefile generic to version 1.5
+  * added genmkfile to Build-Depends
+  * updated changelog.upstream
+  * updated changelog.upstream
+  * packaging, bumped Standards-Version from 3.9.4 to 3.9.6 for jessie
+    support
+  * added debian/source/lintian-overrides with debian-watch-may-check-
+    gpg-signature to fix lintian warning -
+    https://phabricator.whonix.org/T277
 
-    version 10.0.3
+  [ Jason Mehring ]
+  * version 10.0.4
 
-commit 9b56022aca9a4898ad49e291bf858486641d80bc
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Sat Apr 25 05:07:02 2015 -0400
+  [ Patrick Schleizer ]
+  * lintian warning copyright fix
 
-    Added qubes-core-agent (>= 2.1.60) as a depend
+  [ Jason Mehring ]
+  * Add pkgs directory to .gitignore
+  * Fix re-enable control-port-filter
+  * version 10.0.5
 
-commit 57556b0c7e655982bbd1471a1d5b2cd35bf3412a
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Sat Apr 25 05:06:29 2015 -0400
+  [ Patrick Schleizer ]
+  * fixed handling of changelog - https://phabricator.whonix.org/T193
+  * skip rads on Qubes - https://phabricator.whonix.org/T306
+  * skip rads systemd service on qubes -
+    https://phabricator.whonix.org/T306
 
-    Sorted and added more replaceip triggers
+  [ Jason Mehring ]
+  * Clear notes for Whonix 11
+  * Update copyright dates to include 2015
+  * Remove qubes-whonix-control-port-filter-python and rename add /
+    rename Whonix config files
+  * Added Qubes systemd override for swap-file-creator
 
-commit 011d5489566e2130f0be51a8ac633d0ec2b6b64b
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Sat Apr 25 05:03:51 2015 -0400
+  [ Patrick Schleizer ]
+  * systemd unit: workaround/fix, removed spaces, likely bug in 'deb-
+    systemd-helper' that prevents enabling the service by default -
+    https://phabricator.whonix.org/T316
+  * clean mechanism to skip starting services network-manager, spice-
+    vdagent, swap-file-creator and whonix-initializer in Qubes using
+    /etc/systemd/system/unit.service.d directory -
+    https://phabricator.whonix.org/T315
+  * removed spice-vdagent, swap-file-creator, whonix-initializer from
+    postinst disable systemd units
+  * use status files instead of 'touch' in postinst; use skip files
+    rather than faking done files
+  * added 'var/*' to debian/qubes-whonix.install
+  * fix, '| true' -> '|| true'
+  * deleted /etc/tmpfiles.d/qubes-whonix-whonixcheck.conf because no
+    longer required - https://phabricator.whonix.org/T326
 
-    - Use /etc/whonix.d/50_whonixcheck_qubes
-    - Disable/Re-enable qubes-whonix-network/firewall, tor, control-port-filter
-    - sorted and added more replaceip triggers
+  [ Jason Mehring ]
+  * renamed: whonix-firewall -> whonix-firewall-plugin
+  * renamed: init -> qubes-whonix-sysinit
+  * renamed: qubes-whonix-firewall -> enable-firewall
+  * renamed: removed original: init, qubes-whonix-firewall, whonix-
+    firewall
+  * network-proxy-setup: Removed ip_forward rule, moved updates-proxy
+    code
+  * enable-servides: Script added; called in sysinit boot stage
+  * replace-ips: Modified to use new qubes-services
+  * utility_functions: Removed code that created $QUBES_WHONIX ENV var
+  * bind-dirs: Modified to use qubes-services
+  * qubes-whonixsetup: Removed all manual start code for tor, sdwdate
+    and whonixcheck
+  * qubes-whonix-firewall.service: renamed Exec to enable-firewall
+  * qubes-whonix-network.service: Removed/added depends and Pre/Posr
+    starts
+  * qubes-whonix-sysinit.service: Added to create required
+    preconfigurations
+  * Added systemd drop in to exclude unit files from activating in
+    TemplateVM
+  * qubes-whonix-tor.service: Added condition to start before
+    whonixcheck; remove condition on /etc/init.d/tor
+  * Added whonix-setup-wizard status-files to skip disclaimer and Tor
+    setup
+  * whonix_firewall: Switched to use qubes-services, added whonix-
+    template 'rule'
+  * uwt: use qubes-services; removed unneeded include
+  * postinst: Removed sdwdate and whonixcheck from being disabled
+  * Renamed whonixsetup.done to whonixsetup.skip
+  * Removed WIP whonixcheck.* systemd releated files. Not needed
+    anymore.
+  * Renamed whonix-firewall-plugin -> whonix-firewall-plugin.sh
+  * Renamed /etc/whonix.d/40_whonixcheck_qubes -> 40_qubes
+  * added --wait option to iptables
+  * Restarting instead of reloading due to upstream Tor bug
+  * Changed location to store last know IP address to /var/cache/qubes-
+    whonix from /etc
+  * Removed now unneeded include and code
+  * Added more comments, copyright and cleanup
+  * Added copyright
+  * qubes-whonix-sysinit: Added/moved additional init code
+  * qubes-whonix-sysinit: Removed sudo, set whonix_repository.skip
+    instead of .done & cleanup
+  * qubes-whonix-sysinit: Added copyright
+  * network-proxy-setup: Added copyright
+  * enable-services: Added copyright and comments
+  * enable-firewall: Added whonix-firewall-failed service, removed sudo
+  * enable-firewall: Added copyright
+  * alert: Added copyright
+  * bind-dirs: Added copyright
+  * messages: Added firewall-failed and tor-disabled messages &
+    copyright
+  * qubes-whonixsetup: Added code to deal with firewall failure and tor-
+    disable serivce
+  * utility_functions.sh: Removed sudo, added comments and copyright
+  * Mass add/modify copyright, comments
+  * Added a postinit service to take care of bind-dirs and stuff that
+    needs to happen after that like replace-ips
+  * replace-ips: moved one directory since its not an init file
+  * renamed bind-dirs to bind-directories
+  * Moved some code from qubes-whonix-sysinit to qubes-whonix-postinit
+  * Commented qubes-whonix iptables rules
+  * enable-firewall: Remove iptables --wait hack; use whonix-
+    gateway/workstation service to identify mode
+  * Added whonix torbrowser config to specify tb installation directory
+  * Update postinst to use new replace-ips location
+  * Updated Whonix 11 NOTES
 
-commit 05d0cdec6ef98de18277fa463d08839addb27043
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Sat Apr 25 05:01:49 2015 -0400
+  [ Patrick Schleizer ]
+  * use iptables --wait - https://phabricator.whonix.org/T344
+  * As per https://lists.alioth.debian.org/pipermail/pkg-systemd-
+    maintainers/2015-June/007613.html debian-systemd mailing list:
+    cannot extend network-manager unit file by using network-
+    manager.service.d we need to do etc/systemd/system/network-
+    manager.service.d/40_qubes.conf ->
+    etc/systemd/system/NetworkManager.service.d/40_qubes.conf
+    https://phabricator.whonix.org/T350
 
-    Renamed and configured systemd configurations files so they will not conflict with future Whonix versions
+  [ Jason Mehring ]
+  * Revert custom torbrowser location per Patricks request
+  * tests: Change dist to jessie for local repo tests; add VERBOSE var
 
-commit 4c30ca00b4c494dea81295643d63ef06c67953df
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Sat Apr 25 05:00:53 2015 -0400
+  [ Patrick Schleizer ]
+  * improved 'Whonix-Gateway NetVM required for updates' message
+    Conflicts:  usr/lib/qubes-whonix/messages.yaml
+  * removed spaces
 
-    removed duplicate FILES entry
+ -- Jason Mehring <nrgaway@gmail.com>  Sat, 25 Jul 2015 00:56:31 -0400
 
-commit 1fd8bfce872421f3c8593a0435beeb759281b76b
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Sat Apr 25 04:59:46 2015 -0400
+qubes-whonix (0:10.0.5-1) wheezy; urgency=medium
 
-    Updated Qubes protected-files location
+  [ Jason Mehring ]
+  * Add pkgs directory to .gitignore
+  * Fix re-enable control-port-filter
 
-commit 56960eb0eae5c5d02663f969fd75b990203e15d3
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Sat Apr 25 04:57:11 2015 -0400
+ -- Jason Mehring <nrgaway@gmail.com>  Wed, 29 Apr 2015 06:57:48 -0400
 
-    Use trusted mode instead of installing keyring for local repo testing
+qubes-whonix (0:10.0.4-1) wheezy; urgency=medium
 
-commit 5783286d2dbd0b624fb39d97b5b3f7904e984180
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Fri Apr 24 13:31:49 2015 +0000
+  [ Jason Mehring ]
+  * Updated NOTES
+  * Removed injected whonix_firewall rules and added to
+    /etc/whonix_firewall.d/32_qubes
+  * Moved qubesdb to utility_functions.sh
+  * Changed ip-replace filelist and triggers
 
-    updated changelog.upstream
+ -- Jason Mehring <nrgaway@gmail.com>  Tue, 28 Apr 2015 09:39:29 -0400
 
-commit 965d332c50b376bbaee15cfbf6a45c3bd31ff280
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Mon Feb 16 11:06:07 2015 +0000
+qubes-whonix (0:10.0.3-1) wheezy; urgency=medium
 
-    added creation of upstream changelog to fix lintian warning
+  [ Patrick Schleizer ]
+  * added creation of upstream changelog to fix lintian warning
+  * updated changelog.upstream
 
-commit 3055fc137ac666902581c717ae2183dbdfaafa93
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Fri Apr 24 13:31:49 2015 +0000
+  [ Jason Mehring ]
+  * Use trusted mode instead of installing keyring for local repo
+    testing
+  * Updated Qubes protected-files location
+  * removed duplicate FILES entry
+  * Renamed and configured systemd configurations files so they will not
+    conflict with future Whonix versions
+  * - Use /etc/whonix.d/50_whonixcheck_qubes - Disable/Re-enable qubes-
+    whonix-network/firewall, tor, control-port-filter - sorted and added
+    more replaceip triggers
+  * Sorted and added more replaceip triggers
+  * Added qubes-core-agent (>= 2.1.60) as a depend
 
-    updated changelog.upstream
+ -- Jason Mehring <nrgaway@gmail.com>  Sun, 26 Apr 2015 02:59:07 -0400
 
-commit 5c43662196c07042c5e98d24516e7d0ca98b0a97
-Merge: 17f0775 e6933af
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Fri Apr 24 13:00:52 2015 +0000
+qubes-whonix (0:10.0.2-1) wheezy; urgency=medium
 
-    Merge remote-tracking branch 'nrgaway/master' into mergetest
-    
-    Conflicts:
-    	debian/rules
-
-commit e6933afac073651016524690759e1483ec884270
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Fri Apr 24 06:06:44 2015 -0400
-
-    version 10.0.2
-
-commit e6d7e06db7cd42d0f76921b0d4cc12b7a64a1b9e
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Fri Apr 24 06:03:31 2015 -0400
-
-    Add systemd unit file for control-port-filter-python.service
-
-commit bcfb73951b045623b303acf087833e73da82f512
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Fri Apr 24 06:02:53 2015 -0400
-
-    Add missing whonixcheck.conf file
-
-commit 974e398a4d4ea2e92458a972ec4df51583ef525b
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Fri Apr 24 05:57:51 2015 -0400
-
-    - Remove references to old whonix status files; use new references
-    - Start whonixcheck last
-    - Add missing whonixcheck for workstation
-    - Don't prompt to install repository in AppVM (Gateway or Workstation)
+  [ Jason Mehring ]
+  * Update files to search and replace IP addresses Fix syntax typo for
+    whonix workstation that prevented search and replace
+  * start whonixcheck on startup for workstation
+  * Use new whonix-setup-wizard directory for *.done files Use
+    50_whonixcheck_user instead of 30_whonixcheck_default Enable new
+    control-port-filter-python.service
+  * Remove unneeded bind directories due to new localtion of whonix
+    status files
+  * - Remove references to old whonix status files; use new references -
+    Start whonixcheck last - Add missing whonixcheck for workstation -
+    Don't prompt to install repository in AppVM (Gateway or Workstation)
     - Prompt to install repository in templatevm
-
-commit 169bdc3a0a326ff828174264a03e0c11c5230594
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Fri Apr 24 05:57:31 2015 -0400
-
-    Remove unneeded bind directories due to new localtion of whonix status files
-
-commit 03beb6693d61cc9836711b3c744c27abc16ab5e2
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Fri Apr 24 05:53:19 2015 -0400
-
-    Use new whonix-setup-wizard directory for *.done files
-    Use 50_whonixcheck_user instead of 30_whonixcheck_default
-    Enable new control-port-filter-python.service
-
-commit b53ce641d0664b2c7e26bd83cb33f0d045f5c84c
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Thu Apr 23 04:36:47 2015 -0400
-
-    start whonixcheck on startup for workstation
-
-commit 5ad388aeb52aa32b17f2bc24f688bad806ebaf36
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Thu Apr 23 04:34:16 2015 -0400
-
-    Update files to search and replace IP addresses
-    Fix syntax typo for whonix workstation that prevented search and replace
-
-commit 96641fd385c47db534c5fa8eda17c1499240ddb2
-Merge: 11d7dc2 856e649
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Thu Apr 23 01:07:07 2015 -0400
-
-    Merge branch '10.0.1'
-
-commit 856e649fc87a22bb660e25f8db92596c07758cdf
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Wed Apr 22 23:04:57 2015 -0400
-
-    version 10.0.1
-
-commit 11d7dc249676821fa1f32cb2d8a8ae1b6604a58e
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Wed Apr 22 22:53:22 2015 -0400
-
-    version 9.6.6
-
-commit c2bc3b95a4a27ca02a8ac2c7a6cf6a6206feadeb
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Thu Apr 2 18:41:23 2015 +0000
-
-    added genmkfile to Build-Depends
-
-commit 4ebcffafa1216c3fa3b1fd243f2198518555f483
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Thu Apr 2 17:24:43 2015 +0000
-
-    updated makefile generic to version 1.5
-
-commit ecd661dea10f686d7b9529c2cc4f02f668427607
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Wed Apr 1 16:54:46 2015 +0000
-
-    updated readme
-
-commit 414ff98ccaa1867bc02a1e989048912f9feaa11b
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Tue Mar 24 17:26:45 2015 +0000
-
-    updated makefile generic to version 1.4
-
-commit ed591ea6568feddf8593b1f834b86fb26e556cca
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Wed Apr 22 22:06:33 2015 -0400
-
-    Commented out watchdog as it was resetting tor every minute
-
-commit cf8518e28275e1a8fa139316a8832a711245ca2c
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Wed Apr 22 22:05:34 2015 -0400
-
-    More specific reference to be able to inject firewall code was needed for Whonix 10
-
-commit 7930f416099aac721db1ac6257df4350a4edc454
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Wed Apr 22 02:42:15 2015 -0400
-
-    version 9.6.5
-
-commit d99df2aa16cea7a30834da9ba3760e220a1115bb
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Wed Apr 22 02:40:07 2015 -0400
-
-    Send a 0 when enabling a service
-
-commit 21b09239b3327bda160ee024bf0de6c3249dce72
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Wed Apr 22 02:38:47 2015 -0400
-
-    Keep whonixcheck and sdwdate disabled and manually start them to prevent false positive errors that tor is not started
-
-commit 258a1034e1b159dcaafad4341ae114923c48bac2
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Wed Apr 22 02:36:46 2015 -0400
-
-    Make sure qubes-network is started before qubes-firewall
-
-commit 99e7c45d33a1cf0cf05cc09c391e8226dc174f01
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Wed Apr 22 02:35:49 2015 -0400
-
-    Streamlined enable/disable services; remove immutable bits
-
-commit bec1488a7c3e81b7e082b18bf30835a80dba8b97
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Wed Apr 22 02:34:27 2015 -0400
-
-    Added ability to upgrade and dist-upgrade from local test repo
-
-commit 0416617b3e0872f75894882ae89e1de346b2d0f0
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Wed Apr 22 02:33:22 2015 -0400
-
-    Added a tor systemd unit files along with a wip unit file to implement hardening
-
-commit f6ee5878d727a327929d05c46086de0e9665764d
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Wed Apr 22 02:31:35 2015 -0400
-
-    Added wip whonixcheck systemd unit file
-
-commit 617256be63bd959c18c5533bd1ddf39ab350c02b
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Apr 20 02:33:31 2015 -0400
-
-    Notes with issues not yet resolved due to changes in Qubes or qubes-whonix
-
-commit 928f8f11250dcc3bf94845cd638fabedce5472e5
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Apr 20 02:31:38 2015 -0400
-
-    Remove chattr +i and replace with a protected files routine
-    
-    Cleanup and Improve enable/disable serivces
-    Cleanup Debian maintainers scripts removing unneeded reporting on systemd status
-
-commit 17f0775a633a99835c90e93981f387ffd5324d8e
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Thu Apr 2 18:41:23 2015 +0000
-
-    added genmkfile to Build-Depends
-
-commit 6e2f55ac751e2643a27a8a9bbb0c7e7b8d207ddf
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Thu Apr 2 17:24:43 2015 +0000
-
-    updated makefile generic to version 1.5
-
-commit 0a920ae3970180400bde85a2612e285c5d117d2d
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Wed Apr 1 16:54:46 2015 +0000
-
-    updated readme
-
-commit 8b1b1ef119d433906e92b01fbb2d1fbcdc2926e8
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Tue Mar 24 17:26:45 2015 +0000
-
-    updated makefile generic to version 1.4
-
-commit 2d358fe7013648ab0043fbd2d477c62e1f59890c
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Mar 23 12:11:13 2015 -0400
-
-    Updated changelog for 9.6.4
-
-commit 1c7124ea260fb3f07da42853bfb562594384e5dc
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Mar 23 12:05:40 2015 -0400
-
-    Bump version to 9.6.4
-
-commit 89f3545b1b54606a41ea6f735fc4569e463060d4
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Mar 23 12:05:19 2015 -0400
-
-    Fix a bug that gave error on upgrade when restarting service
-
-commit d1b560a68cdcc1fc6c4e778e614b9a6433fbbc0b
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Mar 23 12:04:30 2015 -0400
-
-    Use debhelper package install to install files to prevent tests from being part of package
-
-commit f4fb23b8f67c7bfabfe738eaaf50931353f29cef
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Mar 23 12:02:58 2015 -0400
-
-    Fixed an issue with restarting services and added whonix-setup-wizard cache dir
-
-commit 2e13d34e6009235e3f0e13407ebc268ae8bd32b3
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Mar 23 12:01:21 2015 -0400
-
-    Added more options to make sure unwanted dirs like rpm or deb do not make it into Debian package
-
-commit 53ac99c5aa8c10f8e926304a463b96264715cd2f
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Mar 23 11:59:41 2015 -0400
-
-    Removed stale references from notes
-
-commit 9f656178f5c16ad3261928f58163caf7dab5af34
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Mar 23 11:58:47 2015 -0400
-
-    Added a update test script that will install a local repo and perform an update of package
-    
+  * Add missing whonixcheck.conf file
+  * Add systemd unit file for control-port-filter-python.service
+
+ -- Jason Mehring <nrgaway@gmail.com>  Fri, 24 Apr 2015 06:04:21 -0400
+
+qubes-whonix (0:10.0.1-1) wheezy; urgency=medium
+
+  * version 10.0.1
+
+ -- Jason Mehring <nrgaway@gmail.com>  Wed, 22 Apr 2015 23:02:29 -0400
+
+qubes-whonix (0:9.6.6-1) wheezy; urgency=medium
+
+  [ Patrick Schleizer ]
+  * added genmkfile to Build-Depends
+  * updated makefile generic to version 1.5
+  * updated readme
+  * updated makefile generic to version 1.4
+
+  [ Jason Mehring ]
+  * Commented out watchdog as it was resetting tor every minute
+  * More specific reference to be able to inject firewall code was
+    needed for Whonix 10
+
+ -- Jason Mehring <nrgaway@gmail.com>  Wed, 22 Apr 2015 22:45:53 -0400
+
+qubes-whonix (0:9.6.5-1) wheezy; urgency=medium
+
+  [ Jason Mehring ]
+  * Remove chattr +i and replace with a protected files routine
+  * Notes with issues not yet resolved due to changes in Qubes or qubes-
+    whonix
+  * Added wip whonixcheck systemd unit file
+  * Added a tor systemd unit files along with a wip unit file to
+    implement hardening
+  * Added ability to upgrade and dist-upgrade from local test repo
+  * Streamlined enable/disable services; remove immutable bits
+  * Make sure qubes-network is started before qubes-firewall
+  * Keep whonixcheck and sdwdate disabled and manually start them to
+    prevent false positive errors that tor is not started
+  * Send a 0 when enabling a service
+
+ -- Jason Mehring <nrgaway@gmail.com>  Wed, 22 Apr 2015 02:40:48 -0400
+
+qubes-whonix (0:9.6.4-1) wheezy; urgency=medium
+
+  [ Jason Mehring ]
+  * Bump version to 9.6.4
+  * Fix a bug that gave error on upgrade when restarting service
+  * Use debhelper package install to install files to prevent tests from being part of package
+  * Fixed an issue with restarting services and added whonix-setup-wizard cache dir
+  * Added more options to make sure unwanted dirs like rpm or deb do not make it into Debian package
+  * Removed stale references from notes
+  * Added a update test script that will install a local repo and perform an update of package
     The test suite is excluded from built package
-
-commit ae3b93320bbf38a556e4376cbdc7ee87d2fe4c87
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Mar 23 06:13:23 2015 -0400
-
-    Updated changelog for 9.6.3
-
-commit 490499a283947657405f00e2c9c6aab14bed7d01
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Mar 23 06:11:47 2015 -0400
-
-    Bumped version to 9.6.3
-
-commit edbc2d084208c3deedf513a71c642f20cc35b134
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Mar 23 05:54:27 2015 -0400
-
-    Updated Makefile.builder to work with new qubes-builder api
-
-commit ca2092e25deb48aa144e88c2c2bfbd0c2f177598
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Mar 23 05:53:21 2015 -0400
-
-    Added /var/cache/whonix-setup-wizard to list of dirs to bind on startup
-
-commit 42d207b2c7bd2fd0de9e0ec5e2a1569c531dea4f
-Merge: 5a13ac2 6ff6f30
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Sun Feb 22 21:32:31 2015 +0000
-
-    Merge remote-tracking branch 'nrgaway/master'
-    
-    Conflicts:
-    	debian/changelog
-
-commit 6ff6f30233e2a5d9434691c5b4b910600e20d36f
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Sun Feb 22 14:33:50 2015 -0500
-
-    Add version file and bump version to 9.6.2
-
-commit c8ee215e01c2f8fcc0ccc6a728a25608ad3088d5
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Sun Feb 22 14:21:27 2015 -0500
-
-    Debian options to ignore directories like deb
-
-commit 169776cca0922f7875ae5d72c1fe234726b526f9
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Sun Feb 22 14:17:47 2015 -0500
-
-    Remove verbose tar and exclude directories like deb from orig tar file
-
-commit e52bc1e577dbfef08a0d564961b5a72ccce8a59b
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Sun Feb 22 14:11:19 2015 -0500
-
-    Changed Architecture to all from any as per Patricks request
-
-commit 90f3a964115471a7894c76f2ef0e14d231614d1e
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Sun Feb 22 14:09:09 2015 -0500
-
-    Updated 9.6.1 changelog with commit details and new versioning scheme
-
-commit 9f8c937b8b13413dfee5ff8772de7300848dbaf0
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Mon Feb 16 10:59:40 2015 +0000
-
-    added "Uploaders: Patrick Schleizer <adrelanos@riseup.net>" to debian/control
-
-commit 88ba66ae3a099311ddb8e50b2415a74cce0fdeb8
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Mon Feb 16 10:42:45 2015 +0000
-
-    synced COPYING with debian/copyright
-
-commit 5a13ac2617c974128cfb2b3b4c0613cb91ca3cfd
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Tue Feb 17 07:19:26 2015 +0000
-
-    debian/control: changed "Architecture:" from "any" to "all" - https://phabricator.whonix.org/T187
-
-commit 731e3e8ab0a5958341a96c4d4877b72ea0084209
-Merge: 8bbc0ae 18437a8
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Mon Feb 16 21:33:57 2015 +0000
-
-    Merge remote-tracking branch 'nrgaway/master'
-
-commit 18437a8d99281773dafc4bd2b25ccab948bba0dd
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Feb 16 06:51:57 2015 -0500
-
-    Removed developer enable-iptables-logging script
-
-commit 5b8df1b7c5fea511638d8d3c4af07495ad6136c9
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Feb 16 06:45:56 2015 -0500
-
-    Fixed typo in README.md
-
-commit 8bbc0ae3a157e74621fb20ca3209cc67045f6f4b
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Mon Feb 16 11:06:07 2015 +0000
-
-    added creation of upstream changelog to fix lintian warning
-
-commit 448f0353be69442b466f28149b6e67d038461e5d
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Mon Feb 16 11:03:40 2015 +0000
-
-    bumped changelog version (to fix lintian warning about missing close ITP)
-
-commit cd5f3d83d36ec31867f78a73bf2fa9ea6ca7d171
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Mon Feb 16 11:02:00 2015 +0000
-
-    added changelog.upstream to fix lintian warning
-
-commit 7592d6b49004e7d9151195a768d8a0ff384f5268
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Mon Feb 16 10:59:40 2015 +0000
-
-    added "Uploaders: Patrick Schleizer <adrelanos@riseup.net>" to debian/control
-
-commit 6d88b9284c5cc634e57a95b2c9993f39a21431ac
-Author: Patrick Schleizer <adrelanos@riseup.net>
-Date:   Mon Feb 16 10:42:45 2015 +0000
-
-    synced COPYING with debian/copyright
-
-commit a86b58c6fcc02face96f4e101a6ebbdcfc5c2bc3
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Feb 16 03:08:27 2015 -0500
-
-    Create new file 35_qubes_stream_isolation_plugin and use it instead of replacing IPs in 31_anon_dist_stream_isolation_plugin
-
-commit f2678cf2de8ebde15a62929d5c1ea14d16a37008
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Feb 16 02:49:08 2015 -0500
-
-    Don't need to replace IPs in /etc/whonix_firewall.d/30_default since all the IP's in that file are commented out
-
-commit 559694e1f699f52a1fb099786843efbfa101ddf6
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Feb 16 02:38:14 2015 -0500
-
-    Renamed  32_uwt_default to 32_qubes
-
-commit 0dc46aa4d8809fb19046465b107a79a2c247d39e
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Feb 16 01:53:20 2015 -0500
-
-    Fix typos
-
-commit 4c22b942418cd650e5fd9c26c2a202da81152b80
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Feb 16 01:17:11 2015 -0500
-
-    Remove duplicate trigger /etc/network/interfaces.whonix
-
-commit b4bc545e315dc27a76ac2490192f78731fa32fc4
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Fri Feb 13 20:23:41 2015 -0500
-
-    Whonix 9.6 and added compatibility for Qubes R3
-
-commit 6fe9c10100bd026e4b957e429ee3939cdc68738c
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Tue Feb 3 04:11:07 2015 -0500
-
-    Modified make-helper.bsh to work with Qubes builder
-
-commit 51ec5194008e71bcfdd9b8e82aa9f76dc2077dc3
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Sun Feb 1 05:45:51 2015 -0500
-
-    Make sure timezone is set to UTC
-
-commit 09563f814b40a14fba452f137eedfb9944e5ef55
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Fri Jan 30 00:30:35 2015 -0500
-
-    Tweaked scripts to work with Whonix 9.6 properly
-
-commit ff5045ebb8179dc94b4669413412015345a8163b
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Thu Jan 29 23:54:38 2015 -0500
-
-    Forgot to change references to renamed scripts in postinit
-
-commit 5747f05c5ff589e79dc5176626ef88869c115a6e
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Thu Jan 29 23:41:54 2015 -0500
-
-    Make sure /home/user/.gateway exists before attempting to touch file in directory
-
-commit 9bdc376c194f4be9f800c712e950e24c07f7c32a
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Thu Jan 29 23:20:15 2015 -0500
-
-    Add missing line continuation symbol
-
-commit c283336c4dcfc0b286979f5977fd50edd1c9ced6
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Thu Jan 29 22:52:53 2015 -0500
-
-    Fix interest-noawait typo in triggers
-
-commit 765d0792d55f771b780197f7c7a2243e1779a90a
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Thu Jan 29 20:46:25 2015 -0500
-
-    Renamed all bash libs with .sh extension; not executable and removed from scripts to be more standardized
-
-commit ac9427363b267d9040f55ee4a55167b225c0c2aa
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Thu Jan 29 20:42:32 2015 -0500
-
-    Added depends and triggers for whonix-setup-wizard
-    Added trigger for kde-audio to prevent showing in Qubes
-    Ignore first-use notice
+  * Updated changelog for 9.6.3
+
+ -- Jason Mehring <nrgaway@gmail.com>  Mon, 23 Mar 2015 12:07:39 -0400
+
+qubes-whonix (0:9.6.3-1) wheezy; urgency=medium
+
+  [ Jason Mehring ]
+  * Added /var/cache/whonix-setup-wizard to list of dirs to bind on
+    startup
+  * Updated Makefile.builder to work with new qubes-builder api
+  * Bumped version to 9.6.3
+
+ -- Jason Mehring <nrgaway@gmail.com>  Mon, 23 Mar 2015 06:12:02 -0400
+
+qubes-whonix (0:9.6.2-1) unstable; urgency=medium
+
+  [ Jason Mehring ]
+  * Remove duplicate trigger /etc/network/interfaces.whonix
+  * Fix typos
+  * Renamed  32_uwt_default to 32_qubes
+  * Don't need to replace IPs in /etc/whonix_firewall.d/30_default since
+    all the IP's in that file are commented out
+  * Create new file 35_qubes_stream_isolation_plugin and use it instead
+    of replacing IPs in 31_anon_dist_stream_isolation_plugin
+  * Fixed typo in README.md
+  * Removed developer enable-iptables-logging script
+
+  [ Patrick Schleizer ]
+  * synced COPYING with debian/copyright
+  * added "Uploaders: Patrick Schleizer <adrelanos@riseup.net>" to
+    debian/control
+
+  [ Jason Mehring ]
+  * Updated 9.6.1 changelog with commit details and new versioning
+    scheme
+  * Changed Architecture to all from any as per Patricks request
+  * Remove verbose tar and exclude directories like deb from orig tar
+    file
+  * Debian options to ignore directories like deb
+  * Add version file and bump version to 9.6.2
+
+ -- Jason Mehring <nrgaway@gmail.com>  Sun, 22 Feb 2015 14:22:45 -0500
+
+qubes-whonix (0:9.6.1-1) unstable; urgency=medium
+
+  [ Jason Mehring ]
+  * Lintian package modifications
+  * Tweaked rules to allow building on both Qubes and Whonix
+  * Changed package name to qubes-whonix
+  * Package rename fixes
+  * Renamed 50_uwt_defaults per Patrick's request
+  * Removed un-needed directives to create directories since the package
+    builder will automatically create any required directories
+  * Removed extra linefeed at end of files
+  * Changed WHONIX_QUBES to QUBES_WHONIX and exit 0 if not running in
+    Qubes environment
+  * replaced make-helper.bsh script incase it was corrupt
+  * Modified Makefile to read better
+  * Remove duplicate entry from Makefile
+  * Make replacement make-helper.bsh executable
+  * move xenstore-read within a conditional statement
+  * Removed un-needed enables for services in this package
+  * Added haveged, nautilus-open-terminal as depends
+  * Removed qubes-whonix-init.service and added it as a ExecStartPost to
+    qubes-whonix-network.service
+  * Make sure immutable files are locked always to prevent qubes
+    programs from over-writing
+  * Added CONTRIBUTING text
+  * Ignore Wing Project files
+  * Added depends and triggers for whonix-setup-wizard Added trigger for
+    kde-audio to prevent showing in Qubes Ignore first-use notice
     Dropped some un-needed depends in control file
+  * Renamed all bash libs with .sh extension; not executable and removed
+    from scripts to be more standardized
+  * Fix interest-noawait typo in triggers
+  * Add missing line continuation symbol
+  * Make sure /home/user/.gateway exists before attempting to touch file
+    in directory
+  * Forgot to change references to renamed scripts in postinit
+  * Tweaked scripts to work with Whonix 9.6 properly
+  * Make sure timezone is set to UTC
+  * Modified make-helper.bsh to work with Qubes builder
+  * Whonix 9.6 and added compatibility for Qubes R3
 
-commit b5964ae53da09d51e0045189b6329a2296af75e3
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Thu Jan 29 20:41:27 2015 -0500
+ -- Jason Mehring <nrgaway@gmail.com>  Sun, 22 Feb 2015 13:41:14 -0500
 
-    Ignore Wing Project files
+qubes-whonix (0:9.6.0-1) unstable; urgency=low
 
-commit 255ba447b6cecb9c83437923e3bbc606172d503b
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Thu Jan 29 20:38:40 2015 -0500
+  * Initial release.
 
-    Added CONTRIBUTING text
-
-commit 7313fc2372b19bb8671d363cd8a9c1f157ec9fbc
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Tue Jan 27 19:34:08 2015 -0500
-
-    Make sure immutable files are locked always to prevent qubes programs from over-writing
-
-commit 9320fd5928b565def5edefd913c52f676b84ec88
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Tue Jan 13 23:46:50 2015 -0500
-
-    Removed qubes-whonix-init.service and added it as a ExecStartPost to qubes-whonix-network.service
-    
-    Changed WHONIX to QUBES_WHONIX in 32_uwt_default
-    Set QUBES_WHONIX to unknown if /var/lib/qubes is not available
-    Added a profile for unknown to allow override of UWT
-
-commit b422495caa557e5916e8c7a4b823d56917215043
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Wed Jan 7 12:31:44 2015 -0500
-
-    Added haveged, nautilus-open-terminal as depends
-
-commit 28ddc33f47c169b750ecc9fda5a5dbe3fbf304ad
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Tue Jan 6 19:31:39 2015 -0500
-
-    Removed un-needed enables for services in this package
-
-commit 5279a0a28e8a8e0941567d6e5ef7c93ad2be8e87
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Tue Jan 6 18:05:36 2015 -0500
-
-    move xenstore-read within a conditional statement
-
-commit 7eac4fee94516f02403414a4df2bb587c78df546
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Tue Jan 6 12:41:04 2015 -0500
-
-    Make replacement make-helper.bsh executable
-
-commit cdd1a44a9893d1f3a7f95ef2e7a1ad2b34c1dcdb
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Tue Jan 6 12:37:52 2015 -0500
-
-    Remove duplicate entry from Makefile
-
-commit 02db6aef959936addccdef7c2f35789e9a43004b
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Tue Jan 6 12:32:27 2015 -0500
-
-    Modified Makefile to read better
-
-commit b4a3344555ae5d8a60bdfc03819cf651024e16d5
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Tue Jan 6 11:29:38 2015 -0500
-
-    replaced make-helper.bsh script incase it was corrupt
-
-commit 606cbbc100aa84ebbbd913d041f327adc3d757c6
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Tue Jan 6 10:28:56 2015 -0500
-
-    Changed WHONIX_QUBES to QUBES_WHONIX and exit 0 if not running in Qubes environment
-
-commit 1f0a9c68002ba4f3b83c8998e39ed73f23172676
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Jan 5 17:06:32 2015 -0500
-
-    Removed extra linefeed at end of files
-
-commit 21f6f1a478a9da1b66f60788fe836f85a668d7fa
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Jan 5 17:06:00 2015 -0500
-
-    Removed un-needed directives to create directories since the package builder will automatically create any required directories
-
-commit 31c4a83e38b3a296bfe29d1023089dfe42da60a1
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Jan 5 16:39:48 2015 -0500
-
-    Renamed 50_uwt_defaults per Patrick's request
-
-commit 951ad4982dcdc19fe9cf5234b62c465a515da20f
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Jan 5 16:38:10 2015 -0500
-
-    Package rename fixes
-    
-    Some text got changed to qubes-whonix when it should have remained just whonix
-
-commit 7a3d8d6e7f54acbb5392701e4885735073ac6d79
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Jan 5 00:03:32 2015 -0500
-
-    Changed package name to qubes-whonix
-    
-    Moved custom config files into their own directory to prevent future conflicts
-    /usr/lib/qubes-whonix
-    
-    Refactored lots.
-    
-    Wrote some Debian helper scripts to help get this building in Qubes as well
-     as Whonix development environment
-
-commit 5494901b601d5c03841513208d689284179bc6ce
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Mon Dec 29 01:15:15 2014 -0500
-
-    Tweaked rules to allow building on both Qubes and Whonix
-
-commit 2a408877f9459fe39e82be7100285312f5e3a3f2
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Sun Dec 28 17:25:09 2014 -0500
-
-    Lintian package modifications
-
-commit a10bc6c8c28baccd56cda5a1e19d20a6b752927a
-Author: Jason Mehring <nrgaway@gmail.com>
-Date:   Sun Dec 28 13:52:47 2014 -0500
-
-    Initial commit
+ -- Jason Mehring <nrgaway@gmail.com>  Fri, 30 Jan 2015 00:00:00 +0000

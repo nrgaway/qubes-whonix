@@ -1,11 +1,31 @@
 #!/bin/bash -e
 # vim: set ts=4 sw=4 sts=4 et :
+#
+# network-proxy-setup - Enables an extra internal network interface
+#
+# This file is part of Qubes+Whonix.
+# Copyright (C) 2014 - 2015 Jason Mehring <nrgaway@gmail.com>
+# License: GPL-2+
+# Authors: Jason Mehring
+#
+#   This program is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU General Public License
+#   as published by the Free Software Foundation; either version 2
+#   of the License, or (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 source /usr/lib/qubes-whonix/utility_functions.sh
 
 INTERFACE="eth1"
 
-if [ "${QUBES_WHONIX}" == "gateway" ]; then
+if [ -e /var/run/qubes-service/whonix-gateway ]; then
 
     # Setup Xen / Qubes proxy
     network=$(${QUBESDB}-read ${PREFIX}qubes-netvm-network 2>/dev/null)
@@ -34,22 +54,8 @@ if [ "${QUBES_WHONIX}" == "gateway" ]; then
             /sbin/ifconfig ${INTERFACE} up
             /sbin/ethtool -K ${INTERFACE} sg off || true
             /sbin/ethtool -K ${INTERFACE} tx off || true
-    
+
             ip link set ${INTERFACE} up
         fi
     }
-
-    # Allow whonix-gateway to act as an update-proxy
-    touch /var/run/qubes-service/qubes-updates-proxy
-
-    # Search and replace tinyproxy error files so we can inject code that
-    # we can use to identify that its a tor proxy so updates are secure
-    error_file="/usr/share/tinyproxy/default.html"
-    grep -q "${PROXY_META}" "${error_file}" || {
-        sed -i "s/<\/head>/${PROXY_META}\n<\/head>/" "${error_file}"
-    }
 fi
-
-# Make sure ip forwarding is disabled
-echo "0" > /proc/sys/net/ipv4/ip_forward
-
