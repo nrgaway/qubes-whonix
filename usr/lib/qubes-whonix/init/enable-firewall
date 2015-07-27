@@ -24,6 +24,9 @@
 
 source /usr/lib/qubes-whonix/utility_functions.sh
 
+[ -n "$iptables_cmd" ] || iptables_cmd="iptables --wait"
+[ -n "$ip6tables_cmd" ] || ip6tables_cmd="ip6tables --wait"
+
 # Gateway or Workstation
 if [ -e /var/run/qubes-service/whonix-gateway ] || [ -e /var/run/qubes-service/whonix-workstation ]; then
 
@@ -42,7 +45,7 @@ elif [ -e /var/run/qubes-service/whonix-template ]; then
     # Check if a secure Tor update server is available
     if [ ! -e /var/run/qubes-service/whonix-secure-proxy ]; then
         curl.anondist-orig --connect-timeout 3 "${PROXY_SERVER}" | grep -q "${PROXY_META}" && {
-            touch /var/run/qubes-service/whonix-secure-proxy
+            sudo touch /var/run/qubes-service/whonix-secure-proxy
         }
     fi
 
@@ -54,17 +57,17 @@ fi
 if [ -e /var/run/qubes-service/whonix-firewall-failed ]; then
 
     # Set secure defaults.
-    iptables --wait -P INPUT DROP
-    iptables --wait -P FORWARD DROP
-    iptables --wait -P OUTPUT DROP
+    $iptables_cmd -P INPUT DROP
+    $iptables_cmd -P FORWARD DROP
+    $iptables_cmd -P OUTPUT DROP
 
     # Flush old rules.
-    iptables --wait -F
-    iptables --wait -X
-    iptables --wait -t nat -F
-    iptables --wait -t nat -X
-    iptables --wait -t mangle -F
-    iptables --wait -t mangle -X
+    $iptables_cmd -F
+    $iptables_cmd -X
+    $iptables_cmd -t nat -F
+    $iptables_cmd -t nat -X
+    $iptables_cmd -t mangle -F
+    $iptables_cmd -t mangle -X
 fi
 
 exit 0

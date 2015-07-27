@@ -1,3 +1,161 @@
+qubes-whonix (0:11.0.0-1) jessie; urgency=medium
+
+  [ Jason Mehring ]
+  * bump version to 11.0.0
+
+  [ Patrick Schleizer ]
+  * synced COPYING with debian/copyright
+  * added "Uploaders: Patrick Schleizer <adrelanos@riseup.net>" to
+    debian/control
+  * added changelog.upstream to fix lintian warning
+  * bumped changelog version (to fix lintian warning about missing close
+    ITP)
+  * added creation of upstream changelog to fix lintian warning
+  * debian/control: changed "Architecture:" from "any" to "all" -
+    https://phabricator.whonix.org/T187
+  * updated makefile generic to version 1.4
+  * updated readme
+  * updated makefile generic to version 1.5
+  * added genmkfile to Build-Depends
+  * updated changelog.upstream
+  * updated changelog.upstream
+  * packaging, bumped Standards-Version from 3.9.4 to 3.9.6 for jessie
+    support
+  * added debian/source/lintian-overrides with debian-watch-may-check-
+    gpg-signature to fix lintian warning -
+    https://phabricator.whonix.org/T277
+
+  [ Jason Mehring ]
+  * version 10.0.4
+
+  [ Patrick Schleizer ]
+  * lintian warning copyright fix
+
+  [ Jason Mehring ]
+  * Add pkgs directory to .gitignore
+  * Fix re-enable control-port-filter
+  * version 10.0.5
+
+  [ Patrick Schleizer ]
+  * fixed handling of changelog - https://phabricator.whonix.org/T193
+  * skip rads on Qubes - https://phabricator.whonix.org/T306
+  * skip rads systemd service on qubes -
+    https://phabricator.whonix.org/T306
+
+  [ Jason Mehring ]
+  * Clear notes for Whonix 11
+  * Update copyright dates to include 2015
+  * Remove qubes-whonix-control-port-filter-python and rename add /
+    rename Whonix config files
+  * Added Qubes systemd override for swap-file-creator
+
+  [ Patrick Schleizer ]
+  * systemd unit: workaround/fix, removed spaces, likely bug in 'deb-
+    systemd-helper' that prevents enabling the service by default -
+    https://phabricator.whonix.org/T316
+  * clean mechanism to skip starting services network-manager, spice-
+    vdagent, swap-file-creator and whonix-initializer in Qubes using
+    /etc/systemd/system/unit.service.d directory -
+    https://phabricator.whonix.org/T315
+  * removed spice-vdagent, swap-file-creator, whonix-initializer from
+    postinst disable systemd units
+  * use status files instead of 'touch' in postinst; use skip files
+    rather than faking done files
+  * added 'var/*' to debian/qubes-whonix.install
+  * fix, '| true' -> '|| true'
+  * deleted /etc/tmpfiles.d/qubes-whonix-whonixcheck.conf because no
+    longer required - https://phabricator.whonix.org/T326
+
+  [ Jason Mehring ]
+  * renamed: whonix-firewall -> whonix-firewall-plugin
+  * renamed: init -> qubes-whonix-sysinit
+  * renamed: qubes-whonix-firewall -> enable-firewall
+  * renamed: removed original: init, qubes-whonix-firewall, whonix-
+    firewall
+  * network-proxy-setup: Removed ip_forward rule, moved updates-proxy
+    code
+  * enable-servides: Script added; called in sysinit boot stage
+  * replace-ips: Modified to use new qubes-services
+  * utility_functions: Removed code that created $QUBES_WHONIX ENV var
+  * bind-dirs: Modified to use qubes-services
+  * qubes-whonixsetup: Removed all manual start code for tor, sdwdate
+    and whonixcheck
+  * qubes-whonix-firewall.service: renamed Exec to enable-firewall
+  * qubes-whonix-network.service: Removed/added depends and Pre/Posr
+    starts
+  * qubes-whonix-sysinit.service: Added to create required
+    preconfigurations
+  * Added systemd drop in to exclude unit files from activating in
+    TemplateVM
+  * qubes-whonix-tor.service: Added condition to start before
+    whonixcheck; remove condition on /etc/init.d/tor
+  * Added whonix-setup-wizard status-files to skip disclaimer and Tor
+    setup
+  * whonix_firewall: Switched to use qubes-services, added whonix-
+    template 'rule'
+  * uwt: use qubes-services; removed unneeded include
+  * postinst: Removed sdwdate and whonixcheck from being disabled
+  * Renamed whonixsetup.done to whonixsetup.skip
+  * Removed WIP whonixcheck.* systemd releated files. Not needed
+    anymore.
+  * Renamed whonix-firewall-plugin -> whonix-firewall-plugin.sh
+  * Renamed /etc/whonix.d/40_whonixcheck_qubes -> 40_qubes
+  * added --wait option to iptables
+  * Restarting instead of reloading due to upstream Tor bug
+  * Changed location to store last know IP address to /var/cache/qubes-
+    whonix from /etc
+  * Removed now unneeded include and code
+  * Added more comments, copyright and cleanup
+  * Added copyright
+  * qubes-whonix-sysinit: Added/moved additional init code
+  * qubes-whonix-sysinit: Removed sudo, set whonix_repository.skip
+    instead of .done & cleanup
+  * qubes-whonix-sysinit: Added copyright
+  * network-proxy-setup: Added copyright
+  * enable-services: Added copyright and comments
+  * enable-firewall: Added whonix-firewall-failed service, removed sudo
+  * enable-firewall: Added copyright
+  * alert: Added copyright
+  * bind-dirs: Added copyright
+  * messages: Added firewall-failed and tor-disabled messages &
+    copyright
+  * qubes-whonixsetup: Added code to deal with firewall failure and tor-
+    disable serivce
+  * utility_functions.sh: Removed sudo, added comments and copyright
+  * Mass add/modify copyright, comments
+  * Added a postinit service to take care of bind-dirs and stuff that
+    needs to happen after that like replace-ips
+  * replace-ips: moved one directory since its not an init file
+  * renamed bind-dirs to bind-directories
+  * Moved some code from qubes-whonix-sysinit to qubes-whonix-postinit
+  * Commented qubes-whonix iptables rules
+  * enable-firewall: Remove iptables --wait hack; use whonix-
+    gateway/workstation service to identify mode
+  * Added whonix torbrowser config to specify tb installation directory
+  * Update postinst to use new replace-ips location
+  * Updated Whonix 11 NOTES
+
+  [ Patrick Schleizer ]
+  * use iptables --wait - https://phabricator.whonix.org/T344
+  * As per https://lists.alioth.debian.org/pipermail/pkg-systemd-
+    maintainers/2015-June/007613.html debian-systemd mailing list:
+    cannot extend network-manager unit file by using network-
+    manager.service.d we need to do etc/systemd/system/network-
+    manager.service.d/40_qubes.conf ->
+    etc/systemd/system/NetworkManager.service.d/40_qubes.conf
+    https://phabricator.whonix.org/T350
+
+  [ Jason Mehring ]
+  * Revert custom torbrowser location per Patricks request
+  * tests: Change dist to jessie for local repo tests; add VERBOSE var
+
+  [ Patrick Schleizer ]
+  * improved 'Whonix-Gateway NetVM required for updates' message
+    Conflicts:  usr/lib/qubes-whonix/messages.yaml
+  * removed spaces
+
+ -- Jason Mehring <nrgaway@gmail.com>  Sat, 25 Jul 2015 00:56:31 -0400
+
 qubes-whonix (0:10.0.5-1) wheezy; urgency=medium
 
   [ Jason Mehring ]
