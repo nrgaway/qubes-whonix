@@ -43,8 +43,5 @@ interest-noawait /usr/share/tor/tor-service-defaults-torrc.anondist
 interest-noawait /usr/share/xchat-improved-privacy/.xchat2/xchat.conf
 
 # Don't show in Qubes
-interest-noawait /etc/xdg/autostart/whonixsetup.desktop
-interest-noawait /etc/xdg/autostart/whonix-setup-wizard.desktop
-interest-noawait /etc/xdg/autostart/gateway_first_run_notice.desktop
-interest-noawait /etc/xdg/autostart/spice-vdagent.desktop
-interest-noawait /etc/xdg/autostart/pulseaudio-kde.desktop
+interest-noawait /usr/share/applications
+interest-noawait /etc/xdg
