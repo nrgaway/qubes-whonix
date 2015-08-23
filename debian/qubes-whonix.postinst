@@ -27,8 +27,6 @@
 # https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html or
 # the debian-policy package
 
-# Directory that modified desktop entry config files are stored in
-XDG_CONFIG_QUBES="/usr/share/qubes/xdg"
 
 changeSystemdStatus() {
     unit=${1}
@@ -74,41 +72,6 @@ disableSystemdUnits() {
     done
 }
 
-remove_ShowIn() {
-    if [ -e "${1}" ]; then
-        sed -i '/^\(Not\|Only\)ShowIn/d' "${1}"
-    fi
-}
-
-showIn() {
-    desktop_entry="${1}"
-    shown_in="${2}"
-    message="${shown_in:-"Shown in All;"}"
-    desktop_entry_qubes="${XDG_CONFIG_QUBES}/autostart/${desktop_entry##*/}"
-
-    # Make sure Qubes autostart directory exists
-    mkdir -p "${XDG_CONFIG_QUBES}/autostart"
-
-    # Desktop entry exists, so move to Qubes directory and modify it
-    if [ -e "${desktop_entry}" ]; then
-        echo "Desktop Entry Modification - ${message} ${desktop_entry##*/}..."
-        cp -pf "${desktop_entry}" "${desktop_entry_qubes}"
-
-        remove_ShowIn "${desktop_entry_qubes}"
-        sed -i '/^X-GNOME-Autostart-enabled.*[fF0]/d' "${desktop_entry_qubes}"
-
-        # Will only be '' if shown in all
-        if [ ! "${shown_in}x" == "x" ]; then
-            echo "${shown_in}" >> "${desktop_entry_qubes}" || true
-        fi
-
-    # Desktop entry must have been removed, so also remove from Qubes directory
-    else
-        echo "Desktop Entry Modification - Remove: ${desktop_entry##*/}..."
-        rm -f "${desktop_entry_qubes}"
-    fi
-}
-
 
 case "${1}" in
     configure)
@@ -135,14 +98,8 @@ case "${1}" in
             qubes-whonix-firewall \
             qubes-whonix-tor.service
 
-        # Modify desktop files not to show in Qubes
-        for item in = /etc/xdg/autostart/pulseaudio-kde.desktop \
-                      /etc/xdg/autostart/gateway_first_run_notice.desktop \
-                      /etc/xdg/autostart/spice-vdagent.desktop \
-                      /etc/xdg/autostart/whonixsetup.desktop \
-                      /etc/xdg/autostart/whonix-setup-wizard.desktop ; do
-            showIn "${item}" 'NotShowIn=QUBES;'
-        done
+        ## Update all xdg autostart desktop entries
+        /usr/lib/qubes-whonix/whonix-trigger-desktop-file-install || true
 
         # Set timezone to UTC
         timezone='UTC'
@@ -205,12 +162,9 @@ case "${1}" in
                     ;;
 
                 # Desktop Entry Modification - Not shown in Qubes
-                /etc/xdg/autostart/pulseaudio-kde.desktop | \
-                /etc/xdg/autostart/gateway_first_run_notice.desktop | \
-                /etc/xdg/autostart/spice-vdagent.desktop | \
-                /etc/xdg/autostart/whonixsetup.desktop | \
-                /etc/xdg/autostart/whonix-setup-wizard.desktop)
-                    showIn "${trigger}" 'NotShowIn=QUBES;'
+                /usr/share/applications | \
+                /etc/xdg)
+                    /usr/lib/qubes-whonix/whonix-trigger-desktop-file-install || true
                     ;;
 
                 *)
