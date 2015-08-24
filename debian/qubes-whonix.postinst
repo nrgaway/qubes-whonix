@@ -98,8 +98,8 @@ case "${1}" in
             qubes-whonix-firewall \
             qubes-whonix-tor.service
 
-        ## Update all xdg autostart desktop entries
-        /usr/lib/qubes-whonix/whonix-trigger-desktop-file-install || true
+        # Update all Whonix xdg autostart desktop entries
+        /etc/qubes/triggers.d/whonix-trigger-desktop-file-install.trigger configure || true
 
         # Set timezone to UTC
         timezone='UTC'
@@ -159,12 +159,6 @@ case "${1}" in
                 /usr/share/tor/tor-service-defaults-torrc.anondist | \
                 /usr/share/xchat-improved-privacy/.xchat2/xchat.conf)
                     /usr/lib/qubes-whonix/replace-ips
-                    ;;
-
-                # Desktop Entry Modification - Not shown in Qubes
-                /usr/share/applications | \
-                /etc/xdg)
-                    /usr/lib/qubes-whonix/whonix-trigger-desktop-file-install || true
                     ;;
 
                 *)

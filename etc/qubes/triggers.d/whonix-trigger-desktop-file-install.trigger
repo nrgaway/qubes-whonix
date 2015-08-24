@@ -19,42 +19,40 @@
 #   --remove-not-show-in ENVIRONMENT   Remove ENVIRONMENT from the list of desktop environment where the desktop files should not be displayed
 #   --add-not-show-in ENVIRONMENT      Add ENVIRONMENT to the list of desktop environment where the desktop files should not be displayed
 
-QUBES_DESKTOP_FILE_INSTALL='/usr/bin/qubes-desktop-file-install'
-QUBES_XDG_CONFIG_DIR=/var/lib/qubes/xdg/autostart
-XDG_CONFIG_DIR=/etc/xdg/autostart
+source /etc/qubes/triggers.d/qubes-trigger-desktop-file-install.sh
 
-INSTALL_CMD=""${QUBES_DESKTOP_FILE_INSTALL}" --force --dir "${QUBES_XDG_CONFIG_DIR}""
-
-# Remove all current Qubes desktop entry files
-if [ "${1}" == "clean" ]; then
-    rm -f "${QUBES_XDG_CONFIG_DIR}"/*
-fi
-
-generatePath () {
-    echo "${XDG_CONFIG_DIR}/${1}.desktop"
-
+# ==============================================================================
+# Desktop Entry Modifications
+# ==============================================================================
+desktopFileInstall() {
+    # --------------------------------------------------------------------------
+    # NotShowIn=QUBES
+    # --------------------------------------------------------------------------
+    FILES=(
+        'pulseaudio-kde'
+        'gateway_first_run_notice'
+        'spice-vdagent'
+        'whonixsetup'
+        'whonix-setup-wizard'
+    ); install --remove-show-in --add-not-show-in X-QUBES
 }
 
-generateFileList () {
-    for key in "${!FILES[@]}"; do
-        FILES[${key}]="$(generatePath ${FILES[key]})"
-    done
-}
-
-install () {
-    local options="${@}"
-
-    # Install an edited version of desktop file in $QUBES_XDG_CONFIG_DIR
-    generateFileList
-    $INSTALL_CMD "${@}" "${FILES[@]}" || true
-
-}
-
-# Desktop Entry Modification - NotShowIn=QUBES
-FILES=(
-    'pulseaudio-kde'
-    'gateway_first_run_notice'
-    'spice-vdagent'
-    'whonixsetup'
-    'whonix-setup-wizard'
-); install --remove-show-in --add-not-show-in X-QUBES
+case "${1}" in
+    configure)
+        rm -f "${QUBES_XDG_CONFIG_DIR}"/*
+        run desktopFileInstall || true
+        ;;
+    
+    triggered)
+        shift
+        for trigger in ${@}; do
+            case "${trigger}" in
+                /usr/share/applications | \
+                /etc/xdg)
+                    echo "Updating Whonix Desktop Entry Overrides..."
+                    run desktopFileInstall || true
+                    ;;
+            esac
+        done
+        ;;
+esac

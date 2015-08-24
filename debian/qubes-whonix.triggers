@@ -41,7 +41,3 @@ interest-noawait /usr/share/anon-kde-streamiso/share/config/kioslaverc
 interest-noawait /usr/share/anon-torchat/.torchat/torchat.ini
 interest-noawait /usr/share/tor/tor-service-defaults-torrc.anondist
 interest-noawait /usr/share/xchat-improved-privacy/.xchat2/xchat.conf
-
-# Don't show in Qubes
-interest-noawait /usr/share/applications
-interest-noawait /etc/xdg
